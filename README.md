@@ -40,3 +40,13 @@ Next, you need to create both container by running the following commands:
         --name cardano_cli cardano_cli:latest
             
 ** Remember, you need to create container from the repository containing your `config/` folder.
+
+### Start a relay node
+
+    cardano-node run \
+       --topology /node_config/ff-topology.json \
+       --database-path /node_data \
+       --socket-path /node_data/node.socket \
+       --host-addr x.x.x.x
+       --port 3000 \
+       --config /node_config/ff-config.json
