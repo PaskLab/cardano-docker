@@ -9,9 +9,9 @@ I've wrote a Dockerfile that simplify the process.
 First, you need to build all required images:
 
         
-1. The Cardano sources image (Set the right release VERSION_NUMBER, ie: `1.13.0`):
+1. The Cardano sources image (Set the right release VERSION_NUMBER, ie: `1.13.0-rewards`):
 
-        docker build --build-arg VERSION=<VERSION_NUMBER> -t cardano_sources:latest ./Dockerfiles/sources
+        docker build --build-arg RELEASE=<VERSION_NUMBER> -t cardano_sources:latest ./Dockerfiles/sources
 
     ** Tip: _Add `--no-cache` to rebuild from scratch_ **
 
@@ -22,7 +22,10 @@ First, you need to build all required images:
 3. The cli image:
 
         docker build -t cardano_cli:latest Dockerfiles/cli
-                    
+                                     
+### Create config files
+port.txt
+
 ### Creating the container
 
 Next, you need to create both container by running the following commands:
@@ -31,7 +34,7 @@ Next, you need to create both container by running the following commands:
         --network host \
         --mount source=cardano_node,target=/node_data \
         --mount type=bind,source="$(pwd)"/config,target=/node_config \
-        --name cardano_node cardano_node:latest
+        --name cardano_node cardano_node:latest 
 
     docker run -dit \
         --network host \
@@ -47,6 +50,5 @@ Next, you need to create both container by running the following commands:
        --topology /node_config/ff-topology.json \
        --database-path /node_data \
        --socket-path /node_data/node.socket \
-       --host-addr x.x.x.x
        --port 3000 \
-       --config /node_config/ff-config.json
+       --config /node_config/ff-config.json 

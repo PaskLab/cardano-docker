@@ -6,8 +6,11 @@ LABEL maintainer="https://github.com/pascallapointe"
 
 WORKDIR /root/cardano-node
 
-# Keep scripts folder
+# Keep repository scripts folder
 RUN cp -r scripts ../.
+
+# Add start-relay.sh to the other scripts
+COPY scripts/start-relay.sh /root/scripts/start-relay.sh
 
 # Build cardano-node binary
 RUN cabal update
@@ -37,4 +40,4 @@ RUN apt-get autoremove -y
 RUN apt-get clean
 RUN apt-get autoclean
 
-CMD ["/bin/bash"]
+CMD ["start-relay.sh"]
