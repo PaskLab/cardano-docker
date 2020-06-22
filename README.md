@@ -1,6 +1,12 @@
 # cardano-docker
 Docker configurations for setting up Cardano Node Container
 
+#### Reference
+
+Thanks to CoinCashew for providing a great guide. Many steps used in this README are from their guide.
+
+[CoinCashew Guide: How to build a Haskell Testnet Cardano Stakepool](https://www.coincashew.com/coins/overview-ada/guide-how-to-build-a-haskell-stakepool-node)
+
 ### Building from source 
 
 Since we need our binary to work on Aarch64 architecture, you'll need to build the node from the source files.
@@ -56,9 +62,18 @@ folder. Your file should contain only one line representing the **PORT** used by
     
     echo 3000 > port.txt
     
+#### Activating LiveView
+
+If you want to use the LiveView interface, you can update the `ViewMode` and `TraceBlockFetchDecisions` in your 
+`ff-config.json` file by running the following command:
+
+    sed -i.bak -e "s/SimpleView/LiveView/g" -e "s/TraceBlockFetchDecisions\": false/TraceBlockFetchDecisions\": true/g" ff-config.json
+    
 #### Relay node configuration
 
+Now you need to configure your ff-topology.json file with your Relay and Producer node information.
 
+See: [Configure the block-producer node and the relay nodes](https://www.coincashew.com/coins/overview-ada/guide-how-to-build-a-haskell-stakepool-node#3-1-configure-the-block-producer-node-and-the-relay-nodes)
 
 ### Creating the container
 
@@ -77,14 +92,3 @@ Next, you need to create both container by running the following commands:
         --name cardano_cli cardano_cli:latest
             
 ** Remember, you need to create container from the repository containing your `config/` folder.
-
-### Start a relay node
-
-    cardano-node run \
-       --topology /node_config/ff-topology.json \
-       --database-path /node_data \
-       --socket-path /node_data/node.socket \
-       --port 3000 \
-       --config /node_config/ff-config.json 
-
-[]: https://hydra.iohk.io/build/2735165/download/1/index.html

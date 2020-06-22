@@ -12,6 +12,9 @@ RUN cp -r scripts ../.
 # Add start-relay.sh to the other scripts
 COPY scripts/start-relay.sh /root/scripts/start-relay.sh
 
+# Add execution right
+RUN chmod +x /root/scripts/start-relay.sh
+
 # Build cardano-node binary
 RUN cabal update
 RUN cabal user-config update
