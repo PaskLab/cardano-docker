@@ -13,29 +13,30 @@ Since we need our binary to work on Aarch64 architecture, you'll need to build t
 I've wrote a Dockerfile that simplify the process.
 
 First, you need to build all required images:
-
+  
+1. The Cardano sources image:
         
-1. The Cardano sources image (Set the right release VERSION_NUMBER, ie: `1.13.0-rewards`):
-
-        VERSION_NUMBER=<VERSION_NUMBER>; \
-            docker build \
-            --build-arg RELEASE=${VERSION_NUMBER} \
-            -t cardano_sources:${VERSION_NUMBER} \
-            ./Dockerfiles/sources
+        docker build \
+            -t cardano_env:latest \
+            ./Dockerfiles/build_env
 
     ** Tip: _Add `--no-cache` to rebuild from scratch_ **
+        
+2. Set the version variable (Set the right release VERSION_NUMBER, ie: `1.14.0`)
 
-2. Tag the `cardano_sources` image as **latest**:
-
-        docker tag cardano_sources:${VERSION_NUMBER} cardano_sources:latest
+    VERSION_NUMBER=<VERSION_NUMBER>
 
 3. The node image:
 
-        docker build -t cardano_node:${VERSION_NUMBER} Dockerfiles/node
+        docker build \
+            --build-arg RELEASE=${VERSION_NUMBER} \
+            -t cardano_node:${VERSION_NUMBER} Dockerfiles/node
         
 4. The cli image:
 
-        docker build -t cardano_cli:${VERSION_NUMBER} Dockerfiles/cli
+        docker build \
+            --build-arg RELEASE=${VERSION_NUMBER} \
+            -t cardano_cli:${VERSION_NUMBER} Dockerfiles/cli
         
 5. Tag your images with the **latest** tag:
 
