@@ -50,6 +50,9 @@ RUN cabal install
 WORKDIR /root
 RUN rm -rf cabal-install-3.0.0.0 cabal-install-3.0.0.0.tar.gz
 
+# Install Cardano Node dependencies
+RUN apt-get install -y libsodium-dev
+
 # Download cardano-node repository
 ARG RELEASE
 RUN git clone https://github.com/input-output-hk/cardano-node
