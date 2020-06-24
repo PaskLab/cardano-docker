@@ -1,8 +1,8 @@
 #!/bin/sh
 
 HOSTADDR=0.0.0.0
-DATA_DIR=/node_data
-CONFIG_DIR=/node_config
+DATA_DIR=/root/node_data
+CONFIG_DIR=/root/node_config
 TOPOLOGY=${CONFIG_DIR}/ff-topology.json
 DB_PATH=${DATA_DIR}/db
 SOCKET_PATH=${DATA_DIR}/socket

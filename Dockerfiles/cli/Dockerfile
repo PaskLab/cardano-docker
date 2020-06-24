@@ -47,4 +47,4 @@ RUN apt-get autoremove -y
 RUN apt-get clean
 RUN apt-get autoclean
 
-CMD ["/bin/bash"]
+CMD ["tail", "-f", "/dev/null"]

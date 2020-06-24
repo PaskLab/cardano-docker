@@ -4,7 +4,7 @@ LABEL description="Environment for building Cardano node & tools"
 LABEL maintainer="https://github.com/pascallapointe"
 
 ENV PATH=/root/.cabal/bin:/root/scripts:$PATH
-ENV CARDANO_NODE_SOCKET_PATH=/node_data/socket
+ENV CARDANO_NODE_SOCKET_PATH=/root/node_data/socket
 WORKDIR /root
 
 # Install base utilities and dependencies
