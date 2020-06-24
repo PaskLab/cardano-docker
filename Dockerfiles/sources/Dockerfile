@@ -51,9 +51,9 @@ WORKDIR /root
 RUN rm -rf cabal-install-3.0.0.0 cabal-install-3.0.0.0.tar.gz
 
 # Download cardano-node repository
+ARG RELEASE
 RUN git clone https://github.com/input-output-hk/cardano-node
 WORKDIR /root/cardano-node
-ARG RELEASE
 RUN git checkout ${RELEASE}
 RUN git submodule update --init --recursive
 
