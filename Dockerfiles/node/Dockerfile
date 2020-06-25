@@ -8,6 +8,7 @@ WORKDIR /root
 
 # Install Cardano Node dependencies
 RUN apt-get install -y libtool
+RUN apt-get install -y autoconf
 
 RUN git clone https://github.com/input-output-hk/libsodium
 
