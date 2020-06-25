@@ -7,6 +7,8 @@ LABEL maintainer="https://github.com/pascallapointe"
 WORKDIR /root
 
 # Install Cardano Node dependencies
+RUN apt-get install -y libtool
+
 RUN git clone https://github.com/input-output-hk/libsodium
 
 WORKDIR /root/libsodium
