@@ -24,7 +24,7 @@ First, you need to build all required images:
         
 2. Set the version variable (Set the right release VERSION_NUMBER, ie: `1.14.0`)
 
-    VERSION_NUMBER=<VERSION_NUMBER>
+        VERSION_NUMBER=<VERSION_NUMBER>
 
 3. The node image:
 
@@ -76,7 +76,14 @@ Now you need to configure your ff-topology.json file with your Relay and Produce
 
 See: [Configure the block-producer node and the relay nodes](https://www.coincashew.com/coins/overview-ada/guide-how-to-build-a-haskell-stakepool-node#3-1-configure-the-block-producer-node-and-the-relay-nodes)
 
-### Creating the container
+### Creating the containers with Docker Compose
+
+You can copy the docker-compose.yaml where your `config/` folder reside. Than start your containers with the 
+following command:
+
+    docker-compose up -d
+
+### Manually creating the containers
 
 Next, you need to create both container by running the following commands:
 
