@@ -1,10 +1,20 @@
-FROM cardano_sources
+FROM cardano_env
 
 LABEL name="cardano_cli"
 LABEL description="Cardano CLI"
 LABEL maintainer="https://github.com/pascallapointe"
 
+WORKDIR /root
+
+# Install Cardano Node dependencies
+RUN apt-get install -y libsodium-dev
+
+# Download cardano-node repository
+ARG RELEASE
+RUN git clone https://github.com/input-output-hk/cardano-node
 WORKDIR /root/cardano-node
+RUN git checkout ${RELEASE}
+RUN git submodule update --init --recursive
 
 # Keep scripts folder
 RUN cp -r scripts ../.
@@ -37,4 +47,4 @@ RUN apt-get autoremove -y
 RUN apt-get clean
 RUN apt-get autoclean
 
-CMD ["/bin/bash"]
+CMD ["tail", "-f", "/dev/null"]
