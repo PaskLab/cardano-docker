@@ -1,9 +1,10 @@
 FROM ubuntu:bionic
-LABEL name="cardano_sources"
-LABEL description="Sources for building Cardano node & tools"
+LABEL name="cardano_env"
+LABEL description="Environment for building Cardano node & tools"
 LABEL maintainer="https://github.com/pascallapointe"
 
 ENV PATH=/root/.cabal/bin:/root/scripts:$PATH
+ENV CARDANO_NODE_SOCKET_PATH=/root/node_data/socket
 WORKDIR /root
 
 # Install base utilities and dependencies
@@ -48,13 +49,6 @@ RUN cabal update
 RUN cabal install
 WORKDIR /root
 RUN rm -rf cabal-install-3.0.0.0 cabal-install-3.0.0.0.tar.gz
-
-# Download cardano-node repository
-RUN git clone https://github.com/input-output-hk/cardano-node
-WORKDIR /root/cardano-node
-ARG RELEASE
-RUN git checkout ${RELEASE}
-RUN git submodule update --init --recursive
 
 # Image clean-up
 RUN apt-get autoremove -y

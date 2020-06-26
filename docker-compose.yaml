@@ -1,0 +1,46 @@
+version: "3.7"
+
+services:
+
+  cardano_node:
+    container_name: cardano_node
+    image: cardano_node:latest
+    command: ["start-relay.sh"]
+    volumes:
+      - type: volume
+        source: cardano-node
+        target: /root/node_data
+      - type: bind
+        source: ./config
+        target: /root/node_config
+    network_mode: host
+    restart: unless-stopped
+    stop_grace_period: 10s
+    logging:
+      options:
+        max-size: "1m"
+        max-file: "10"
+
+  cardano_cli:
+    container_name: cardano_cli
+    image: cardano_cli:latest
+    command: ["tail", "-f", "/dev/null"]
+    depends_on:
+      - cardano_node
+    volumes:
+      - type: volume
+        source: cardano-node
+        target: /root/node_data
+      - type: bind
+        source: ./config
+        target: /root/node_config
+    network_mode: host
+    restart: unless-stopped
+    stop_grace_period: 10s
+    logging:
+      options:
+        max-size: "1m"
+        max-file: "10"
+
+volumes:
+  cardano-node:
