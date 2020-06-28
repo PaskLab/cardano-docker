@@ -50,6 +50,24 @@ RUN cabal install
 WORKDIR /root
 RUN rm -rf cabal-install-3.0.0.0 cabal-install-3.0.0.0.tar.gz
 
+# Install Cardano Libsodium dependencies
+RUN apt-get install -y libtool
+RUN apt-get install -y autoconf
+
+RUN git clone https://github.com/input-output-hk/libsodium
+
+WORKDIR /root/libsodium
+RUN git checkout 66f017f1
+RUN ./autogen.sh
+RUN ./configure
+RUN make
+RUN make install
+
+ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
+
+WORKDIR /root
+RUN rm -rf libsodium
+
 # Image clean-up
 RUN apt-get autoremove -y
 RUN apt-get clean
