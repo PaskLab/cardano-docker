@@ -30,8 +30,8 @@ WORKDIR /root/cardano-node
 RUN git checkout ${RELEASE}
 RUN git submodule update --init --recursive
 
-# Keep scripts folder
-RUN cp -r scripts ../.
+# Add files
+COPY ../other/cabal.project.local /root/cardano-node/cabal.project.local
 
 # Build cardano-node binary
 RUN cabal update
