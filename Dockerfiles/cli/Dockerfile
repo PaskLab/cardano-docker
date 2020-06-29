@@ -14,7 +14,7 @@ RUN git checkout ${RELEASE}
 RUN git submodule update --init --recursive
 
 # Add files
-COPY ../other/cabal.project.local /root/cardano-node/cabal.project.local
+COPY files/cabal.project.local /root/cardano-node/cabal.project.local
 
 # Build cardano-node binary
 RUN cabal update

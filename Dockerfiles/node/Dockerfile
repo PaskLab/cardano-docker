@@ -14,9 +14,9 @@ RUN git checkout ${RELEASE}
 RUN git submodule update --init --recursive
 
 # Add files
-COPY ../other/cabal.project.local /root/cardano-node/cabal.project.local
-COPY ../scripts/start-relay.sh /root/scripts/start-relay.sh
-COPY ../scripts/start-relay.sh /root/scripts/start-producer.sh
+COPY files/cabal.project.local /root/cardano-node/cabal.project.local
+COPY files/start-relay.sh /root/scripts/start-relay.sh
+COPY files/start-producer.sh /root/scripts/start-producer.sh
 
 # Add execution right
 RUN chmod +x /root/scripts/start-relay.sh
