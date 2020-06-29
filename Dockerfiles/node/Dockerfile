@@ -20,6 +20,7 @@ COPY files/start-producer.sh /root/scripts/start-producer.sh
 
 # Add execution right
 RUN chmod +x /root/scripts/start-relay.sh
+RUN chmod +x /root/scripts/start-producer.sh
 
 # Build cardano-node binary
 RUN cabal update
