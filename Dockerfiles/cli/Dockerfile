@@ -21,9 +21,17 @@ RUN cabal update
 RUN cabal user-config update
 RUN cabal install cardano-cli
 
-# Image clean-up
 WORKDIR /root
 
+# Install topologyUpdater script
+COPY files/topologyUpdater.sh /root/scripts/topologyUpdater.sh
+RUN chmod +x /root/scripts/topologyUpdater.sh
+RUN apt-get -y install cron
+COPY files/topology-updater-cron /etc/cron.d/topology-updater-cron
+RUN chmod 0644 /etc/cron.d/topology-updater-cron
+RUN crontab /etc/cron.d/topology-updater-cron
+
+# Image clean-up
 RUN rm -rf cardano-node
 RUN apt-get purge -y apt-utils
 RUN apt-get purge -y git
@@ -44,4 +52,4 @@ RUN apt-get autoremove -y
 RUN apt-get clean
 RUN apt-get autoclean
 
-CMD ["tail", "-f", "/dev/null"]
+CMD ["cron", "-f"]
