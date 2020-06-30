@@ -24,6 +24,8 @@ RUN cabal install cardano-cli
 WORKDIR /root
 
 # Install topologyUpdater script
+RUN apt-get update
+RUN apt-get install -y curl
 COPY files/topologyUpdater.sh /root/scripts/topologyUpdater.sh
 RUN chmod +x /root/scripts/topologyUpdater.sh
 RUN apt-get -y install cron
