@@ -54,4 +54,4 @@ RUN apt-get autoremove -y
 RUN apt-get clean
 RUN apt-get autoclean
 
-CMD ["cron", "-f"]
+CMD ["tail", "-f", "/dev/null"]

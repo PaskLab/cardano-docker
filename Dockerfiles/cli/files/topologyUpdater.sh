@@ -1,7 +1,7 @@
 #!/bin/bash
 
 LOG_PATH="/root/node_data"
-PORT=$(cat /root/node_data/port.txt)
+PORT=$(cat /root/node_config/port.txt)
 
 TESTNET_MAGIC=42
 

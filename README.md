@@ -100,3 +100,9 @@ Next, you need to create both container by running the following commands:
         --name cardano_cli cardano_cli:latest
             
 ** Remember, you need to create container from the repository containing your `config/` folder.
+
+### Topology Updater
+
+Use the following command in `cardano_cli` container to activate topologyUpdater:
+
+    docker exec -d cardano_cli cron -f
