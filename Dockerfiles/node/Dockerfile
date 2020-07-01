@@ -6,23 +6,6 @@ LABEL maintainer="https://github.com/pascallapointe"
 
 WORKDIR /root
 
-# Install Cardano Node dependencies
-RUN apt-get install -y libtool
-RUN apt-get install -y autoconf
-
-RUN git clone https://github.com/input-output-hk/libsodium
-
-WORKDIR /root/libsodium
-RUN git checkout 66f017f1
-RUN ./autogen.sh
-RUN ./configure
-RUN make
-RUN make install
-
-ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
-
-WORKDIR /root
-
 # Download cardano-node repository
 ARG RELEASE
 RUN git clone https://github.com/input-output-hk/cardano-node
@@ -30,14 +13,14 @@ WORKDIR /root/cardano-node
 RUN git checkout ${RELEASE}
 RUN git submodule update --init --recursive
 
-# Keep repository scripts folder
-RUN cp -r scripts ../.
-
-# Add start-relay.sh to the other scripts
-COPY scripts/start-relay.sh /root/scripts/start-relay.sh
+# Add files
+COPY files/cabal.project.local /root/cardano-node/cabal.project.local
+COPY files/start-relay.sh /root/scripts/start-relay.sh
+COPY files/start-producer.sh /root/scripts/start-producer.sh
 
 # Add execution right
 RUN chmod +x /root/scripts/start-relay.sh
+RUN chmod +x /root/scripts/start-producer.sh
 
 # Build cardano-node binary
 RUN cabal update

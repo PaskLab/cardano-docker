@@ -5,7 +5,8 @@ services:
   cardano_node:
     container_name: cardano_node
     image: cardano_node:latest
-    command: ["start-relay.sh"]
+    command: ["start-relay.sh"]     # Comment for node producer
+    #command: ["start-producer.sh"] # Uncomment for node producer
     volumes:
       - type: volume
         source: cardano-node

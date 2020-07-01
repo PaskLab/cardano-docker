@@ -54,9 +54,9 @@ so you can access your configuration from within.
 If your OS is unix based, you can use the `wget` utility to download all configuration files from the
 [official source](https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/index.html).
 
-    wget https://hydra.iohk.io/build/3175192/download/1/shelley_testnet-config.json
-    wget https://hydra.iohk.io/build/3175192/download/1/shelley_testnet-genesis.json
-    wget https://hydra.iohk.io/build/3175192/download/1/shelley_testnet-topology.json
+    wget https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/shelley_testnet-config.json
+    wget https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/shelley_testnet-genesis.json
+    wget https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/shelley_testnet-topology.json
         
 Now, if you wish to use the `start-relay.sh` script provided in my repository, add a `port.txt` file under your `/config` 
 folder. Your file should contain only one line representing the **PORT** used by your node. 
@@ -83,6 +83,8 @@ following command:
 
     docker-compose up -d
 
+* Tips: To start a node as producer instead of relay, swap the comment on `CMD` line in the `docker-compose.yaml` file.
+
 ### Manually creating the containers
 
 Next, you need to create both container by running the following commands:
@@ -100,3 +102,9 @@ Next, you need to create both container by running the following commands:
         --name cardano_cli cardano_cli:latest
             
 ** Remember, you need to create container from the repository containing your `config/` folder.
+
+### Topology Updater
+
+Use the following command in `cardano_cli` container to activate topologyUpdater:
+
+    docker exec -d cardano_cli cron -f
