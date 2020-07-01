@@ -83,6 +83,8 @@ following command:
 
     docker-compose up -d
 
+* Tips: To start a node as producer instead of relay, swap the comment on `CMD` line in the `docker-compose.yaml` file.
+
 ### Manually creating the containers
 
 Next, you need to create both container by running the following commands:
