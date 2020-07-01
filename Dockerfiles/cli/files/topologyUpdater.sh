@@ -1,5 +1,7 @@
 #!/bin/bash
 
+USERNAME="${USERNAME}"
+
 LOG_PATH="/root/node_data"
 PORT=$(cat /root/node_config/port.txt)
 
