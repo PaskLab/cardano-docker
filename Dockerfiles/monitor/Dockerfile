@@ -25,18 +25,9 @@ ARG GRAF_URL="https://dl.grafana.com/oss/release/${GRAF_FILE}"
 ARG CLOCK_FILE="grafana-clock-panel-1.1.1.zip"
 ARG CLOCK_URL="https://github.com/grafana/clock-panel/releases/download/v1.1.1/${CLOCK_FILE}"
 
-ARG DASH_DIR="dashboards"
-ARG UMED_FILE="Haskel_Node_SKY_Relay1_Dash.json"
-ARG UMED_DB_URL="https://raw.githubusercontent.com/Oqulent/SkyLight-Pool/master/${UMED_FILE}"
-
-ARG IOKH_FILE="cardano-application-dashboard-v2.json"
-ARG IOHK_DB_URL="https://raw.githubusercontent.com/input-output-hk/cardano-ops/master/modules/grafana/cardano/${IOKH_FILE}"
-
 # Download all libraries
 RUN wget ${PROM_URL}
 RUN wget ${GRAF_URL}
-RUN wget ${UMED_DB_URL}
-RUN wget ${IOHK_DB_URL}
 
 # Extract files
 RUN mkdir ${PROM_DIR}
@@ -45,16 +36,14 @@ RUN tar zxC ${PROM_DIR} -f ${PROM_FILE} --strip-components 1
 RUN mkdir ${GRAF_DIR}
 RUN tar zxC ${GRAF_DIR} -f ${GRAF_FILE} --strip-components 1
 
+# Add Grafana plugin
 WORKDIR /root/grafana/plugins-bundled
 
+RUN wget ${CLOCK_URL}
 RUN unzip ${CLOCK_FILE}
 RUN rm ${CLOCK_FILE}
 
 WORKDIR /root
-
-RUN mkdir ${DASH_DIR}
-RUN mv ${UMED_FILE} ${DASH_DIR}/.
-RUN mv ${IOKH_FILE} ${DASH_DIR}/.
 
 # Fix grafana's datasource.
 RUN sed -e "s#Prometheus#prometheus#g" ${DASH_DIR}/${UMED_FILE} -i
