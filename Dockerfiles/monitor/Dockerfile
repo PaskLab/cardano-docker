@@ -37,13 +37,13 @@ RUN mkdir ${GRAF_DIR}
 RUN tar zxC ${GRAF_DIR} -f ${GRAF_FILE} --strip-components 1
 
 # Add Grafana plugin
-WORKDIR /root/grafana/plugins-bundled
-
-RUN wget ${CLOCK_URL}
-RUN unzip ${CLOCK_FILE}
-RUN rm ${CLOCK_FILE}
-
-WORKDIR /root
+#WORKDIR /root/grafana/plugins-bundled
+#
+#RUN wget ${CLOCK_URL}
+#RUN unzip ${CLOCK_FILE}
+#RUN rm ${CLOCK_FILE}
+#
+#WORKDIR /root
 
 # Install start script
 COPY files/start-monitoring.sh /root/scripts/start-monitoring.sh
