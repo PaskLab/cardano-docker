@@ -65,5 +65,5 @@ RUN apt-get autoremove -y
 RUN apt-get clean
 RUN apt-get autoclean
 
-["tail", "-f", "/dev/null"]
+CMD ["tail", "-f", "/dev/null"]
 #CMD ["start-monitoring.sh"]
