@@ -120,6 +120,7 @@ Go in the same folder where you've created your `monitoring-config` folder and r
 
     docker run -dit \
         --network host \
+        --mount source=cardano-monitor,target=/root/grafana/data \
         --mount type=bind,source="$(pwd)"/monitoring-config,target=/root/config \
         --name cardano_monitor cardano_monitor:latest
 
