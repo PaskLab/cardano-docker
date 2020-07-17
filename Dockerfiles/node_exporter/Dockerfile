@@ -12,7 +12,7 @@ RUN apt-get install -y wget
 # Define arguments/variables
 ARG NEXP_DIR="node_exporter"
 ARG NEXP_FILE="node_exporter-1.0.1.linux-arm64.tar.gz"
-ARG NEXP_URL="https://github.com/prometheus/node_exporter/releases/download/v1.0.1/$NEXP_FILE"
+ARG NEXP_URL="https://github.com/prometheus/node_exporter/releases/download/v1.0.1/${NEXP_FILE}"
 # Download all libraries
 RUN wget ${NEXP_URL}
 

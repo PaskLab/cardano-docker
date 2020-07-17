@@ -13,20 +13,20 @@ RUN apt-get install -y adduser
 RUN apt-get install -y libfontconfig1
 
 # Define arguments/variables
-ARG PROM_DIR='prometheus'
-ARG PROM_FILE='prometheus-2.19.2.linux-arm64.tar.gz'
-ARG PROM_URL='https://github.com/prometheus/prometheus/releases/download/v2.19.2/${PROM_FILE}'
+ARG PROM_DIR="prometheus"
+ARG PROM_FILE="prometheus-2.19.2.linux-arm64.tar.gz"
+ARG PROM_URL="https://github.com/prometheus/prometheus/releases/download/v2.19.2/${PROM_FILE}"
 
-ARG GRAF_DIR='grafana'
-ARG GRAF_FILE='grafana-7.0.6.linux-arm64.tar.gz'
-ARG GRAF_URL='https://dl.grafana.com/oss/release/${GRAF_FILE}'
+ARG GRAF_DIR="grafana"
+ARG GRAF_FILE="grafana-7.0.6.linux-arm64.tar.gz"
+ARG GRAF_URL="https://dl.grafana.com/oss/release/${GRAF_FILE}"
 
-ARG DASH_DIR='dashboards'
-ARG UMED_FILE='Haskel_Node_SKY_Relay1_Dash.json'
-ARG UMED_DB_URL='https://raw.githubusercontent.com/Oqulent/SkyLight-Pool/master/${UMED_FILE}'
+ARG DASH_DIR="dashboards"
+ARG UMED_FILE="Haskel_Node_SKY_Relay1_Dash.json"
+ARG UMED_DB_URL="https://raw.githubusercontent.com/Oqulent/SkyLight-Pool/master/${UMED_FILE}"
 
-ARG IOKH_FILE='cardano-application-dashboard-v2.json'
-ARG IOHK_DB_URL='https://raw.githubusercontent.com/input-output-hk/cardano-ops/master/modules/grafana/cardano/${IOKH_FILE}'
+ARG IOKH_FILE="cardano-application-dashboard-v2.json"
+ARG IOHK_DB_URL="https://raw.githubusercontent.com/input-output-hk/cardano-ops/master/modules/grafana/cardano/${IOKH_FILE}"
 
 # Download all libraries
 RUN wget ${PROM_URL}
