@@ -53,7 +53,7 @@ COPY files/start-monitoring.sh /root/scripts/start-monitoring.sh
 RUN chmod +x /root/scripts/start-monitoring.sh
 
 # Export executable path
-ENV PATH=/root/${PROM_DIR}:/root/${GRAF_DIR}/bin:$PATH
+ENV PATH=/root/${PROM_DIR}:/root/${GRAF_DIR}/bin:/root/scripts:$PATH
 
 # Image clean-up
 RUN rm ${PROM_FILE}
