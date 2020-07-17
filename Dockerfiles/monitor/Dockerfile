@@ -45,9 +45,6 @@ RUN rm ${CLOCK_FILE}
 
 WORKDIR /root
 
-# Fix grafana's datasource.
-RUN sed -e "s#Prometheus#prometheus#g" ${DASH_DIR}/${UMED_FILE} -i
-
 # Install start script
 COPY files/start-monitoring.sh /root/scripts/start-monitoring.sh
 RUN chmod +x /root/scripts/start-monitoring.sh
