@@ -43,5 +43,17 @@ services:
         max-size: "1m"
         max-file: "10"
 
+  cardano_exporter:
+    container_name: cardano_exporter
+    image: cardano_exporter:latest
+    command: ["node_exporter"]
+    network_mode: host
+    restart: unless-stopped
+    stop_grace_period: 10s
+    logging:
+      options:
+        max-size: "1m"
+        max-file: "10"
+
 volumes:
   cardano-node:
