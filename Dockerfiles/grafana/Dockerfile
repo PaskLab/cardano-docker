@@ -39,4 +39,4 @@ RUN apt-get autoremove -y
 RUN apt-get clean
 RUN apt-get autoclean
 
-CMD ["grafana-server", "--config /root/config/grafana.ini", "--homepath /root/grafana"]
+CMD ["grafana-server", "--config", "/root/config/grafana.ini", "--homepath", "/root/grafana"]
