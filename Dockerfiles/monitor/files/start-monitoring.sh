@@ -1,6 +1,6 @@
 #!/bin/bash
 
-prometheus --config.file=/root/config/prometheus.yml --web.listen-address=:3200 &
+node_exporter &
 sleep 3
 
-grafana-server --config /root/config/grafana.ini --homepath /root/grafana
+prometheus --config.file=/root/config/prometheus.yml --web.listen-address=:3200 &
