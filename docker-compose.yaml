@@ -43,5 +43,19 @@ services:
         max-size: "1m"
         max-file: "10"
 
+  cardano_monitor:
+    container_name: cardano_monitor
+    image: cardano_monitor:latest
+    command: ["start-monitoring.sh"]
+    depends_on:
+      - cardano_node
+    network_mode: host
+    restart: unless-stopped
+    stop_grace_period: 10s
+    logging:
+      options:
+        max-size: "1m"
+        max-file: "10"
+
 volumes:
   cardano-node:
