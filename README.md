@@ -1,11 +1,17 @@
 # cardano-docker
-Docker configurations for setting up Cardano Node Container
+Docker files for setting up Cardano Node environment on Raspberry Pi (arm64/aarch64)
 
 #### Reference
 
-Thanks to CoinCashew for providing a great guide. Many steps used in this README are from their guide.
+Many steps used in this repository are from resources bellow:
+
+Thanks to CoinCashew for providing a great guide.
 
 [CoinCashew Guide: How to build a Haskell Testnet Cardano Stakepool](https://www.coincashew.com/coins/overview-ada/guide-how-to-build-a-haskell-stakepool-node)
+
+Thanks to everyone behind CNODE from **cardano-community repository**.
+
+[https://github.com/cardano-community/guild-operators](https://github.com/cardano-community/guild-operators)
 
 ### Building from source 
 
@@ -55,8 +61,12 @@ If your OS is unix based, you can use the `wget` utility to download all configu
 [official source](https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/index.html).
 
     wget https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/shelley_testnet-config.json
-    wget https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/shelley_testnet-genesis.json
+    wget https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/shelley_testnet-shelley-genesis.json
     wget https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/shelley_testnet-topology.json
+
+#### !!! Important !!!!
+Once you have the files, rename them to `topology.json` and `config.json` to avoid breaking the script every times they
+change the name..! Leave the `genesis.json` as is since its name is or think to update your `config.json` accordingly.
         
 Now, if you wish to use the `start-relay.sh` script provided in my repository, add a `port.txt` file under your `/config` 
 folder. Your file should contain only one line representing the **PORT** used by your node. 
@@ -76,18 +86,61 @@ Now you need to configure your ff-topology.json file with your Relay and Produce
 
 See: [Configure the block-producer node and the relay nodes](https://www.coincashew.com/coins/overview-ada/guide-how-to-build-a-haskell-stakepool-node#3-1-configure-the-block-producer-node-and-the-relay-nodes)
 
+### Monitoring
+
+Since it's nice to monitor your setup, follow the Grafana/Prometheus installation step bellow:
+
+1. Build the cardano_monitor image:
+
+        docker build \
+            -t cardano_monitor:latest \
+            ./Dockerfiles/monitor
+            
+2. Build the grafana image:
+
+        docker build \
+            -t grafana:latest \
+            ./Dockerfiles/grafana
+
+### Monitoring tools configuration \*\*OPTIONAL\*\*
+
+Now you've created yours monitoring images, it's time to create your `monitoring-config` folder.
+Your `cardano_monitor` container will bind to this folder, so you can access your configuration from within.
+
+    mkdir monitoring-config
+    cd monitoring-config
+
+You can now copy the following config file in this folder:
+
+- [./Dockerfiles/monitor/files/grafana.ini](Dockerfiles/grafana/files/grafana.ini)
+
+#### Creating the Grafana web server
+
+Since you don't need to run a Grafana web server on every **cardano-node** host, it's container creation isn't included
+in the `docker-compose.yml` file. Use the following command to create its container in a location of your choosing.
+
+Go in the same folder where you've created your `monitoring-config` folder and run the following command:
+
+    docker run -dit \
+        --network host \
+        --mount source=grafana-data,target=/root/grafana/data \
+        --mount type=bind,source="$(pwd)"/monitoring-config,target=/root/config \
+        --name grafana grafana:latest
+
+** Tips: Just remove the `bind mount` line if you're good with the provided configuration file.
+
 ### Creating the containers with Docker Compose
 
-You can copy the docker-compose.yaml where your `config/` folder reside. Than start your containers with the 
+You can copy the docker-compose.yaml where your `config/` folder reside. Then start your containers with the 
 following command:
 
     docker-compose up -d
 
-* Tips: To start a node as producer instead of relay, swap the comment on `CMD` line in the `docker-compose.yaml` file.
+** Tips: To start a node as producer instead of relay, swap the comment on `CMD` line in the `docker-compose.yaml` file.
 
 ### Manually creating the containers
 
-Next, you need to create both container by running the following commands:
+If you don't use docker-compose, you need to create both container by running the following commands:
 
     docker run -dit \
         --network host \
