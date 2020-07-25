@@ -65,8 +65,8 @@ If your OS is unix based, you can use the `wget` utility to download all configu
     wget https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/shelley_testnet-topology.json
 
 #### !!! Important !!!!
-Once you have the files, rename them to `topology.json` and `config.json` to avoid breaking the script every times they
-change the name..! Leave the `genesis.json` as is since its name is or think to update your `config.json` accordingly.
+Once you have the files, rename them to `genesis.json`, `topology.json` and `config.json` to avoid breaking the script every times they
+change the name..! Don't forget to update the reference to the `genesis.json` file in your `config.json`.
         
 Now, if you wish to use the `start-relay.sh` script provided in my repository, add a `port.txt` file under your `/config` 
 folder. Your file should contain only one line representing the **PORT** used by your node. 
