@@ -138,26 +138,7 @@ following command:
 
 ** Tips: To start a node as producer instead of relay, swap the comment on `CMD` line in the `docker-compose.yaml` file.
 
-### Manually creating the containers
+### Read further on these topics:
 
-If you don't use docker-compose, you need to create both container by running the following commands:
-
-    docker run -dit \
-        --network host \
-        --mount source=cardano-node,target=/root/node_data \
-        --mount type=bind,source="$(pwd)"/config,target=/root/node_config \
-        --name cardano_node cardano_node:latest 
-
-    docker run -dit \
-        --network host \
-        --mount source=cardano-node,target=/root/node_data \
-        --mount type=bind,source="$(pwd)"/config,target=/root/node_config \
-        --name cardano_cli cardano_cli:latest
-            
-** Remember, you need to create container from the repository containing your `config/` folder.
-
-### Topology Updater
-
-Use the following command in `cardano_cli` container to activate topologyUpdater:
-
-    docker exec -d cardano_cli cron -f
+- [How get peers with Topology Updater](Docs/topology.md)
+- [Manually creating the containers](Docs/standalone-containers.md)
