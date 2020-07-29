@@ -13,7 +13,14 @@ CNODE_CONFIG_DIR="/root/node_config"
 CNODE_LOG_DIR="${CNODE_DATA_DIR}"
 
 CNODE_PORT=$(cat /root/node_config/port.txt)  # must match your relay node port as set in the startup command
+CNODE_HOSTNAME="CHANGE ME"
 CNODE_VALENCY=1   # optional for multi-IP hostnames
+
+if [ "${CNODE_HOSTNAME}" != "CHANGE ME" ]; then
+  T_HOSTNAME="&hostname=${CNODE_HOSTNAME}"
+else
+  T_HOSTNAME=''
+fi
 
 # Adapting cardano-cli command for the network
 CONFIG_JSON="${CNODE_CONFIG_DIR}/config.json"
@@ -33,4 +40,4 @@ export CARDANO_NODE_SOCKET_PATH="/root/node_data/socket"
 
 blockNo=$(cardano-cli shelley query tip ${PROTOCOL_IDENTIFIER} ${NETWORK_IDENTIFIER} | jq -r .blockNo )
 
-curl -s "https://api.clio.one/htopology/v1/?port=${CNODE_PORT}&blockNo=${blockNo}&valency=${CNODE_VALENCY}&magic=${NWMAGIC}" | tee -a $CNODE_LOG_DIR/topologyUpdater_lastresult.json
+curl -s "https://api.clio.one/htopology/v1/?port=${CNODE_PORT}&blockNo=${blockNo}&valency=${CNODE_VALENCY}&magic=${NWMAGIC}${T_HOSTNAME}" | tee -a $CNODE_LOG_DIR/topologyUpdater_lastresult.json

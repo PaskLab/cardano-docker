@@ -16,4 +16,4 @@ If you don't use docker-compose, you need to create both container by running th
         --mount type=bind,source="$(pwd)"/config,target=/root/node_config \
         --name cardano_cli cardano_cli:latest
             
-** Remember, you need to create container from the repository containing your `config/` folder.
+** Remember, you need to create your container from the repository containing your `config/` folder.
