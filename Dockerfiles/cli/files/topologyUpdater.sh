@@ -13,7 +13,7 @@ CNODE_CONFIG_DIR="/root/node_config"
 CNODE_LOG_DIR="${CNODE_DATA_DIR}"
 
 CNODE_PORT=$(cat /root/node_config/port.txt)  # must match your relay node port as set in the startup command
-CNODE_HOSTNAME="CHANGE ME"
+CNODE_HOSTNAME=${CNODE_HOSTNAME:-'CHANGE ME'}
 CNODE_VALENCY=1   # optional for multi-IP hostnames
 
 if [ "${CNODE_HOSTNAME}" != "CHANGE ME" ]; then

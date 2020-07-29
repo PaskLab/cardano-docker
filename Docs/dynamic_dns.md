@@ -12,6 +12,10 @@ provided configuration file
 
 - [Dockerfiles/ddclient/files/ddclient.conf](../Dockerfiles/ddclient/files/ddclient.conf)
 
+Change the configuration file access:
+
+    sudo chmod 600 ddclient.conf
+
 ### Creating the DDclient image
 
     docker build \
