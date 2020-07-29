@@ -141,4 +141,5 @@ following command:
 ### Read further on these topics:
 
 - [How get peers with Topology Updater](Docs/topology.md)
+- [Dynamic DNS support](Docs/dynamic_dns.md)
 - [Manually creating the containers](Docs/standalone-containers.md)

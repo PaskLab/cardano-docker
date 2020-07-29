@@ -14,9 +14,9 @@ provided configuration file
 
 ### Creating the DDclient image
 
-        docker build \
-            -t ddclient:latest \
-            ./Dockerfiles/ddclient
+    docker build \
+        -t ddclient:latest \
+        ./Dockerfiles/ddclient
             
 ### Creating the containers
 
