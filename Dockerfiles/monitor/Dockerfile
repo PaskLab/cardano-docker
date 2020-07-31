@@ -33,7 +33,7 @@ RUN tar zxC ${NEXP_DIR} -f ${NEXP_FILE} --strip-components 1
 COPY files/start-monitoring.sh /root/scripts/start-monitoring.sh
 RUN chmod +x /root/scripts/start-monitoring.sh
 
-# Add Prometeheus configuration, can be overridden using a 'bind mount' volume
+# Add Prometheus configuration, can be overridden using a 'bind mount' volume
 COPY files/prometheus.yml /root/config/prometheus.yml
 
 # Export executable path

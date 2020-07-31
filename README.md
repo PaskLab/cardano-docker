@@ -1,17 +1,26 @@
 # cardano-docker
-Docker files for setting up Cardano Node environment on Raspberry Pi (arm64/aarch64)
+Docker files for setting up Cardano Node environment.
 
 #### Reference
 
 Many steps used in this repository are from resources bellow:
 
-Thanks to CoinCashew for providing a great guide.
-
-[CoinCashew Guide: How to build a Haskell Testnet Cardano Stakepool](https://www.coincashew.com/coins/overview-ada/guide-how-to-build-a-haskell-stakepool-node)
+[Cardano Official Documentation](https://docs.cardano.org/projects/cardano-node/en/latest/index.html)
 
 Thanks to everyone behind CNODE from **cardano-community repository**.
 
 [https://github.com/cardano-community/guild-operators](https://github.com/cardano-community/guild-operators)
+
+For non-dockerized instructions on how to compile cardano-node on RaspberryPi-4B, I'll refer you to
+[Alessandro Konrad Pi-Pool repository](https://github.com/alessandrokonrad/Pi-Pool).
+
+#### !!! Important, known issue !!!
+
+Since mainnet, node freeze issue as been notice on `aarch64` based system.
+
+To overcome this issue, you'll need to fully synchronized the blockchain on `x86/amd64` based system before moving the
+files to your `aarch64` system. Thanks to [@alessandrokonrad](https://github.com/alessandrokonrad) for providing
+this solution.
 
 ### Building from source 
 
@@ -20,31 +29,35 @@ I've wrote a Dockerfile that simplify the process.
 
 First, you need to build all required images:
   
-1. The Cardano sources image:
+1. Set the architecture variable to your requirement (Only x86/amd64 and aarch64 supported):
+  
+        ARCHITECTURE=<PROCESSOR_ARCHITECTURE(x86_64 or aarch64)>
+  
+2. The Cardano sources image:
         
         docker build \
             -t cardano_env:latest \
-            ./Dockerfiles/build_env
+            ./Dockerfiles/build_env/${ARCHITECTURE}
 
     ** Tip: _Add `--no-cache` to rebuild from scratch_ **
         
-2. Set the version variable (Set the right release VERSION_NUMBER, ie: `1.14.0`)
+3. Set the version variable (Set the right release VERSION_NUMBER, ie: `1.14.0`)
 
         VERSION_NUMBER=<VERSION_NUMBER>
 
-3. The node image:
+4. The node image:
 
         docker build \
             --build-arg RELEASE=${VERSION_NUMBER} \
             -t cardano_node:${VERSION_NUMBER} Dockerfiles/node
         
-4. The cli image:
+5. The cli image:
 
         docker build \
             --build-arg RELEASE=${VERSION_NUMBER} \
             -t cardano_cli:${VERSION_NUMBER} Dockerfiles/cli
         
-5. Tag your images with the **latest** tag:
+6. Tag your images with the **latest** tag:
 
         docker tag cardano_node:${VERSION_NUMBER} cardano_node:latest
         docker tag cardano_cli:${VERSION_NUMBER} cardano_cli:latest
@@ -60,76 +73,30 @@ so you can access your configuration from within.
 If your OS is unix based, you can use the `wget` utility to download all configuration files from the
 [official source](https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/index.html).
 
-    wget https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/shelley_testnet-config.json
-    wget https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/shelley_testnet-shelley-genesis.json
-    wget https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/shelley_testnet-topology.json
+    wget -O config.json https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/mainnet-config.json
+    wget -O byron-genesis.json https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/mainnet-byron-genesis.json
+    wget -O shelley-genesis.json https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/mainnet-shelley-genesis.json
+    wget -O topology.json https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/mainnet-topology.json
 
 #### !!! Important !!!!
-Once you have the files, rename them to `topology.json` and `config.json` to avoid breaking the script every times they
-change the name..! Leave the `genesis.json` as is since its name is or think to update your `config.json` accordingly.
+We rename them to `byron-genesis.json`, `shelley-genesis.json`, `topology.json` and `config.json` to avoid breaking the script every time they
+change the name..! Don't forget to update the reference to the `*-genesis.json` file in your `config.json`.
         
 Now, if you wish to use the `start-relay.sh` script provided in my repository, add a `port.txt` file under your `/config` 
 folder. Your file should contain only one line representing the **PORT** used by your node. 
     
     echo 3000 > port.txt
     
-#### Activating LiveView
+### Relay node configuration
 
-If you want to use the LiveView interface, you can update the `ViewMode` and `TraceBlockFetchDecisions` in your 
-`ff-config.json` file by running the following command:
+Now you need to configure your `topology.json` file with your Relay and Producer node information.
 
-    sed -i.bak -e "s/SimpleView/LiveView/g" -e "s/TraceBlockFetchDecisions\": false/TraceBlockFetchDecisions\": true/g" ff-config.json
-    
-#### Relay node configuration
-
-Now you need to configure your ff-topology.json file with your Relay and Producer node information.
-
-See: [Configure the block-producer node and the relay nodes](https://www.coincashew.com/coins/overview-ada/guide-how-to-build-a-haskell-stakepool-node#3-1-configure-the-block-producer-node-and-the-relay-nodes)
-
-### Monitoring
-
-Since it's nice to monitor your setup, follow the Grafana/Prometheus installation step bellow:
-
-1. Build the cardano_monitor image:
-
-        docker build \
-            -t cardano_monitor:latest \
-            ./Dockerfiles/monitor
-            
-2. Build the grafana image:
-
-        docker build \
-            -t grafana:latest \
-            ./Dockerfiles/grafana
-
-### Monitoring tools configuration \*\*OPTIONAL\*\*
-
-Now you've created yours monitoring images, it's time to create your `monitoring-config` folder.
-Your `cardano_monitor` container will bind to this folder, so you can access your configuration from within.
-
-    mkdir monitoring-config
-    cd monitoring-config
-
-You can now copy the following config file in this folder:
-
-- [./Dockerfiles/monitor/files/grafana.ini](Dockerfiles/grafana/files/grafana.ini)
-
-#### Creating the Grafana web server
-
-Since you don't need to run a Grafana web server on every **cardano-node** host, it's container creation isn't included
-in the `docker-compose.yml` file. Use the following command to create its container in a location of your choosing.
-
-Go in the same folder where you've created your `monitoring-config` folder and run the following command:
-
-    docker run -dit \
-        --network host \
-        --mount source=grafana-data,target=/root/grafana/data \
-        --mount type=bind,source="$(pwd)"/monitoring-config,target=/root/config \
-        --name grafana grafana:latest
-
-** Tips: Just remove the `bind mount` line if you're good with the provided configuration file.
+See: [Configure topology files for block-producing and relay nodes](https://docs.cardano.org/projects/cardano-node/en/latest/stake-pool-operations/core_relay.html).
 
 ### Creating the containers with Docker Compose
+
+Docker Compose required `cardano_node`, `cardano_cli` and `cardano_monitor` images.
+To build the `cardano_monitor` image, read: [Monitoring with Grafana](Docs/monitoring.md).
 
 You can copy the docker-compose.yaml where your `config/` folder reside. Then start your containers with the 
 following command:
@@ -138,26 +105,9 @@ following command:
 
 ** Tips: To start a node as producer instead of relay, swap the comment on `CMD` line in the `docker-compose.yaml` file.
 
-### Manually creating the containers
+### Read further on these topics:
 
-If you don't use docker-compose, you need to create both container by running the following commands:
-
-    docker run -dit \
-        --network host \
-        --mount source=cardano-node,target=/root/node_data \
-        --mount type=bind,source="$(pwd)"/config,target=/root/node_config \
-        --name cardano_node cardano_node:latest 
-
-    docker run -dit \
-        --network host \
-        --mount source=cardano-node,target=/root/node_data \
-        --mount type=bind,source="$(pwd)"/config,target=/root/node_config \
-        --name cardano_cli cardano_cli:latest
-            
-** Remember, you need to create container from the repository containing your `config/` folder.
-
-### Topology Updater
-
-Use the following command in `cardano_cli` container to activate topologyUpdater:
-
-    docker exec -d cardano_cli cron -f
+- [How get peers with Topology Updater](Docs/topology.md)
+- [Monitoring with Grafana](Docs/monitoring.md)
+- [Dynamic DNS support](Docs/dynamic_dns.md)
+- [Manually creating the containers](Docs/standalone-containers.md)

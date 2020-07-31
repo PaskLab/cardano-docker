@@ -13,19 +13,21 @@ WORKDIR /root/cardano-node
 RUN git checkout ${RELEASE}
 RUN git submodule update --init --recursive
 
-# Add files
+# Add cabal config files
 COPY files/cabal.project.local /root/cardano-node/cabal.project.local
+
+# Build cardano-node binary
+RUN cabal update
+RUN cabal user-config update
+RUN cabal install cardano-node
+
+# Add startup scripts
 COPY files/start-relay.sh /root/scripts/start-relay.sh
 COPY files/start-producer.sh /root/scripts/start-producer.sh
 
 # Add execution right
 RUN chmod +x /root/scripts/start-relay.sh
 RUN chmod +x /root/scripts/start-producer.sh
-
-# Build cardano-node binary
-RUN cabal update
-RUN cabal user-config update
-RUN cabal install cardano-node
 
 # Image clean-up
 WORKDIR /root
