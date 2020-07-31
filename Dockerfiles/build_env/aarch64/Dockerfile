@@ -1,10 +1,11 @@
 FROM ubuntu:bionic
 LABEL name="cardano_env"
-LABEL description="Environment for building Cardano node & tools"
+LABEL description="AARCH64 Environment for building Cardano node & tools"
 LABEL maintainer="https://github.com/pascallapointe"
 
 ENV PATH=/root/.cabal/bin:/root/scripts:$PATH
 ENV CARDANO_NODE_SOCKET_PATH=/root/node_data/socket
+ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /root
 
 # Install base utilities and dependencies
@@ -19,9 +20,11 @@ RUN apt-get install -y libtinfo-dev
 RUN apt-get install -y libsystemd-dev
 RUN apt-get install -y zlib1g-dev
 RUN apt-get install -y llvm
+RUN apt-get install -y automake
+RUN apt-get install -y make
 RUN apt-get install -y build-essential
 RUN apt-get install -y libffi-dev
-RUN apt-get install -y make
+RUN apt-get install -y libncursesw5
 RUN apt-get install -y g++
 RUN apt-get install -y tmux
 RUN apt-get install -y jq

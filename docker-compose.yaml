@@ -28,6 +28,8 @@ services:
     command: ["tail", "-f", "/dev/null"]
     depends_on:
       - cardano_node
+    environment:
+      CNODE_HOSTNAME: 'CHANGE ME'
     volumes:
       - type: volume
         source: cardano-node
