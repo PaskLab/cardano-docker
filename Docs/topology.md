@@ -9,6 +9,12 @@ In order to get a peers topology file from **TopologyUpdater**, you prove that y
 node is stable and up-to-date with the blockchain. The updater script is included
 in the Cardano Cli image, you juste need to activate the Cron job to trigger it every hour.
 
+##### !!! Important !!!
+The script use's the `genesis.json` file name. Since the combinator uses both `byron-genesis.json` and
+`shelley-genesis.json`, create a copy of `shelley-genesis.json` and renamed it to `genesis.json`.
+
+### Enable Topology Updater
+
 Use the following command in `cardano_cli` container to activate topologyUpdater cron job:
 
     docker exec -d cardano_cli cron -f
