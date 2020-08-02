@@ -1,4 +1,5 @@
 version: "3.7"
+# Use --compatibility flag with "docker-compose up" for deploy key translation
 
 services:
 
@@ -21,6 +22,12 @@ services:
       options:
         max-size: "1m"
         max-file: "10"
+    deploy:
+      resources:
+        limits:
+          memory: 7000M
+        reservations:
+          memory: 2000M
 
   cardano_cli:
     container_name: cardano_cli
