@@ -101,9 +101,11 @@ To build the `cardano_monitor` image, read: [Monitoring with Grafana](Docs/monit
 You can copy the docker-compose.yaml where your `config/` folder reside. Then start your containers with the 
 following command:
 
-    docker-compose up -d
+    docker-compose --compatibility up -d
 
 ** Tips: To start a node as producer instead of relay, swap the comment on `CMD` line in the `docker-compose.yaml` file.
+** Tips: --compatibility flag used to support deploy key.
+** TIPS: Adjust limit values under deploy to your fit your system available memory to avoid OOM KILL signal.
 
 ### Read further on these topics:
 
