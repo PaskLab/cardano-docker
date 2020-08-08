@@ -25,9 +25,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: 7000M
+          memory: 7G
         reservations:
-          memory: 2000M
+          memory: 4G
 
   cardano_cli:
     container_name: cardano_cli
