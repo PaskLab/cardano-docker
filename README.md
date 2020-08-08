@@ -112,4 +112,5 @@ following command:
 - [How get peers with Topology Updater](Docs/topology.md)
 - [Monitoring with Grafana](Docs/monitoring.md)
 - [Dynamic DNS support](Docs/dynamic_dns.md)
+- [Limit containers memory usage](Docs/memory_limit.md)
 - [Manually creating the containers](Docs/standalone-containers.md)
