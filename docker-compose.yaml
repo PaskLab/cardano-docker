@@ -32,7 +32,7 @@ services:
   cardano_cli:
     container_name: cardano_cli
     image: cardano_cli:latest
-    command: ["start-cron.sh"]
+    command: ["cron", "-f"]
     depends_on:
       - cardano_node
     environment:
