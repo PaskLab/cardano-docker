@@ -72,6 +72,7 @@ WORKDIR /root
 RUN rm -rf libsodium
 
 # Image clean-up
+RUN cabal clean
 RUN apt-get autoremove -y
 RUN apt-get clean
 RUN apt-get autoclean
