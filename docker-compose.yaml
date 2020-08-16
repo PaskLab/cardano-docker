@@ -37,6 +37,7 @@ services:
     depends_on:
       - cardano_node
     environment:
+      NON_ROOT_USERNAME: 'NON ROOT USERNAME'
       CNODE_HOSTNAME: 'CHANGE ME'
     volumes:
       - type: volume
