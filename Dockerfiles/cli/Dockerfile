@@ -32,6 +32,8 @@ RUN apt-get -y install cron
 COPY files/topology-updater-cron /etc/cron.d/topology-updater-cron
 RUN chmod 0644 /etc/cron.d/topology-updater-cron
 RUN crontab /etc/cron.d/topology-updater-cron
+COPY files/start-cron.sh /root/scripts/start-cron.sh
+RUN chmod +x /root/scripts/start-cron.sh
 
 # Image clean-up
 RUN rm -rf cardano-node

@@ -24,7 +24,7 @@ this solution.
 
 ### Building from source 
 
-Since we might need our binary to work on unsupported architecture like Aarch64, you'll need to build the node from the source files.
+Since we need our binary to work on Aarch64 architecture, you'll need to build the node from the source files.
 I've wrote a Dockerfile that simplify the process.
 
 First, you need to build all required images:
@@ -112,4 +112,5 @@ following command:
 - [How get peers with Topology Updater](Docs/topology.md)
 - [Monitoring with Grafana](Docs/monitoring.md)
 - [Dynamic DNS support](Docs/dynamic_dns.md)
+- [Limit containers memory usage](Docs/memory_limit.md)
 - [Manually creating the containers](Docs/standalone-containers.md)

@@ -5,7 +5,7 @@
 
 # shellcheck disable=SC2086,SC2034
 
-USERNAME="root" # replace with your username
+USERNAME="${NON_ROOT_USERNAME}" # replace with your username
 
 CNODE_BIN="/root/.cabal/bin"
 CNODE_DATA_DIR="/root/node_data"
