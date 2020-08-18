@@ -25,17 +25,19 @@ services:
     deploy:
       resources:
         limits:
-          memory: 7000M
+          memory: 6G
         reservations:
-          memory: 2000M
+          memory: 4G
 
   cardano_cli:
     container_name: cardano_cli
     image: cardano_cli:latest
-    command: ["tail", "-f", "/dev/null"]
+    command: ["cron", "-f"]               # Comment for node producer
+    #command: ["tail", "-f", "/dev/null"] # Uncomment for node producer
     depends_on:
       - cardano_node
     environment:
+      NON_ROOT_USERNAME: 'NON ROOT USERNAME'
       CNODE_HOSTNAME: 'CHANGE ME'
     volumes:
       - type: volume

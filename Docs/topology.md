@@ -15,12 +15,16 @@ The script use's the `genesis.json` file name. Since the combinator uses both `b
 
 ### Enable Topology Updater
 
-Use the following command in `cardano_cli` container to activate topologyUpdater cron job:
+If you're using docker-compose, change the env `CNODE_HOSTNAME: 'CHANGE ME'` parameters under the
+`cardano_cli` service for **your own domain URL**. If you're using IP's, do not touch anything.
+
+If you're not using docker-compose, use the following command in `cardano_cli` container to activate
+topologyUpdater cron job:
 
     docker exec -d cardano_cli cron -f
     
 You'll be able to get a topology.json file after the script made 4 successful attempt. You can
-check your attemps using the following command:
+check your attempts using the following command:
 
     docker exec cardano_cli cat /root/node_data/topologyUpdater_lastresult.json
     
