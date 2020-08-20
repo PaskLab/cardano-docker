@@ -13,7 +13,9 @@ WORKDIR /root/cardano-db-sync
 RUN git checkout ${RELEASE}
 RUN git submodule update --init --recursive
 
-RUN sh <(curl -L https://nixos.org/nix/install) --no-daemon
+RUN apt-get install -y curl
+RUN curl -L https://nixos.org/nix/install
+RUN ./install --no-daemon
 RUN nix-build -A cardano-db-sync -o db-sync-node
 
 # Build cardano-node binary
