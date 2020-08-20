@@ -16,11 +16,12 @@ services:
         source: ./config
         target: /root/node_config
     network_mode: host
-    restart: unless-stopped
+    restart: on-failure
     stop_grace_period: 10s
     logging:
+      driver: "json-file"
       options:
-        max-size: "1m"
+        max-size: "200k"
         max-file: "10"
     deploy:
       resources:
@@ -47,11 +48,12 @@ services:
         source: ./config
         target: /root/node_config
     network_mode: host
-    restart: unless-stopped
+    restart: on-failure
     stop_grace_period: 10s
     logging:
+      driver: "json-file"
       options:
-        max-size: "1m"
+        max-size: "200k"
         max-file: "10"
 
   cardano_monitor:
@@ -61,12 +63,67 @@ services:
     depends_on:
       - cardano_node
     network_mode: host
-    restart: unless-stopped
+    restart: on-failure
     stop_grace_period: 10s
     logging:
+      driver: "json-file"
       options:
-        max-size: "1m"
+        max-size: "200k"
         max-file: "10"
+
+
+#  postgres:
+#    image: arm64v8/postgres:11.5-alpine
+#    environment:
+#      - POSTGRES_LOGGING=true
+#      - POSTGRES_DB_FILE=/run/secrets/postgres_db
+#      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+#      - POSTGRES_USER_FILE=/run/secrets/postgres_user
+#    secrets:
+#      - postgres_password
+#      - postgres_user
+#      - postgres_db
+#    volumes:
+#      - postgres:/var/lib/postgresql/data
+#    ports:
+#      - 5432:5432
+#    restart: on-failure
+#    logging:
+#      driver: "json-file"
+#      options:
+#        max-size: "200k"
+#        max-file: "10"
+
+#  cardano_db_sync:
+#    container_name: cardano_db_sync
+#    image: cardano_db_sync:latest
+#    command: ["tail", "-f", "/dev/null"]
+#    depends_on:
+#      - cardano_node
+#      - postgres
+#    secrets:
+#      - postgres_password
+#      - postgres_user
+#      - postgres_db
+#    volumes:
+#      - type: volume
+#        source: cardano-node
+#        target: /root/node_data
+#    restart: on-failure
+#    logging:
+#      driver: "json-file"
+#      options:
+#        max-size: "200k"
+#        max-file: "10"
+
+#secrets:
+#  postgres_db:
+#    file: ./config/secrets/postgres_db
+#  postgres_password:
+#    file: ./config/secrets/postgres_password
+#  postgres_user:
+#    file: ./config/secrets/postgres_user
 
 volumes:
   cardano-node:
+#  postgres:
