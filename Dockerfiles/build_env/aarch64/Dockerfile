@@ -48,15 +48,15 @@ RUN ln -sf /usr/local/bin/ghc /usr/bin/ghc
 
 # Install version 3.0 of Cabal-Install
 #RUN wget http://hackage.haskell.org/package/cabal-install-3.0.0.0/cabal-install-3.0.0.0.tar.gz
-RUN wget http://hackage.haskell.org/package/Cabal-3.2.0.0/Cabal-3.2.0.0.tar.gz
+RUN wget https://downloads.haskell.org/~cabal/cabal-install-3.2.0.0/cabal-install-3.2.0.0.tar.gz
 #RUN tar -xf cabal-install-3.0.0.0.tar.gz
-RUN tar -xf Cabal-3.2.0.0.tar.gz
+RUN tar -xf cabal-install-3.2.0.0.tar.gz
 #WORKDIR /cardano/cabal-install-3.0.0.0
-WORKDIR Cabal-3.2.0.0
+WORKDIR cabal-install-3.2.0.0
 RUN cabal update
-RUN cabal build
+RUN cabal install
 WORKDIR /cardano
-#RUN rm -rf cabal-install-3.0.0.0 cabal-install-3.0.0.0.tar.gz
+#RUN rm -rf cabal-install-3.0.0.0 Cabal-3.2.0.0.tar.gz
 
 # Install Cardano Libsodium dependencies
 #RUN apt-get install -y libtool
