@@ -3,10 +3,12 @@ LABEL name="cardano_env"
 LABEL description="AARCH64 Environment for building Cardano node & tools"
 LABEL maintainer="https://github.com/pascallapointe"
 
-ENV PATH=/root/.cabal/bin:/root/scripts:$PATH
+USER cardano:cardano
+
+ENV PATH=/cardano/scripts:$PATH
 ENV CARDANO_NODE_SOCKET_PATH=/root/node_data/socket
 ENV DEBIAN_FRONTEND=noninteractive
-WORKDIR /root
+WORKDIR /cardano
 
 # Install base utilities and dependencies
 RUN apt-get update
@@ -35,44 +37,47 @@ RUN apt-get install -y haskell-platform
 # Install version 8.6 of haskell compiler GHC
 RUN wget https://downloads.haskell.org/ghc/8.6.5/ghc-8.6.5-aarch64-ubuntu18.04-linux.tar.xz
 RUN tar -xf ghc-8.6.5-aarch64-ubuntu18.04-linux.tar.xz
-WORKDIR /root/ghc-8.6.5
+WORKDIR /cardano/ghc-8.6.5
 RUN ./configure
 RUN make install
-WORKDIR /root
+WORKDIR /cardano
 RUN rm -rf ghc-8.6.5 ghc-8.6.5-aarch64-ubuntu18.04-linux.tar.xz
 
 # Make the ghc symlink point to the newer version 8.6
 RUN ln -sf /usr/local/bin/ghc /usr/bin/ghc
 
 # Install version 3.0 of Cabal-Install
-RUN wget http://hackage.haskell.org/package/cabal-install-3.0.0.0/cabal-install-3.0.0.0.tar.gz
-RUN tar -xf cabal-install-3.0.0.0.tar.gz
-WORKDIR /root/cabal-install-3.0.0.0
+#RUN wget http://hackage.haskell.org/package/cabal-install-3.0.0.0/cabal-install-3.0.0.0.tar.gz
+RUN wget http://hackage.haskell.org/package/Cabal-3.2.0.0/Cabal-3.2.0.0.tar.gz
+#RUN tar -xf cabal-install-3.0.0.0.tar.gz
+RUN tar -xf Cabal-3.2.0.0.tar.gz
+#WORKDIR /cardano/cabal-install-3.0.0.0
+WORKDIR Cabal-3.2.0.0
 RUN cabal update
-RUN cabal install
-WORKDIR /root
-RUN rm -rf cabal-install-3.0.0.0 cabal-install-3.0.0.0.tar.gz
+RUN cabal build
+WORKDIR /cardano
+#RUN rm -rf cabal-install-3.0.0.0 cabal-install-3.0.0.0.tar.gz
 
 # Install Cardano Libsodium dependencies
-RUN apt-get install -y libtool
-RUN apt-get install -y autoconf
-
-RUN git clone https://github.com/input-output-hk/libsodium
-
-WORKDIR /root/libsodium
-RUN git checkout 66f017f1
-RUN ./autogen.sh
-RUN ./configure
-RUN make
-RUN make install
-
-ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
-
-WORKDIR /root
-RUN rm -rf libsodium
+#RUN apt-get install -y libtool
+#RUN apt-get install -y autoconf
+#
+#RUN git clone https://github.com/input-output-hk/libsodium
+#
+#WORKDIR /cardano/libsodium
+#RUN git checkout 66f017f1
+#RUN ./autogen.sh
+#RUN ./configure
+#RUN make
+#RUN make install
+#
+#ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
+#
+#WORKDIR /cardano
+#RUN rm -rf libsodium
 
 # Image clean-up
-RUN cabal clean
-RUN apt-get autoremove -y
-RUN apt-get clean
-RUN apt-get autoclean
+#RUN cabal clean
+#RUN apt-get autoremove -y
+#RUN apt-get clean
+#RUN apt-get autoclean
