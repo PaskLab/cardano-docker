@@ -3,9 +3,12 @@ LABEL name="cardano_env"
 LABEL description="AARCH64 Environment for building Cardano node & tools"
 LABEL maintainer="https://github.com/pascallapointe"
 
+# Creating non root user
 ARG USERNAME
+RUN useradd -r -u 1001 -g ${USERNAME} ${USERNAME}
 USER ${USERNAME}:${USERNAME}
 
+# Define environment variables
 ENV PATH=/cardano/scripts:$PATH
 ENV CARDANO_NODE_SOCKET_PATH=/cardano/socket/node.sock
 ENV DEBIAN_FRONTEND=noninteractive
