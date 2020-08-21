@@ -5,7 +5,7 @@ LABEL maintainer="https://github.com/pascallapointe"
 
 # Creating non root user
 ARG USERNAME
-RUN useradd -r -u 1001 -g ${USERNAME} ${USERNAME}
+RUN useradd ${USERNAME}
 USER ${USERNAME}:${USERNAME}
 
 # Define environment variables
