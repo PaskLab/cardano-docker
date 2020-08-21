@@ -3,11 +3,13 @@ LABEL name="cardano_env"
 LABEL description="AARCH64 Environment for building Cardano node & tools"
 LABEL maintainer="https://github.com/pascallapointe"
 
-USER cardano:cardano
+ARG USERNAME
+USER ${USERNAME}:${USERNAME}
 
 ENV PATH=/cardano/scripts:$PATH
-ENV CARDANO_NODE_SOCKET_PATH=/root/node_data/socket
+ENV CARDANO_NODE_SOCKET_PATH=/cardano/socket/node.sock
 ENV DEBIAN_FRONTEND=noninteractive
+
 WORKDIR /cardano
 
 # Install base utilities and dependencies
