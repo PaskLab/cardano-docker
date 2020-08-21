@@ -47,37 +47,33 @@ RUN rm -rf ghc-8.6.5 ghc-8.6.5-aarch64-ubuntu18.04-linux.tar.xz
 RUN ln -sf /usr/local/bin/ghc /usr/bin/ghc
 
 # Install version 3.0 of Cabal-Install
-#RUN wget http://hackage.haskell.org/package/cabal-install-3.0.0.0/cabal-install-3.0.0.0.tar.gz
-RUN wget https://downloads.haskell.org/~cabal/cabal-install-3.2.0.0/cabal-install-3.2.0.0.tar.gz
-#RUN tar -xf cabal-install-3.0.0.0.tar.gz
-RUN tar -xf cabal-install-3.2.0.0.tar.gz
-#WORKDIR /cardano/cabal-install-3.0.0.0
-WORKDIR cabal-install-3.2.0.0
+RUN wget http://hackage.haskell.org/package/cabal-install-3.0.0.0/cabal-install-3.0.0.0.tar.gz
+RUN tar -xf cabal-install-3.0.0.0.tar.gz
+WORKDIR /cardano/cabal-install-3.0.0.0
 RUN cabal update
 RUN cabal install
-WORKDIR /cardano
-#RUN rm -rf cabal-install-3.0.0.0 Cabal-3.2.0.0.tar.gz
+RUN rm -rf cabal-install-3.0.0.0 Cabal-3.2.0.0.tar.gz
 
 # Install Cardano Libsodium dependencies
-#RUN apt-get install -y libtool
-#RUN apt-get install -y autoconf
-#
-#RUN git clone https://github.com/input-output-hk/libsodium
-#
-#WORKDIR /cardano/libsodium
-#RUN git checkout 66f017f1
-#RUN ./autogen.sh
-#RUN ./configure
-#RUN make
-#RUN make install
-#
-#ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
-#
-#WORKDIR /cardano
-#RUN rm -rf libsodium
+RUN apt-get install -y libtool
+RUN apt-get install -y autoconf
+
+RUN git clone https://github.com/input-output-hk/libsodium
+
+WORKDIR /cardano/libsodium
+RUN git checkout 66f017f1
+RUN ./autogen.sh
+RUN ./configure
+RUN make
+RUN make install
+
+ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
+
+WORKDIR /cardano
+RUN rm -rf libsodium
 
 # Image clean-up
-#RUN cabal clean
-#RUN apt-get autoremove -y
-#RUN apt-get clean
-#RUN apt-get autoclean
+RUN cabal clean
+RUN apt-get autoremove -y
+RUN apt-get clean
+RUN apt-get autoclean
