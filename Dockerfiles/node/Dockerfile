@@ -41,8 +41,9 @@ COPY files/topologyUpdater.sh /cardano/scripts/topologyUpdater.sh
 # Creating non root user cardano
 RUN useradd -m cardano
 
-# Add execution right
+# Add permissions
 RUN chown -R cardano:cardano /cardano
+RUN chmod g+s /cardano
 RUN chmod 540 /cardano/scripts/*
 RUN chmod 540 /cardano/bin/*
 
