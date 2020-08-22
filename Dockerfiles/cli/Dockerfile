@@ -4,6 +4,8 @@ LABEL name="cardano_cli"
 LABEL description="Cardano CLI"
 LABEL maintainer="https://github.com/pascallapointe"
 
+USER cardano:cardano
+
 WORKDIR /root
 
 # Download cardano-node repository
@@ -26,10 +28,10 @@ WORKDIR /root
 # Install topologyUpdater script
 RUN apt-get update
 RUN apt-get install -y curl
-COPY files/topologyUpdater.sh /root/scripts/topologyUpdater.sh
+COPY ../node/files/topologyUpdater.sh /root/scripts/topologyUpdater.sh
 RUN chmod +x /root/scripts/topologyUpdater.sh
 RUN apt-get -y install cron
-COPY files/topology-updater-cron /etc/cron.d/topology-updater-cron
+COPY ../node/files/topology-updater-cron /etc/cron.d/topology-updater-cron
 RUN chmod 0644 /etc/cron.d/topology-updater-cron
 RUN crontab /etc/cron.d/topology-updater-cron
 COPY files/start-cron.sh /root/scripts/start-cron.sh

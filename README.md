@@ -32,7 +32,7 @@ First, you need to build all required images:
 1. Set the architecture variable to your requirement (Only x86/amd64 and aarch64 supported):
   
         ARCHITECTURE=<PROCESSOR_ARCHITECTURE(x86_64 or aarch64)>
-  
+        
 2. The Cardano sources image:
         
         docker build \
@@ -45,19 +45,24 @@ First, you need to build all required images:
 
         VERSION_NUMBER=<VERSION_NUMBER>
 
-4. The node image:
+4. Set your username:
+        
+        USERNAME=<YOUR_USERNAME_>
+
+5. The node image:
 
         docker build \
+            --build-arg USERNAME=${USERNAME} \
             --build-arg RELEASE=${VERSION_NUMBER} \
             -t cardano_node:${VERSION_NUMBER} Dockerfiles/node
         
-5. The cli image:
+6. The cli image:
 
         docker build \
             --build-arg RELEASE=${VERSION_NUMBER} \
             -t cardano_cli:${VERSION_NUMBER} Dockerfiles/cli
         
-6. Tag your images with the **latest** tag:
+7. Tag your images with the **latest** tag:
 
         docker tag cardano_node:${VERSION_NUMBER} cardano_node:latest
         docker tag cardano_cli:${VERSION_NUMBER} cardano_cli:latest

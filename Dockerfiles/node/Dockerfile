@@ -4,6 +4,8 @@ LABEL name="cardano_node"
 LABEL description="Cardano node"
 LABEL maintainer="https://github.com/pascallapointe"
 
+USER cardano:cardano
+
 WORKDIR /root
 
 # Download cardano-node repository
@@ -31,6 +33,11 @@ RUN chmod +x /root/scripts/start-producer.sh
 
 # Image clean-up
 WORKDIR /root
+
+# Creating non root user
+ARG USERNAME
+RUN useradd ${USERNAME}
+USER ${USERNAME}:${USERNAME}
 
 RUN rm -rf cardano-node
 RUN apt-get purge -y apt-utils

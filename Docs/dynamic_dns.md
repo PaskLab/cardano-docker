@@ -25,7 +25,6 @@ Change the configuration file access:
 ### Creating the containers
 
     docker run -dit \
-        --network host \
         --mount type=bind,source="$(pwd)"/config,target=/root/config \
         --name ddclient ddclient:latest
             

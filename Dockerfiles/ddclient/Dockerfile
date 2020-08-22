@@ -3,6 +3,8 @@ LABEL name="ddclient"
 LABEL description="Client utility for dynamic DNS updates"
 LABEL maintainer="https://github.com/pascallapointe"
 
+USER cardano:cardano
+
 ENV DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /root

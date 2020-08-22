@@ -10,11 +10,15 @@ services:
     #command: ["start-producer.sh"] # Uncomment for node producer
     volumes:
       - type: volume
-        source: cardano-node
-        target: /root/node_data
+        source: cardano-db
+        target: /cardano/socket
+      - type: volume
+        source: cardano-db
+        target: /cardano/db
       - type: bind
         source: ./config
-        target: /root/node_config
+        target: /cardano/config
+        read_only: true
     network_mode: host
     restart: on-failure
     stop_grace_period: 10s
@@ -42,12 +46,12 @@ services:
       CNODE_HOSTNAME: 'CHANGE ME'
     volumes:
       - type: volume
-        source: cardano-node
-        target: /root/node_data
+        source: cardano-socket
+        target: /cardano/socket
       - type: bind
         source: ./config
-        target: /root/node_config
-    network_mode: host
+        target: /cardano/config
+        read_only: true
     restart: on-failure
     stop_grace_period: 10s
     logging:
@@ -125,5 +129,6 @@ services:
 #    file: ./config/secrets/postgres_user
 
 volumes:
-  cardano-node:
+  cardano-db:
+  cardano-socket:
 #  postgres:

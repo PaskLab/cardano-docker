@@ -3,6 +3,8 @@ LABEL name="grafana"
 LABEL description="Grafana server"
 LABEL maintainer="https://github.com/pascallapointe"
 
+USER cardano:cardano
+
 WORKDIR /root
 
 # Install base utilities and dependencies

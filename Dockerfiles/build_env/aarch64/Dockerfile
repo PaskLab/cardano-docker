@@ -52,7 +52,8 @@ RUN tar -xf cabal-install-3.0.0.0.tar.gz
 WORKDIR /cardano/cabal-install-3.0.0.0
 RUN cabal update
 RUN cabal install
-RUN rm -rf cabal-install-3.0.0.0 Cabal-3.2.0.0.tar.gz
+WORKDIR /cardano
+RUN rm -rf cabal-install-3.0.0.0 cabal-install-3.0.0.0.tar.gz
 
 # Install Cardano Libsodium dependencies
 RUN apt-get install -y libtool

@@ -3,6 +3,8 @@ LABEL name="cardano_env"
 LABEL description="X86/AMD64 Environment for building Cardano node & tools"
 LABEL maintainer="https://github.com/pascallapointe"
 
+USER cardano:cardano
+
 ENV PATH=/root/.local/bin:/root/.cabal/bin:/root/scripts:$PATH
 ENV CARDANO_NODE_SOCKET_PATH=/root/node_data/socket
 ENV DEBIAN_FRONTEND=noninteractive

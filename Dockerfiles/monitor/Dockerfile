@@ -3,6 +3,8 @@ LABEL name="cardano_monitor"
 LABEL description="Monitoring tools for Cardano node and its host"
 LABEL maintainer="https://github.com/pascallapointe"
 
+USER cardano:cardano
+
 WORKDIR /root
 
 # Install base utilities and dependencies
