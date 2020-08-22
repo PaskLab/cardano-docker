@@ -16,11 +16,15 @@ For non-dockerized instructions on how to compile cardano-node on RaspberryPi-4B
 
 #### !!! Important, known issue !!!
 
-Since mainnet, node freeze issue as been notice on `aarch64` based system.
+* Node freeze issue as been notice on `aarch64` based system while downloading the blockchain
+ on first boot.
 
-To overcome this issue, you'll need to fully synchronized the blockchain on `x86/amd64` based system before moving the
-files to your `aarch64` system. Thanks to [@alessandrokonrad](https://github.com/alessandrokonrad) for providing
-this solution.
+    To overcome this issue, you'll need to fully synchronized the blockchain on `x86/amd64` based system before moving the
+    files to your `aarch64` system. Thanks to [@alessandrokonrad](https://github.com/alessandrokonrad) for providing
+    this solution.
+
+* All containers running on host network, providing network isolation where possible will
+be part of future improvement.
 
 ### Building from source 
 
