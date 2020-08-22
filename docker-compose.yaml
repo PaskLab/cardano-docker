@@ -8,8 +8,9 @@ services:
     environment:
       CNODE_HOSTNAME: 'CHANGE ME'
     image: cardano_node:latest
-    command: ["start-relay.sh"]     # Comment for node producer
-    #command: ["start-producer.sh"] # Uncomment for node producer
+    command: ["start-relay.sh"]           # Comment for node producer or relay with topology updater
+    #command: ["start-with-topology.sh"]  # Uncomment for relay with topology updater
+    #command: ["start-producer.sh"]       # Uncomment for node producer
     volumes:
       - type: volume
         source: cardano-db

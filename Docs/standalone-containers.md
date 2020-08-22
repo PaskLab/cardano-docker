@@ -9,7 +9,7 @@ If you don't use docker-compose, you need to create both container by running th
         --env CNODE_HOSTNAME='CHANGE ME' \
         --mount source=cardano-db,target=/cardano/db \
         --mount source=cardano-socket,target=/cardano/socket \
-        --mount type=bind,source="$(pwd)"/config,target=/cardano/config \
+        --mount type=bind,source="$(pwd)"/config,target=/cardano/config,readonly \
         --name cardano_node cardano_node:latest 
             
 ** Remember, you need to create your container from the repository containing your `config/` folder.

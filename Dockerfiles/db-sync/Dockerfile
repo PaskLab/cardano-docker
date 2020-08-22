@@ -4,8 +4,6 @@ LABEL name="cardano_db_sync"
 LABEL description="Cardano DB Sync"
 LABEL maintainer="https://github.com/pascallapointe"
 
-USER cardano:cardano
-
 WORKDIR /root
 
 # Download cardano-db-sync repository

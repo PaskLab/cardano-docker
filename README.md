@@ -48,6 +48,7 @@ First, you need to build all required images:
 4. The node image:
 
         docker build \
+            --build-arg ARCHITECTURE=${ARCHITECTURE} \
             --build-arg RELEASE=${VERSION_NUMBER} \
             -t cardano_node:${VERSION_NUMBER} Dockerfiles/node
      
@@ -74,6 +75,14 @@ If your OS is unix based, you can use the `wget` utility to download all configu
 #### !!! Important !!!!
 We rename them to `byron-genesis.json`, `shelley-genesis.json`, `topology.json` and `config.json` to avoid breaking the script every time they
 change the name..! Don't forget to update the reference to the `*-genesis.json` file in your `config.json`.
+
+#### Configuration files permissions
+
+Your user living inside your container need to have access to your configuration file. Add public read permission to all your files under `/config`:
+
+    chmod 644 config/*
+   
+#### Port configuration
         
 Now, if you wish to use the `start-relay.sh` script provided in my repository, add a `port.txt` file under your `/config` 
 folder. Your file should contain only one line representing the **PORT** used by your node. 

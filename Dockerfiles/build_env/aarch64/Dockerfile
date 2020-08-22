@@ -4,8 +4,7 @@ LABEL description="AARCH64 Environment for building Cardano node & tools"
 LABEL maintainer="https://github.com/pascallapointe"
 
 # Define environment variables
-ENV PATH=/root/.cabal/bin:/cardano/scripts:$PATH
-ENV CARDANO_NODE_SOCKET_PATH=/cardano/socket/node.sock
+ENV PATH=/root/.cabal/bin:$PATH
 ENV DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /root
