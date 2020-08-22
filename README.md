@@ -41,31 +41,19 @@ First, you need to build all required images:
 
     ** Tip: _Add `--no-cache` to rebuild from scratch_ **
         
-3. Set the version variable (Set the right release VERSION_NUMBER, ie: `1.14.0`)
+3. Set the version variable (Set the right release VERSION_NUMBER, ie: `1.19.0`)
 
         VERSION_NUMBER=<VERSION_NUMBER>
 
-4. Set your username:
-        
-        USERNAME=<YOUR_USERNAME_>
-
-5. The node image:
+4. The node image:
 
         docker build \
-            --build-arg USERNAME=${USERNAME} \
             --build-arg RELEASE=${VERSION_NUMBER} \
             -t cardano_node:${VERSION_NUMBER} Dockerfiles/node
-        
-6. The cli image:
-
-        docker build \
-            --build-arg RELEASE=${VERSION_NUMBER} \
-            -t cardano_cli:${VERSION_NUMBER} Dockerfiles/cli
-        
-7. Tag your images with the **latest** tag:
+     
+5. Tag your image with the **latest** tag:
 
         docker tag cardano_node:${VERSION_NUMBER} cardano_node:latest
-        docker tag cardano_cli:${VERSION_NUMBER} cardano_cli:latest
                                      
 ### Node configuration
 

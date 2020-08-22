@@ -5,6 +5,8 @@ services:
 
   cardano_node:
     container_name: cardano_node
+    environment:
+      CNODE_HOSTNAME: 'CHANGE ME'
     image: cardano_node:latest
     command: ["start-relay.sh"]     # Comment for node producer
     #command: ["start-producer.sh"] # Uncomment for node producer
@@ -33,32 +35,6 @@ services:
           memory: 6G
         reservations:
           memory: 4G
-
-  cardano_cli:
-    container_name: cardano_cli
-    image: cardano_cli:latest
-    command: ["cron", "-f"]               # Comment for node producer
-    #command: ["tail", "-f", "/dev/null"] # Uncomment for node producer
-    depends_on:
-      - cardano_node
-    environment:
-      NON_ROOT_USERNAME: 'NON ROOT USERNAME'
-      CNODE_HOSTNAME: 'CHANGE ME'
-    volumes:
-      - type: volume
-        source: cardano-socket
-        target: /cardano/socket
-      - type: bind
-        source: ./config
-        target: /cardano/config
-        read_only: true
-    restart: on-failure
-    stop_grace_period: 10s
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "200k"
-        max-file: "10"
 
   cardano_monitor:
     container_name: cardano_monitor

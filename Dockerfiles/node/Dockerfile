@@ -4,8 +4,6 @@ LABEL name="cardano_node"
 LABEL description="Cardano node"
 LABEL maintainer="https://github.com/pascallapointe"
 
-USER cardano:cardano
-
 WORKDIR /root
 
 # Download cardano-node repository
@@ -21,23 +19,32 @@ COPY files/cabal.project.local /root/cardano-node/cabal.project.local
 # Build cardano-node binary
 RUN cabal update
 RUN cabal user-config update
-RUN cabal install cardano-node
+RUN cabal build all
+
+#
+# !!!!! copy bin to cardano
+#
+
+# Creating non root user cardano
+RUN useradd cardano
+USER cardano:cardano
 
 # Add startup scripts
-COPY files/start-relay.sh /root/scripts/start-relay.sh
-COPY files/start-producer.sh /root/scripts/start-producer.sh
+COPY files/start-relay.sh /cardano/scripts/start-relay.sh
+COPY files/start-producer.sh /cardano/scripts/start-producer.sh
+COPY files/start_with_topology.sh /cardano/scripts/start_with_topology.sh
+
+# Install topologyUpdater script
+RUN apt-get update
+RUN apt-get install -y curl
+COPY files/topologyUpdater.sh /cardano/scripts/topologyUpdater.sh
 
 # Add execution right
-RUN chmod +x /root/scripts/start-relay.sh
-RUN chmod +x /root/scripts/start-producer.sh
+RUN chown -R cardano:cardano /cardano
+RUN chmod +x /cardano/scripts/*
 
 # Image clean-up
-WORKDIR /root
-
-# Creating non root user
-ARG USERNAME
-RUN useradd ${USERNAME}
-USER ${USERNAME}:${USERNAME}
+WORKDIR /cardano
 
 RUN rm -rf cardano-node
 RUN apt-get purge -y apt-utils
