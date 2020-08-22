@@ -42,11 +42,8 @@ RUN useradd cardano
 RUN chown -R cardano:cardano /cardano
 RUN chmod +x /cardano/scripts/*
 
-# Switch user
-USER cardano:cardano
-
 # Image clean-up
-WORKDIR /cardano
+WORKDIR /root
 
 RUN rm -rf cardano-node
 RUN apt-get purge -y apt-utils
@@ -67,5 +64,8 @@ RUN apt-get purge -y g++
 RUN apt-get autoremove -y
 RUN apt-get clean
 RUN apt-get autoclean
+
+# Switch user
+#USER cardano:cardano
 
 CMD ["start-relay.sh"]
