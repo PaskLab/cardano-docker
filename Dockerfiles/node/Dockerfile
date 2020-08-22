@@ -28,7 +28,7 @@ RUN cabal build all
 # Add startup scripts
 COPY files/start-relay.sh /cardano/scripts/start-relay.sh
 COPY files/start-producer.sh /cardano/scripts/start-producer.sh
-COPY files/start_with_topology.sh /cardano/scripts/start_with_topology.sh
+COPY files/start-with-topology.sh /cardano/scripts/start_with_topology.sh
 
 # Install topologyUpdater script
 RUN apt-get update
@@ -45,7 +45,7 @@ RUN chmod +x /cardano/scripts/*
 # Image clean-up
 WORKDIR /root
 
-RUN rm -rf cardano-node
+#RUN rm -rf cardano-node
 RUN apt-get purge -y apt-utils
 RUN apt-get purge -y git
 RUN apt-get purge -y wget
