@@ -21,9 +21,9 @@ RUN cabal update
 RUN cabal user-config update
 RUN cabal build all
 
-#
-# !!!!! copy bin to cardano
-#
+ARG ARCHITECTURE
+RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/ghc-8.6.5/cardano-node-${RELEASE}/x/cardano-node/build/cardano-node/cardano-node /cardano/bin
+RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/ghc-8.6.5/cardano-cli-${RELEASE}/x/cardano-cli/build/cardano-cli/cardano-cli /cardano/bin
 
 # Add startup scripts
 COPY files/start-relay.sh /cardano/scripts/start-relay.sh
@@ -41,11 +41,16 @@ RUN useradd cardano
 # Add execution right
 RUN chown -R cardano:cardano /cardano
 RUN chmod +x /cardano/scripts/*
+RUN chmod +x /cardano/bin/*
+
+ENV PATH=/cardano/scripts:/cardano/bin:$PATH
+ENV CARDANO_NODE_SOCKET_PATH=/cardano/socket/node.sock
 
 # Image clean-up
 WORKDIR /root
 
-#RUN rm -rf cardano-node
+RUN rm -rf cardano-node
+RUN rm -rf .cabal
 RUN apt-get purge -y apt-utils
 RUN apt-get purge -y git
 RUN apt-get purge -y wget
@@ -66,6 +71,7 @@ RUN apt-get clean
 RUN apt-get autoclean
 
 # Switch user
-#USER cardano:cardano
+USER cardano:cardano
+WORKDIR /cardano
 
 CMD ["start-relay.sh"]
