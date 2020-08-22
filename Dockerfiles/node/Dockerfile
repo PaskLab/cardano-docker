@@ -28,7 +28,7 @@ RUN cabal build all
 # Add startup scripts
 COPY files/start-relay.sh /cardano/scripts/start-relay.sh
 COPY files/start-producer.sh /cardano/scripts/start-producer.sh
-COPY files/start-with-topology.sh /cardano/scripts/start_with_topology.sh
+COPY files/start-with-topology.sh /cardano/scripts/start-with-topology.sh
 
 # Install topologyUpdater script
 RUN apt-get update
