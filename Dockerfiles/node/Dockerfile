@@ -21,8 +21,10 @@ RUN cabal update
 RUN cabal user-config update
 RUN cabal build all
 
+# Create files structure
+RUN mkdir -p /cardano/config /cardano/bin /cardano/db /cardano/socket /cardano/scripts
+
 ARG ARCHITECTURE
-RUN mkdir -p /cardano/bin
 RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/ghc-8.6.5/cardano-node-${RELEASE}/x/cardano-node/build/cardano-node/cardano-node /cardano/bin
 RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/ghc-8.6.5/cardano-cli-${RELEASE}/x/cardano-cli/build/cardano-cli/cardano-cli /cardano/bin
 
@@ -51,7 +53,7 @@ ENV CARDANO_NODE_SOCKET_PATH=/cardano/socket/node.sock
 WORKDIR /root
 
 RUN rm -rf cardano-node
-RUN rm -rf .cabal
+RUN rm -rf .cabal .local
 RUN apt-get purge -y apt-utils
 RUN apt-get purge -y git
 RUN apt-get purge -y wget
