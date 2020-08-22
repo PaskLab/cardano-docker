@@ -25,10 +25,6 @@ RUN cabal build all
 # !!!!! copy bin to cardano
 #
 
-# Creating non root user cardano
-RUN useradd cardano
-USER cardano:cardano
-
 # Add startup scripts
 COPY files/start-relay.sh /cardano/scripts/start-relay.sh
 COPY files/start-producer.sh /cardano/scripts/start-producer.sh
@@ -39,9 +35,15 @@ RUN apt-get update
 RUN apt-get install -y curl
 COPY files/topologyUpdater.sh /cardano/scripts/topologyUpdater.sh
 
+# Creating non root user cardano
+RUN useradd cardano
+
 # Add execution right
 RUN chown -R cardano:cardano /cardano
 RUN chmod +x /cardano/scripts/*
+
+# Switch user
+USER cardano:cardano
 
 # Image clean-up
 WORKDIR /cardano
