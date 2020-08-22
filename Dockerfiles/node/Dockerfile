@@ -37,12 +37,12 @@ RUN apt-get install -y curl
 COPY files/topologyUpdater.sh /cardano/scripts/topologyUpdater.sh
 
 # Creating non root user cardano
-RUN useradd cardano
+RUN useradd -m cardano
 
 # Add execution right
 RUN chown -R cardano:cardano /cardano
-RUN chmod +x /cardano/scripts/*
-RUN chmod +x /cardano/bin/*
+RUN chmod 540 /cardano/scripts/*
+RUN chmod 540 /cardano/bin/*
 
 ENV PATH=/cardano/scripts:/cardano/bin:$PATH
 ENV CARDANO_NODE_SOCKET_PATH=/cardano/socket/node.sock
