@@ -42,6 +42,14 @@ You can now copy the following config file in this folder:
 
 - [../Dockerfiles/monitor/files/grafana.ini](../Dockerfiles/grafana/files/grafana.ini)
 
+#### Creating the cardano_monitor container
+
+If your not using docker-compose, create the container as follows:
+
+    docker run -dit \
+        --network host \
+        --name cardano_monitor cardano_monitor:latest
+
 #### Creating the Grafana web server
 
 Since you don't need to run a Grafana web server on every **cardano-node** host, it's container creation isn't included
