@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM ubuntu:focal
 LABEL name="cardano_monitor"
 LABEL description="Monitoring tools for Cardano node and its host"
 LABEL maintainer="https://github.com/pascallapointe"
