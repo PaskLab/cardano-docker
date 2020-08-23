@@ -11,6 +11,7 @@ services:
     command: ["start-relay.sh"]           # Comment for node producer or relay with topology updater
     #command: ["start-with-topology.sh"]  # Uncomment for relay with topology updater
     #command: ["start-producer.sh"]       # Uncomment for node producer
+    #command: ["tail","-f","/dev/null"]   # Used for maintenance purpose
     volumes:
       - type: volume
         source: cardano-socket
