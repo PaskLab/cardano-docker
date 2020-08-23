@@ -13,7 +13,7 @@ services:
     #command: ["start-producer.sh"]       # Uncomment for node producer
     volumes:
       - type: volume
-        source: cardano-db
+        source: cardano-socket
         target: /cardano/socket
       - type: volume
         source: cardano-db
