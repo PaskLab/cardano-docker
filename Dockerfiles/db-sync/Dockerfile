@@ -6,6 +6,9 @@ LABEL maintainer="https://github.com/pascallapointe"
 
 WORKDIR /root
 
+RUN apt-get update
+RUN apt-get install -y libpq-dev
+
 # Download cardano-db-sync repository
 ARG RELEASE
 RUN git clone https://github.com/input-output-hk/cardano-db-sync.git
@@ -21,7 +24,7 @@ RUN cabal build all
 WORKDIR /root
 
 # Image clean-up
-RUN rm -rf cardano-db-sync
+#RUN rm -rf cardano-db-sync
 RUN apt-get purge -y apt-utils
 RUN apt-get purge -y git
 RUN apt-get purge -y wget
