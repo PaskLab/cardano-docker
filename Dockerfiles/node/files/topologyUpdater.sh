@@ -3,6 +3,8 @@
 # Adapted version of the script provided by CNTOOL
 # https://cardano-community.github.io/guild-operators/Scripts/topologyupdater.html
 
+sleep 3600
+
 CNODE_CONFIG_DIR="/cardano/config"
 CNODE_LOG_DIR="/cardano"
 
