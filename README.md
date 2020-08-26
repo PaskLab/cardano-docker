@@ -117,7 +117,7 @@ following command:
 
 - [How get peers with Topology Updater](Docs/topology.md)
 - [Monitoring with Grafana](Docs/monitoring.md)
-- [Installation of db-sync & graphql](Docs/db-sync.md)
+- [Installation of db-sync & graphql](../pool-monitor/Docs/db-sync.md)
 - [Dynamic DNS support](Docs/dynamic_dns.md)
 - [Limit containers memory usage](Docs/memory_limit.md)
 - [Manually creating the containers](Docs/standalone-containers.md)
