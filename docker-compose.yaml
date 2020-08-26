@@ -44,10 +44,8 @@ services:
     restart: on-failure
     stop_grace_period: 10s
     logging:
-      driver: "json-file"
-      options:
-        max-size: "200k"
-        max-file: "10"
+      driver: "journald"
+
 volumes:
   cardano-db:
   cardano-socket:
