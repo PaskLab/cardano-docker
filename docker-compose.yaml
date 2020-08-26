@@ -34,9 +34,8 @@ services:
     deploy:
       resources:
         limits:
+          cpus: '3'
           memory: 6G
-        reservations:
-          memory: 4G
 
   cardano_monitor:
     container_name: cardano_monitor
