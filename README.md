@@ -16,11 +16,15 @@ For non-dockerized instructions on how to compile cardano-node on RaspberryPi-4B
 
 #### !!! Important, known issue !!!
 
-Since mainnet, node freeze issue as been notice on `aarch64` based system.
+* Node freeze issue as been notice on `aarch64` based system while downloading the blockchain
+ on first boot.
 
-To overcome this issue, you'll need to fully synchronized the blockchain on `x86/amd64` based system before moving the
-files to your `aarch64` system. Thanks to [@alessandrokonrad](https://github.com/alessandrokonrad) for providing
-this solution.
+    To overcome this issue, you'll need to fully synchronized the blockchain on `x86/amd64` based system before moving the
+    files to your `aarch64` system. Thanks to [@alessandrokonrad](https://github.com/alessandrokonrad) for providing
+    this solution.
+
+* All containers running on host network, providing network isolation where possible will
+be part of future improvement.
 
 ### Building from source 
 
@@ -32,7 +36,7 @@ First, you need to build all required images:
 1. Set the architecture variable to your requirement (Only x86/amd64 and aarch64 supported):
   
         ARCHITECTURE=<PROCESSOR_ARCHITECTURE(x86_64 or aarch64)>
-  
+        
 2. The Cardano sources image:
         
         docker build \
@@ -41,26 +45,20 @@ First, you need to build all required images:
 
     ** Tip: _Add `--no-cache` to rebuild from scratch_ **
         
-3. Set the version variable (Set the right release VERSION_NUMBER, ie: `1.14.0`)
+3. Set the version variable (Set the right release VERSION_NUMBER, ie: `1.19.0`)
 
         VERSION_NUMBER=<VERSION_NUMBER>
 
 4. The node image:
 
         docker build \
+            --build-arg ARCHITECTURE=${ARCHITECTURE} \
             --build-arg RELEASE=${VERSION_NUMBER} \
             -t cardano_node:${VERSION_NUMBER} Dockerfiles/node
-        
-5. The cli image:
-
-        docker build \
-            --build-arg RELEASE=${VERSION_NUMBER} \
-            -t cardano_cli:${VERSION_NUMBER} Dockerfiles/cli
-        
-6. Tag your images with the **latest** tag:
+     
+5. Tag your image with the **latest** tag:
 
         docker tag cardano_node:${VERSION_NUMBER} cardano_node:latest
-        docker tag cardano_cli:${VERSION_NUMBER} cardano_cli:latest
                                      
 ### Node configuration
 
@@ -81,6 +79,14 @@ If your OS is unix based, you can use the `wget` utility to download all configu
 #### !!! Important !!!!
 We rename them to `byron-genesis.json`, `shelley-genesis.json`, `topology.json` and `config.json` to avoid breaking the script every time they
 change the name..! Don't forget to update the reference to the `*-genesis.json` file in your `config.json`.
+
+#### Configuration files permissions
+
+Your user living inside your container need to have access to your configuration file. Add public read permission to all your files under `/config`:
+
+    chmod 644 config/*
+   
+#### Port configuration
         
 Now, if you wish to use the `start-relay.sh` script provided in my repository, add a `port.txt` file under your `/config` 
 folder. Your file should contain only one line representing the **PORT** used by your node. 
@@ -111,6 +117,7 @@ following command:
 
 - [How get peers with Topology Updater](Docs/topology.md)
 - [Monitoring with Grafana](Docs/monitoring.md)
+- [Installation of db-sync & graphql](../pool-monitor/Docs/db-sync.md)
 - [Dynamic DNS support](Docs/dynamic_dns.md)
 - [Limit containers memory usage](Docs/memory_limit.md)
 - [Manually creating the containers](Docs/standalone-containers.md)

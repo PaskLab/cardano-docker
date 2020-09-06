@@ -1,11 +1,11 @@
 #!/bin/sh
 
 HOSTADDR=0.0.0.0
-DATA_DIR=/root/node_data
-CONFIG_DIR=/root/node_config
+BASE_DIR=/cardano
+DB_PATH=${BASE_DIR}/db
+SOCKET_PATH=${BASE_DIR}/socket/node.sock
+CONFIG_DIR=${BASE_DIR}/config
 TOPOLOGY=${CONFIG_DIR}/topology.json
-DB_PATH=${DATA_DIR}/db
-SOCKET_PATH=${DATA_DIR}/socket
 CONFIG=${CONFIG_DIR}/config.json
 PORT=$(cat ${CONFIG_DIR}/port.txt)
 KES=${CONFIG_DIR}/kes.skey

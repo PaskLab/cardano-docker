@@ -1,9 +1,9 @@
-FROM ubuntu:bionic
+FROM ubuntu:focal
 LABEL name="cardano_monitor"
 LABEL description="Monitoring tools for Cardano node and its host"
 LABEL maintainer="https://github.com/pascallapointe"
 
-WORKDIR /root
+WORKDIR /cardano
 
 # Install base utilities and dependencies
 RUN apt-get update
@@ -30,14 +30,21 @@ RUN mkdir ${NEXP_DIR}
 RUN tar zxC ${NEXP_DIR} -f ${NEXP_FILE} --strip-components 1
 
 # Install start script
-COPY files/start-monitoring.sh /root/scripts/start-monitoring.sh
-RUN chmod +x /root/scripts/start-monitoring.sh
+COPY files/start-monitoring.sh /cardano/scripts/start-monitoring.sh
+RUN chmod 544 /cardano/scripts/start-monitoring.sh
 
 # Add Prometheus configuration, can be overridden using a 'bind mount' volume
-COPY files/prometheus.yml /root/config/prometheus.yml
+COPY files/prometheus.yml /cardano/config/prometheus.yml
+
+# Creating non root user cardano
+RUN useradd -m cardano
+
+# Add permissions
+RUN chown -R cardano:cardano /cardano
+RUN chmod g+s /cardano
 
 # Export executable path
-ENV PATH=/root/${PROM_DIR}:/root/${NEXP_DIR}:/root/scripts:$PATH
+ENV PATH=/cardano/${PROM_DIR}:/cardano/${NEXP_DIR}:/cardano/scripts:$PATH
 
 # Image clean-up
 RUN rm ${PROM_FILE}
@@ -47,5 +54,7 @@ RUN apt-get purge -y wget
 RUN apt-get autoremove -y
 RUN apt-get clean
 RUN apt-get autoclean
+
+USER cardano:cardano
 
 CMD ["start-monitoring.sh"]

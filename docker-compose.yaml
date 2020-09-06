@@ -5,54 +5,34 @@ services:
 
   cardano_node:
     container_name: cardano_node
+    environment:
+      CNODE_HOSTNAME: 'CHANGE ME'
     image: cardano_node:latest
-    command: ["start-relay.sh"]     # Comment for node producer
-    #command: ["start-producer.sh"] # Uncomment for node producer
+    command: ["start-relay.sh"]           # Comment for node producer or relay with topology updater
+    #command: ["start-with-topology.sh"]  # Uncomment for relay with topology updater
+    #command: ["start-producer.sh"]       # Uncomment for node producer
+    #command: ["tail","-f","/dev/null"]   # Used for maintenance purpose
     volumes:
       - type: volume
-        source: cardano-node
-        target: /root/node_data
+        source: cardano-socket
+        target: /cardano/socket
+      - type: volume
+        source: cardano-db
+        target: /cardano/db
       - type: bind
         source: ./config
-        target: /root/node_config
+        target: /cardano/config
+        read_only: true
     network_mode: host
-    restart: unless-stopped
+    restart: on-failure
     stop_grace_period: 10s
     logging:
-      options:
-        max-size: "1m"
-        max-file: "10"
+      driver: "journald"
     deploy:
       resources:
         limits:
+          cpus: '3'
           memory: 6G
-        reservations:
-          memory: 4G
-
-  cardano_cli:
-    container_name: cardano_cli
-    image: cardano_cli:latest
-    command: ["cron", "-f"]               # Comment for node producer
-    #command: ["tail", "-f", "/dev/null"] # Uncomment for node producer
-    depends_on:
-      - cardano_node
-    environment:
-      NON_ROOT_USERNAME: 'NON ROOT USERNAME'
-      CNODE_HOSTNAME: 'CHANGE ME'
-    volumes:
-      - type: volume
-        source: cardano-node
-        target: /root/node_data
-      - type: bind
-        source: ./config
-        target: /root/node_config
-    network_mode: host
-    restart: unless-stopped
-    stop_grace_period: 10s
-    logging:
-      options:
-        max-size: "1m"
-        max-file: "10"
 
   cardano_monitor:
     container_name: cardano_monitor
@@ -61,12 +41,11 @@ services:
     depends_on:
       - cardano_node
     network_mode: host
-    restart: unless-stopped
+    restart: on-failure
     stop_grace_period: 10s
     logging:
-      options:
-        max-size: "1m"
-        max-file: "10"
+      driver: "journald"
 
 volumes:
-  cardano-node:
+  cardano-db:
+  cardano-socket:
