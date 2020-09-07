@@ -7,7 +7,7 @@ topology if you want to successfully join the network.
 
 In order to get a peers topology file from **TopologyUpdater**, you prove that your
 node is stable and up-to-date with the blockchain. The updater script is included
-in the Cardano Cli image, you juste need to activate the Cron job to trigger it every hour.
+in the Cardano Node image. 
 
 ##### !!! Important !!!
 The script use's the `genesis.json` file name. Since the combinator uses both `byron-genesis.json` and
@@ -16,17 +16,17 @@ The script use's the `genesis.json` file name. Since the combinator uses both `b
 ### Enable Topology Updater
 
 If you're using docker-compose, change the env `CNODE_HOSTNAME: 'CHANGE ME'` parameters under the
-`cardano_cli` service for **your own domain URL**. If you're using IP's, do not touch anything.
+`cardano_node` service for **your own domain URL**. If you're using IP's, do not touch anything.
 
 If you're not using docker-compose, use the following command in `cardano_cli` container to activate
 topologyUpdater cron job:
 
-    docker exec -d cardano_cli cron -f
+    docker exec -d cardano_cli start_with_topology.sh
     
 You'll be able to get a topology.json file after the script made 4 successful attempt. You can
 check your attempts using the following command:
 
-    docker exec cardano_cli cat /root/node_data/topologyUpdater_lastresult.json
+    docker exec cardano_node cat /cardano/topologyUpdater_lastresult.json
     
 ### Get the topology.json file
 

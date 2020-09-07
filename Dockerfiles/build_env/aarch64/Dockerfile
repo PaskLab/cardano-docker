@@ -1,11 +1,12 @@
-FROM ubuntu:bionic
+FROM ubuntu:focal
 LABEL name="cardano_env"
 LABEL description="AARCH64 Environment for building Cardano node & tools"
 LABEL maintainer="https://github.com/pascallapointe"
 
-ENV PATH=/root/.cabal/bin:/root/scripts:$PATH
-ENV CARDANO_NODE_SOCKET_PATH=/root/node_data/socket
+# Define environment variables
+ENV PATH=/root/.cabal/bin:$PATH
 ENV DEBIAN_FRONTEND=noninteractive
+
 WORKDIR /root
 
 # Install base utilities and dependencies
@@ -67,6 +68,7 @@ RUN make
 RUN make install
 
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
+ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 WORKDIR /root
 RUN rm -rf libsodium

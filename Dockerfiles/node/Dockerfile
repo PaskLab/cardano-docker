@@ -19,20 +19,42 @@ COPY files/cabal.project.local /root/cardano-node/cabal.project.local
 # Build cardano-node binary
 RUN cabal update
 RUN cabal user-config update
-RUN cabal install cardano-node
+RUN cabal build all
+
+# Create files structure
+RUN mkdir -p /cardano/config /cardano/bin /cardano/db /cardano/socket /cardano/scripts
+
+ARG ARCHITECTURE
+RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/ghc-8.6.5/cardano-node-${RELEASE}/x/cardano-node/build/cardano-node/cardano-node /cardano/bin
+RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/ghc-8.6.5/cardano-cli-${RELEASE}/x/cardano-cli/build/cardano-cli/cardano-cli /cardano/bin
 
 # Add startup scripts
-COPY files/start-relay.sh /root/scripts/start-relay.sh
-COPY files/start-producer.sh /root/scripts/start-producer.sh
+COPY files/start-relay.sh /cardano/scripts/start-relay.sh
+COPY files/start-producer.sh /cardano/scripts/start-producer.sh
+COPY files/start-with-topology.sh /cardano/scripts/start-with-topology.sh
 
-# Add execution right
-RUN chmod +x /root/scripts/start-relay.sh
-RUN chmod +x /root/scripts/start-producer.sh
+# Install topologyUpdater script
+RUN apt-get update
+RUN apt-get install -y curl
+COPY files/topologyUpdater.sh /cardano/scripts/topologyUpdater.sh
+
+# Creating non root user cardano
+RUN useradd -m cardano
+
+# Add permissions
+RUN chown -R cardano:cardano /cardano
+RUN chmod g+s /cardano
+RUN chmod 540 /cardano/scripts/*
+RUN chmod 540 /cardano/bin/*
+
+ENV PATH=/cardano/scripts:/cardano/bin:$PATH
+ENV CARDANO_NODE_SOCKET_PATH=/cardano/socket/node.sock
 
 # Image clean-up
 WORKDIR /root
 
 RUN rm -rf cardano-node
+RUN rm -rf .cabal .local
 RUN apt-get purge -y apt-utils
 RUN apt-get purge -y git
 RUN apt-get purge -y wget
@@ -51,5 +73,9 @@ RUN apt-get purge -y g++
 RUN apt-get autoremove -y
 RUN apt-get clean
 RUN apt-get autoclean
+
+# Switch user
+USER cardano:cardano
+WORKDIR /cardano
 
 CMD ["start-relay.sh"]
