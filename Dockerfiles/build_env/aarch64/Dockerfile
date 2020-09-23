@@ -20,7 +20,7 @@ RUN apt-get install -y libssl-dev
 RUN apt-get install -y libtinfo-dev
 RUN apt-get install -y libsystemd-dev
 RUN apt-get install -y zlib1g-dev
-RUN apt-get install -y llvm
+RUN apt-get install -y llvm-9
 RUN apt-get install -y automake
 RUN apt-get install -y make
 RUN apt-get install -y build-essential
