@@ -25,6 +25,7 @@ services:
         read_only: true
     network_mode: host
     restart: on-failure
+    stop_signal: SIGINT
     stop_grace_period: 10s
     logging:
       driver: "journald"
