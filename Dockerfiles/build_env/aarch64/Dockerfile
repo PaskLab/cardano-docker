@@ -34,9 +34,11 @@ RUN apt-get install -y jq
 RUN apt-get install -y haskell-platform
 
 # Install version 8.6 of haskell compiler GHC
-RUN wget https://downloads.haskell.org/ghc/8.6.5/ghc-8.6.5-aarch64-ubuntu18.04-linux.tar.xz
-RUN tar -xf ghc-8.6.5-aarch64-ubuntu18.04-linux.tar.xz
+#RUN wget https://downloads.haskell.org/ghc/8.6.5/ghc-8.6.5-aarch64-ubuntu18.04-linux.tar.xz
+#RUN tar -xf ghc-8.6.5-aarch64-ubuntu18.04-linux.tar.xz
+RUN git clone https://github.com/input-output-hk/ghc.git ghc-8.6.5
 WORKDIR /root/ghc-8.6.5
+RUN git checkout 8.6.5-iohk
 RUN ./configure
 RUN make install
 WORKDIR /root
