@@ -36,6 +36,13 @@ RUN apt-get install -y haskell-platform
 # Install version 8.6 of haskell compiler GHC
 #RUN wget https://downloads.haskell.org/ghc/8.6.5/ghc-8.6.5-aarch64-ubuntu18.04-linux.tar.xz
 #RUN tar -xf ghc-8.6.5-aarch64-ubuntu18.04-linux.tar.xz
+
+RUN git config --global url."git://github.com/ghc/packages-".insteadOf     git://github.com/ghc/packages/
+RUN git config --global url."http://github.com/ghc/packages-".insteadOf    http://github.com/ghc/packages/
+RUN git config --global url."https://github.com/ghc/packages-".insteadOf   https://github.com/ghc/packages/
+RUN git config --global url."ssh://git\@github.com/ghc/packages-".insteadOf ssh://git\@github.com/ghc/packages/
+RUN git config --global url."git\@github.com:/ghc/packages-".insteadOf      git\@github.com:/ghc/packages/
+
 RUN git clone https://github.com/input-output-hk/ghc.git ghc-8.6.5
 WORKDIR /root/ghc-8.6.5
 RUN git checkout release/8.6.5-iohk
