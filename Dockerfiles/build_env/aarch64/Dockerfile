@@ -36,9 +36,10 @@ RUN apt-get install -y haskell-platform
 # Install version 8.6 of haskell compiler GHC
 #RUN wget https://downloads.haskell.org/ghc/8.6.5/ghc-8.6.5-aarch64-ubuntu18.04-linux.tar.xz
 #RUN tar -xf ghc-8.6.5-aarch64-ubuntu18.04-linux.tar.xz
-RUN git clone https://github.com/input-output-hk/ghc.git ghc-8.6.5
+RUN git clone --recursive https://github.com/input-output-hk/ghc.git ghc-8.6.5
 WORKDIR /root/ghc-8.6.5
 RUN git checkout release/8.6.5-iohk
+RUN git submodule update --init
 RUN ./boot
 RUN ./configure
 RUN make -j2
