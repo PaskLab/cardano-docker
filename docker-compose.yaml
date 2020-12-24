@@ -41,6 +41,10 @@ services:
     command: ["start-monitoring.sh"]
     depends_on:
       - cardano_node
+    volumes:
+      - type: volume
+        source: prometheus-db
+        target: /cardano/data
     network_mode: host
     restart: on-failure
     stop_grace_period: 10s
@@ -50,3 +54,4 @@ services:
 volumes:
   cardano-db:
   cardano-socket:
+  prometheus-db:
