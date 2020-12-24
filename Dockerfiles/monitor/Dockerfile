@@ -39,6 +39,9 @@ COPY files/prometheus.yml /cardano/config/prometheus.yml
 # Creating non root user cardano
 RUN useradd -m cardano
 
+# Add data store folder
+RUN mkdir /cardano/data
+
 # Add permissions
 RUN chown -R cardano:cardano /cardano
 RUN chmod g+s /cardano
