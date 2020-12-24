@@ -39,7 +39,9 @@ RUN apt-get install -y haskell-platform
 RUN git clone https://github.com/input-output-hk/ghc.git ghc-8.6.5
 WORKDIR /root/ghc-8.6.5
 RUN git checkout release/8.6.5-iohk
+RUN ./boot
 RUN ./configure
+RUN make -j2
 RUN make install
 WORKDIR /root
 RUN rm -rf ghc-8.6.5 ghc-8.6.5-aarch64-ubuntu18.04-linux.tar.xz
