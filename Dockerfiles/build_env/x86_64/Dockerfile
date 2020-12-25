@@ -31,7 +31,7 @@ RUN apt-get install -y tmux
 RUN apt-get install -y jq
 
 # Install Haskell plateform
-# Install version 3.0 of Cabal-Install
+# Install version 3.2 of Cabal-Install
 RUN wget https://downloads.haskell.org/~cabal/cabal-install-3.2.0.0/cabal-install-3.2.0.0-x86_64-unknown-linux.tar.xz
 RUN tar -xf cabal-install-3.2.0.0-x86_64-unknown-linux.tar.xz
 RUN rm cabal-install-3.2.0.0-x86_64-unknown-linux.tar.xz cabal.sig

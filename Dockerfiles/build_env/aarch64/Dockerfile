@@ -55,14 +55,14 @@ RUN rm -rf ghc-8.6.5
 # Make the ghc symlink point to the newer version 8.6
 RUN ln -sf /usr/local/bin/ghc /usr/bin/ghc
 
-# Install version 3.0 of Cabal-Install
-RUN wget http://hackage.haskell.org/package/cabal-install-3.0.0.0/cabal-install-3.0.0.0.tar.gz
-RUN tar -xf cabal-install-3.0.0.0.tar.gz
-WORKDIR /root/cabal-install-3.0.0.0
-RUN cabal update
-RUN cabal install
+# Install version 3.2 of Cabal-Install
+RUN git clone https://github.com/haskell/cabal.git
+WORKDIR /root/cabal
+RUN git checkout cabal-install-v3.2.0.0
+WORKDIR /root/cabal/cabal-install
+RUN ./bootstrap.sh
 WORKDIR /root
-RUN rm -rf cabal-install-3.0.0.0 cabal-install-3.0.0.0.tar.gz
+RUN rm -rf cabal
 
 # Install Cardano Libsodium dependencies
 RUN apt-get install -y libtool
