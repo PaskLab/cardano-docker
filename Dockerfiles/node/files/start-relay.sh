@@ -9,4 +9,20 @@ TOPOLOGY=${CONFIG_DIR}/topology.json
 CONFIG=${CONFIG_DIR}/config.json
 PORT=$(cat ${CONFIG_DIR}/port.txt)
 
-cardano-node run --topology ${TOPOLOGY} --database-path ${DB_PATH} --socket-path ${SOCKET_PATH} --host-addr ${HOSTADDR} --port ${PORT} --config ${CONFIG}
+_term() {
+  echo "Stopping Cardano Relay Node ..."
+  kill -INT $PID
+}
+
+trap _term TERM INT
+
+echo "Starting Cardano Relay Node ..."
+cardano-node run --topology ${TOPOLOGY} --database-path ${DB_PATH} --socket-path ${SOCKET_PATH} --host-addr ${HOSTADDR} --port ${PORT} --config ${CONFIG} &
+
+PID=$!
+wait $PID
+trap - TERM INT
+wait $PID
+EXIT_STATUS=$?
+
+echo "Exit Status: ${EXIT_STATUS}"
