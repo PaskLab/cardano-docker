@@ -53,6 +53,7 @@ ENV CARDANO_NODE_SOCKET_PATH=/cardano/socket/node.sock
 # Image clean-up
 WORKDIR /root
 
+RUN cabal clean
 RUN rm -rf cardano-node
 RUN rm -rf .cabal .local
 RUN apt-get purge -y apt-utils
