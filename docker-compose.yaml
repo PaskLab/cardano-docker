@@ -16,8 +16,8 @@ services:
       - type: bind
         source: ./socket
         target: /cardano/socket
-      - type: volume
-        source: cardano-db
+      - type: bind
+        source: ./db
         target: /cardano/db
       - type: bind
         source: ./config
@@ -28,12 +28,15 @@ services:
     stop_signal: SIGINT
     stop_grace_period: 10s
     logging:
-      driver: "journald"
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
     deploy:
       resources:
         limits:
-          cpus: '3'
-          memory: 6G
+          cpus: '4'
+          memory: 7G
 
   cardano_monitor:
     container_name: cardano_monitor
@@ -49,8 +52,10 @@ services:
     restart: on-failure
     stop_grace_period: 10s
     logging:
-      driver: "journald"
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
 
 volumes:
-  cardano-db:
   prometheus-db:
