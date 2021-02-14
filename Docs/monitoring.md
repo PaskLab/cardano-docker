@@ -40,7 +40,7 @@ Your user living inside your container need to have access to your configuration
 
 You can now copy the following config file in this folder:
 
-- [../Dockerfiles/monitor/files/grafana.ini](../Dockerfiles/grafana/files/grafana.ini)
+- [../Dockerfiles/grafana/files/grafana.ini](../Dockerfiles/grafana/files/grafana.ini)
 
 #### Creating the cardano_monitor container
 
