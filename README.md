@@ -1,6 +1,8 @@
 # cardano-docker
 Docker files for setting up Cardano Node environment.
 
+#### You can support this repository by delegating to pool BERRY!
+
 #### Reference
 
 Many steps used in this repository are from resources bellow:
@@ -57,11 +59,25 @@ First, you need to build all required images:
 5. Tag your image with the **latest** tag:
 
         docker tag cardano_node:${VERSION_NUMBER} cardano_node:latest
-                                     
+
+### Folder structure
+
+In order to have access to your node files directly on your host, we will use docker bind volumes.
+This allows you to attach a folder on your host to a folder inside your node container.
+They do not have to bare the same name nor the same path.
+
+To make things simple, create the following folders structure:
+
+    ~/Cardano/config
+    ~/Cardano/socket
+    ~/Cardano/db
+                         
+** `~` is equivalent to your home folder, ie: /home/your_user_name                         
+                                  
 ### Node configuration
 
-Now you've created yours images, it's time to create your `config` folder. Your container will bind to this folder,
-so you can access your configuration from within.
+Now you've created yours images, it's time to create your `config` folder, if this is not already done.
+Your container will bind to this folder, so you can access your configuration from within.
 
     mkdir config
     cd config
@@ -78,11 +94,23 @@ If your OS is unix based, you can use the `wget` utility to download all configu
 We rename them to `byron-genesis.json`, `shelley-genesis.json`, `topology.json` and `config.json` to avoid breaking the script every time they
 change the name..! Don't forget to update the reference to the `*-genesis.json` file in your `config.json`.
 
-#### Configuration files permissions
+#### Bind folder permissions
 
-Your user living inside your container need to have access to your configuration file. Add public read permission to all your files under `/config`:
+Your user living inside your container need to have access to your configuration files and need to be able
+to write in `db` and socket `folder`.
+The easy way is to add public read permission to all your files under `/config`:
 
     chmod 644 config/*
+   
+The **correct** way is to give read and/or write access to the `cardano` user group. That group exists only in your 
+container, but might have an equivalent group on your system. Usually the default user group. (They share the same UID)
+
+You can log in your container using `root` in order to change files owner ship and permission:
+
+    docker exec -it --user root cardano_node bash
+
+You can later check on your host what is the equivalent group. All sub-folders and files under `/Cardano` folder should be
+owned by the host equivalent of the container `cardano` group to ensure that the container can write inside them.
    
 #### Port configuration
         
