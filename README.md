@@ -16,10 +16,9 @@ For non-dockerized instructions on how to compile cardano-node on RaspberryPi-4B
 
 #### !!! Notes !!!
 
-* The official Haskell compiler have some flaws when compiling on ARM based system. This is why the `aarch64` Dockerfile
-is using the IOHK patched version of GHC. This version of GHC is not yet released as an official version so use it at your 
-own risk. You can find the source code there:
-   [https://github.com/input-output-hk/ghc/tree/release/8.6.5-iohk](https://github.com/input-output-hk/ghc/tree/release/8.6.5-iohk)
+* GHC version: 8.10.4
+
+* Cabal version: 3.4
 
 * All containers running on host network, providing network isolation where possible will
 be part of future improvement.

@@ -3,8 +3,8 @@ LABEL name="cardano_env"
 LABEL description="X86/AMD64 Environment for building Cardano node & tools"
 LABEL maintainer="https://github.com/pascallapointe"
 
-ENV PATH=/root/.local/bin:/root/.cabal/bin:/cardano/scripts:$PATH
-ENV CARDANO_NODE_SOCKET_PATH=/cardano/socket/node.sock
+# Define environment variables
+ENV PATH=/root/.cabal/bin:/root/.ghcup/bin:$PATH
 ENV DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /root
@@ -29,26 +29,16 @@ RUN apt-get install -y libncursesw5
 RUN apt-get install -y g++
 RUN apt-get install -y tmux
 RUN apt-get install -y jq
+RUN apt-get install -y libnuma-dev
 
-# Install Haskell plateform
-# Install version 3.2 of Cabal-Install
-RUN wget https://downloads.haskell.org/~cabal/cabal-install-3.2.0.0/cabal-install-3.2.0.0-x86_64-unknown-linux.tar.xz
-RUN tar -xf cabal-install-3.2.0.0-x86_64-unknown-linux.tar.xz
-RUN rm cabal-install-3.2.0.0-x86_64-unknown-linux.tar.xz cabal.sig
-RUN mkdir -p .local/bin
-RUN mv cabal .local/bin/
+# Install aarch64 ghcup-0.1.13
+RUN wget -O ghcup https://downloads.haskell.org/~ghcup/0.1.14/x86_64-linux-ghcup-0.1.14
+RUN chmod 500 ghcup
+RUN ./ghcup -v --downloader wget install ghc 8.10.4
+RUN ./ghcup set ghc 8.10.4
 
-# Install version 8.6 of haskell compiler GHC
-RUN wget https://downloads.haskell.org/~ghc/8.6.5/ghc-8.6.5-x86_64-deb9-linux.tar.xz
-RUN tar -xf ghc-8.6.5-x86_64-deb9-linux.tar.xz
-WORKDIR /root/ghc-8.6.5
-RUN ./configure
-RUN make install
-WORKDIR /root
-RUN rm -rf ghc-8.6.5 ghc-8.6.5-x86_64-deb9-linux.tar.xz
-
-# Make the ghc symlink point to the newer version 8.6
-RUN ln -sf /usr/local/bin/ghc /usr/bin/ghc
+# Install aarch64 cabal 3.4
+RUN ./ghcup -v --downloader wget install cabal
 
 # Install Cardano Libsodium dependencies
 RUN apt-get install -y libtool
@@ -64,6 +54,7 @@ RUN make
 RUN make install
 
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
+ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 WORKDIR /root
 RUN rm -rf libsodium
