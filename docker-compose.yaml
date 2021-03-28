@@ -13,11 +13,11 @@ services:
     #command: ["start-producer.sh"]       # Uncomment for node producer
     #command: ["tail","-f","/dev/null"]   # Used for maintenance purpose
     volumes:
-      - type: volume
-        source: cardano-socket
+      - type: bind
+        source: ./socket
         target: /cardano/socket
-      - type: volume
-        source: cardano-db
+      - type: bind
+        source: ./db
         target: /cardano/db
       - type: bind
         source: ./config
@@ -58,6 +58,4 @@ services:
         max-file: "10"
 
 volumes:
-  cardano-db:
-  cardano-socket:
   prometheus-db:
