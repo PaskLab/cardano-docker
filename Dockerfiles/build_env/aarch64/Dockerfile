@@ -4,7 +4,7 @@ LABEL description="AARCH64 Environment for building Cardano node & tools"
 LABEL maintainer="https://github.com/pascallapointe"
 
 # Define environment variables
-ENV PATH=/root/.cabal/bin:$PATH
+ENV PATH=/root/.cabal/bin:/root/.ghcup/bin:$PATH
 ENV DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /root
@@ -29,40 +29,16 @@ RUN apt-get install -y libncursesw5
 RUN apt-get install -y g++
 RUN apt-get install -y tmux
 RUN apt-get install -y jq
+RUN apt-get install -y libnuma-dev
 
-# Install Haskell plateform
-RUN apt-get install -y haskell-platform
+# Install aarch64 ghcup-0.1.13
+RUN wget -O ghcup https://downloads.haskell.org/~ghcup/0.1.14/aarch64-linux-ghcup-0.1.14
+RUN chmod 500 ghcup
+RUN ./ghcup -v --downloader wget install ghc 8.10.4
+RUN ./ghcup set ghc 8.10.4
 
-# Some preparation before building GHC from source ...
-RUN git config --global url."git://github.com/ghc/packages-".insteadOf     git://github.com/ghc/packages/
-RUN git config --global url."http://github.com/ghc/packages-".insteadOf    http://github.com/ghc/packages/
-RUN git config --global url."https://github.com/ghc/packages-".insteadOf   https://github.com/ghc/packages/
-RUN git config --global url."ssh://git\@github.com/ghc/packages-".insteadOf ssh://git\@github.com/ghc/packages/
-RUN git config --global url."git\@github.com:/ghc/packages-".insteadOf      git\@github.com:/ghc/packages/
-
-# Install IOHK version 8.6.5 of haskell compiler GHC
-RUN git clone https://github.com/input-output-hk/ghc.git ghc-8.6.5
-WORKDIR /root/ghc-8.6.5
-RUN git checkout release/8.6.5-iohk
-RUN git submodule update --init
-RUN ./boot
-RUN ./configure
-RUN make -j3
-RUN make install
-WORKDIR /root
-RUN rm -rf ghc-8.6.5
-
-# Make the ghc symlink point to the newer version 8.6
-RUN ln -sf /usr/local/bin/ghc /usr/bin/ghc
-
-# Install version 3.2 of Cabal-Install
-RUN git clone https://github.com/haskell/cabal.git
-WORKDIR /root/cabal
-RUN git checkout cabal-install-v3.2.0.0
-WORKDIR /root/cabal/cabal-install
-RUN ./bootstrap.sh
-WORKDIR /root
-RUN rm -rf cabal
+# Install aarch64 cabal 3.4
+RUN ./ghcup -v --downloader wget install cabal
 
 # Install Cardano Libsodium dependencies
 RUN apt-get install -y libtool

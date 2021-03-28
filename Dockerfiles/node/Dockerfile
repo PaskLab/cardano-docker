@@ -8,6 +8,8 @@ WORKDIR /root
 
 # Download cardano-node repository
 ARG RELEASE
+ARG ARCHITECTURE
+ARG GHC_VERSION=ghc-8.10.4
 RUN git clone https://github.com/input-output-hk/cardano-node
 WORKDIR /root/cardano-node
 RUN git checkout ${RELEASE}
@@ -24,9 +26,8 @@ RUN cabal build all
 # Create files structure
 RUN mkdir -p /cardano/config /cardano/bin /cardano/db /cardano/socket /cardano/scripts
 
-ARG ARCHITECTURE
-RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/ghc-8.6.5/cardano-node-${RELEASE}/x/cardano-node/build/cardano-node/cardano-node /cardano/bin
-RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/ghc-8.6.5/cardano-cli-${RELEASE}/x/cardano-cli/build/cardano-cli/cardano-cli /cardano/bin
+RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-node-${RELEASE}/x/cardano-node/build/cardano-node/cardano-node /cardano/bin
+RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-cli-${RELEASE}/x/cardano-cli/build/cardano-cli/cardano-cli /cardano/bin
 
 # Add startup scripts
 COPY files/start-relay.sh /cardano/scripts/start-relay.sh

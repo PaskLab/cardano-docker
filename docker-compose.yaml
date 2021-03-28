@@ -30,13 +30,13 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "200k"
+        max-size: "10m"
         max-file: "10"
     deploy:
       resources:
         limits:
           cpus: '4'
-          memory: 7G
+          memory: 8G
 
   cardano_monitor:
     container_name: cardano_monitor
