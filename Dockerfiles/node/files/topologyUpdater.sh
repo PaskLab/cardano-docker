@@ -20,7 +20,7 @@ fi
 
 # Adapting cardano-cli command for the network
 CONFIG_JSON="${CNODE_CONFIG_DIR}/config.json"
-GENESIS_JSON="${CNODE_CONFIG_DIR}/genesis.json"
+GENESIS_JSON="${CNODE_CONFIG_DIR}/shelley-genesis.json"
 
 PROTOCOL=$(grep -E '^.{0,1}Protocol.{0,1}:' "${CONFIG_JSON}" | tr -d '"' | tr -d ',' | awk '{print $2}')
 if [[ "${PROTOCOL}" = "Cardano" ]]; then
