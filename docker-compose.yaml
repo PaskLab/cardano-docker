@@ -8,10 +8,10 @@ services:
     environment:
       CNODE_HOSTNAME: 'CHANGE ME'
     image: cardano_node:latest
-    command: ["start-relay.sh"]           # Comment for node producer or relay with topology updater
-    #command: ["start-with-topology.sh"]  # Uncomment for relay with topology updater
-    #command: ["start-producer.sh"]       # Uncomment for node producer
-    #command: ["tail","-f","/dev/null"]   # Used for maintenance purpose
+    command: ["/bin/bash", "-c", "start-relay.sh"]           # Comment for node producer or relay with topology updater
+    #command: ["/bin/bash", "-c", "start-with-topology.sh"]  # Uncomment for relay with topology updater
+    #command: ["/bin/bash", "-c", "start-producer.sh"]       # Uncomment for node producer
+    #command: ["/bin/bash", "-c", "tail","-f","/dev/null"]   # Used for maintenance purpose
     volumes:
       - type: bind
         source: ./socket
@@ -36,7 +36,7 @@ services:
       resources:
         limits:
           cpus: '4'
-          memory: 8G
+          memory: 16G
 
   cardano_monitor:
     container_name: cardano_monitor
@@ -50,7 +50,7 @@ services:
         target: /cardano/data
     network_mode: host
     restart: on-failure
-    stop_grace_period: 10s
+    stop_grace_period: 5s
     logging:
       driver: "json-file"
       options:

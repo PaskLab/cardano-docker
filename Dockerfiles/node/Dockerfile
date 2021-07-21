@@ -80,4 +80,4 @@ RUN apt-get autoclean
 USER cardano:cardano
 WORKDIR /cardano
 
-CMD ["start-relay.sh"]
+CMD ["/bin/bash", "-c", "start-relay.sh"]

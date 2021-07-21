@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 HOSTADDR=0.0.0.0
 BASE_DIR=/cardano
@@ -14,18 +14,17 @@ CERT=${CONFIG_DIR}/node.cert
 
 _term() {
   echo "Stopping Cardano Producer Node ..."
-  kill -INT $PID
+  kill -SIGINT $PID
 }
 
-trap _term TERM INT
-
 echo "Starting Cardano Producer Node ..."
-cardano-node run --topology ${TOPOLOGY} --database-path ${DB_PATH} --socket-path ${SOCKET_PATH} --host-addr ${HOSTADDR} --port ${PORT} --config ${CONFIG} --shelley-kes-key ${KES} --shelley-vrf-key ${VRF} --shelley-operational-certificate ${CERT} +RTS -N4 -RTS &
+cardano-node +RTS -N4 --disable-delayed-os-memory-return -I0.3 -Iw600 -A16m -F1.5 -H2500M -RTS run --topology ${TOPOLOGY} --database-path ${DB_PATH} --socket-path ${SOCKET_PATH} --host-addr ${HOSTADDR} --port ${PORT} --config ${CONFIG} --shelley-kes-key ${KES} --shelley-vrf-key ${VRF} --shelley-operational-certificate ${CERT} &
 
 PID=$!
 wait $PID
-trap - TERM INT
+trap _term SIGTERM SIGINT
 wait $PID
+sleep 5
 EXIT_STATUS=$?
 
 echo "Exit Status: ${EXIT_STATUS}"
