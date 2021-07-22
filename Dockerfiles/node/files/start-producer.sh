@@ -20,7 +20,7 @@ _term() {
 trap _term SIGTERM SIGINT
 
 echo "Starting Cardano Producer Node ..."
-cardano-node +RTS -N4 --disable-delayed-os-memory-return -I0.3 -Iw600 -A16m -F1.5 -H2500M -RTS run --topology ${TOPOLOGY} --database-path ${DB_PATH} --socket-path ${SOCKET_PATH} --host-addr ${HOSTADDR} --port ${PORT} --config ${CONFIG} --shelley-kes-key ${KES} --shelley-vrf-key ${VRF} --shelley-operational-certificate ${CERT} &
+cardano-node +RTS -N4 -RTS run --topology ${TOPOLOGY} --database-path ${DB_PATH} --socket-path ${SOCKET_PATH} --host-addr ${HOSTADDR} --port ${PORT} --config ${CONFIG} --shelley-kes-key ${KES} --shelley-vrf-key ${VRF} --shelley-operational-certificate ${CERT} &
 
 PID=$!
 wait $PID
