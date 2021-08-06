@@ -24,7 +24,7 @@ services:
         target: /cardano/config
         read_only: true
     network_mode: host
-    restart: on-failure
+    restart: unless-stopped
     stop_signal: SIGINT
     stop_grace_period: 10s
     logging:
