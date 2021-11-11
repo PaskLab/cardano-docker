@@ -1,3 +1,6 @@
 jobs: 4
 package cardano-crypto-praos
   flags: +external-libsodium-vrf
+
+package trace-dispatcher
+  ghc-options: -Wwarn
