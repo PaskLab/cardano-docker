@@ -131,7 +131,14 @@ services:
       - type: volume
         source: prometheus-db
         target: /cardano/data
-    network_mode: host
+      - type: bind
+        source: ./monitor/config
+        target: /cardano/config
+    ports:
+      - "3200:3200"
+      - "9100:9100"
+    networks:
+      cardano:
     restart: on-failure
     stop_grace_period: 5s
     logging:

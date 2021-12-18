@@ -4,10 +4,21 @@ global:
     monitor: 'cardano-monitor'
 
 scrape_configs:
-  - job_name: 'cardano-node' # To scrape data from the cardano node
+  - job_name: 'relay1' # To scrape data from the cardano node
+    honor_labels: false
     scrape_interval: 5s
     static_configs:
-      - targets: ['127.0.0.1:12798']
+      - targets: ['relay1:12798']
+  - job_name: 'relay2' # To scrape data from the cardano node
+    honor_labels: false
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ 'relay2:12798' ]
+  - job_name: 'bp' # To scrape data from the cardano node
+    honor_labels: false
+    scrape_interval: 5s
+    static_configs:
+      - targets: [ 'bp:12798' ]
   - job_name: 'host' # To scrape data from a node exporter to monitor your linux host metrics.
     scrape_interval: 5s
     static_configs:
