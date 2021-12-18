@@ -3,8 +3,8 @@ version: "3.7"
 
 services:
 
-  cardano_node:
-    container_name: cardano_node
+  cardano_relay1:
+    container_name: cardano-relay1
     environment:
       CNODE_HOSTNAME: 'CHANGE ME'
     image: cardano_node:latest
@@ -14,16 +14,99 @@ services:
     #command: ["/bin/bash", "-c", "tail","-f","/dev/null"]   # Used for maintenance purpose
     volumes:
       - type: bind
-        source: ./socket
+        source: ./relay1/socket
         target: /cardano/socket
       - type: bind
-        source: ./db
+        source: ./relay1/db
         target: /cardano/db
       - type: bind
-        source: ./config
+        source: ./relay1/config
         target: /cardano/config
         read_only: true
-    network_mode: host
+    ports:
+      - "3001:3000"
+    networks:
+      cardano:
+        aliases:
+          - relay1
+    restart: unless-stopped
+    stop_signal: SIGINT
+    stop_grace_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 16G
+
+  cardano_relay2:
+    container_name: cardano-relay2
+    environment:
+      CNODE_HOSTNAME: 'CHANGE ME'
+    image: cardano_node:latest
+    command: ["/bin/bash", "-c", "start-relay.sh"]           # Comment for node producer or relay with topology updater
+    #command: ["/bin/bash", "-c", "start-with-topology.sh"]  # Uncomment for relay with topology updater
+    #command: ["/bin/bash", "-c", "start-producer.sh"]       # Uncomment for node producer
+    #command: ["/bin/bash", "-c", "tail","-f","/dev/null"]   # Used for maintenance purpose
+    volumes:
+      - type: bind
+        source: ./relay2/socket
+        target: /cardano/socket
+      - type: bind
+        source: ./relay2/db
+        target: /cardano/db
+      - type: bind
+        source: ./relay2/config
+        target: /cardano/config
+        read_only: true
+    ports:
+      - "3002:3000"
+    networks:
+      cardano:
+        aliases:
+          - relay2
+    restart: unless-stopped
+    stop_signal: SIGINT
+    stop_grace_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 16G
+
+  cardano_bp:
+    container_name: cardano-bp
+    environment:
+      CNODE_HOSTNAME: 'CHANGE ME'
+    image: cardano_node:latest
+    command: ["/bin/bash", "-c", "start-relay.sh"]           # Comment for node producer or relay with topology updater
+    #command: ["/bin/bash", "-c", "start-with-topology.sh"]  # Uncomment for relay with topology updater
+    #command: ["/bin/bash", "-c", "start-producer.sh"]       # Uncomment for node producer
+    #command: ["/bin/bash", "-c", "tail","-f","/dev/null"]   # Used for maintenance purpose
+    volumes:
+      - type: bind
+        source: ./bp/socket
+        target: /cardano/socket
+      - type: bind
+        source: ./bp/db
+        target: /cardano/db
+      - type: bind
+        source: ./bp/config
+        target: /cardano/config
+        read_only: true
+    networks:
+      cardano:
+        aliases:
+          - bp
     restart: unless-stopped
     stop_signal: SIGINT
     stop_grace_period: 10s
@@ -59,3 +142,6 @@ services:
 
 volumes:
   prometheus-db:
+
+networks:
+  cardano:
