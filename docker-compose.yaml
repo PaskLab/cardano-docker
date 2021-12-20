@@ -12,6 +12,7 @@ services:
     #command: ["/bin/bash", "-c", "start-with-topology.sh"]  # Uncomment for relay with topology updater
     #command: ["/bin/bash", "-c", "start-producer.sh"]       # Uncomment for node producer
     #command: ["/bin/bash", "-c", "tail","-f","/dev/null"]   # Used for maintenance purpose
+    tty: true
     volumes:
       - type: bind
         source: ./relay1/socket
@@ -52,6 +53,7 @@ services:
     #command: ["/bin/bash", "-c", "start-with-topology.sh"]  # Uncomment for relay with topology updater
     #command: ["/bin/bash", "-c", "start-producer.sh"]       # Uncomment for node producer
     #command: ["/bin/bash", "-c", "tail","-f","/dev/null"]   # Used for maintenance purpose
+    tty: true
     volumes:
       - type: bind
         source: ./relay2/socket
@@ -92,6 +94,7 @@ services:
     #command: ["/bin/bash", "-c", "start-with-topology.sh"]  # Uncomment for relay with topology updater
     #command: ["/bin/bash", "-c", "start-producer.sh"]       # Uncomment for node producer
     #command: ["/bin/bash", "-c", "tail","-f","/dev/null"]   # Used for maintenance purpose
+    tty: true
     volumes:
       - type: bind
         source: ./bp/socket
