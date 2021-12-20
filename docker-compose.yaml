@@ -3,7 +3,7 @@ version: "3.7"
 
 services:
 
-  cardano_relay1:
+  cardano-relay1:
     container_name: cardano-relay1
     environment:
       CNODE_HOSTNAME: 'CHANGE ME'
@@ -43,7 +43,7 @@ services:
           cpus: '4'
           memory: 16G
 
-  cardano_relay2:
+  cardano-relay2:
     container_name: cardano-relay2
     environment:
       CNODE_HOSTNAME: 'CHANGE ME'
@@ -83,7 +83,7 @@ services:
           cpus: '4'
           memory: 16G
 
-  cardano_bp:
+  cardano-bp:
     container_name: cardano-bp
     environment:
       CNODE_HOSTNAME: 'CHANGE ME'
@@ -121,8 +121,8 @@ services:
           cpus: '4'
           memory: 16G
 
-  cardano_monitor:
-    container_name: cardano_monitor
+  cardano-monitor:
+    container_name: cardano-monitor
     image: cardano_monitor:latest
     command: ["start-monitoring.sh"]
     depends_on:
