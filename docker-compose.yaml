@@ -141,7 +141,6 @@ services:
         target: /cardano/config
     ports:
       - "3200:3200"
-      - "9100:9100"
     networks:
       cardano:
     restart: on-failure
