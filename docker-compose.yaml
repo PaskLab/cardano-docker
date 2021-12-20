@@ -27,7 +27,6 @@ services:
     ports:
       - "3001:3000"
     networks:
-      www:
       cardano:
         aliases:
           - relay1
@@ -69,7 +68,6 @@ services:
     ports:
       - "3002:3000"
     networks:
-      www:
       cardano:
         aliases:
           - relay2
@@ -109,7 +107,6 @@ services:
         target: /cardano/config
         read_only: true
     networks:
-      www:
       cardano:
         aliases:
           - bp
@@ -160,6 +157,3 @@ volumes:
 
 networks:
   cardano:
-  www:
-    external: true
-    name: host
