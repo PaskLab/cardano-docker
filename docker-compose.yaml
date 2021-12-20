@@ -8,10 +8,10 @@ services:
     environment:
       CNODE_HOSTNAME: 'CHANGE ME'
     image: cardano_node:latest
-    command: ["/bin/bash", "-c", "start-relay.sh"]           # Comment for node producer or relay with topology updater
+    #command: ["/bin/bash", "-c", "start-relay.sh"]           # Comment for node producer or relay with topology updater
     #command: ["/bin/bash", "-c", "start-with-topology.sh"]  # Uncomment for relay with topology updater
     #command: ["/bin/bash", "-c", "start-producer.sh"]       # Uncomment for node producer
-    #command: ["/bin/bash", "-c", "tail","-f","/dev/null"]   # Used for maintenance purpose
+    command: ["/bin/bash", "-c", "tail","-f","/dev/null"]   # Used for maintenance purpose
     tty: true
     volumes:
       - type: bind
@@ -27,6 +27,7 @@ services:
     ports:
       - "3001:3000"
     networks:
+      www:
       cardano:
         aliases:
           - relay1
@@ -49,10 +50,10 @@ services:
     environment:
       CNODE_HOSTNAME: 'CHANGE ME'
     image: cardano_node:latest
-    command: ["/bin/bash", "-c", "start-relay.sh"]           # Comment for node producer or relay with topology updater
+    #command: ["/bin/bash", "-c", "start-relay.sh"]           # Comment for node producer or relay with topology updater
     #command: ["/bin/bash", "-c", "start-with-topology.sh"]  # Uncomment for relay with topology updater
     #command: ["/bin/bash", "-c", "start-producer.sh"]       # Uncomment for node producer
-    #command: ["/bin/bash", "-c", "tail","-f","/dev/null"]   # Used for maintenance purpose
+    command: ["/bin/bash", "-c", "tail","-f","/dev/null"]   # Used for maintenance purpose
     tty: true
     volumes:
       - type: bind
@@ -68,6 +69,7 @@ services:
     ports:
       - "3002:3000"
     networks:
+      www:
       cardano:
         aliases:
           - relay2
@@ -90,10 +92,10 @@ services:
     environment:
       CNODE_HOSTNAME: 'CHANGE ME'
     image: cardano_node:latest
-    command: ["/bin/bash", "-c", "start-relay.sh"]           # Comment for node producer or relay with topology updater
+    #command: ["/bin/bash", "-c", "start-relay.sh"]           # Comment for node producer or relay with topology updater
     #command: ["/bin/bash", "-c", "start-with-topology.sh"]  # Uncomment for relay with topology updater
     #command: ["/bin/bash", "-c", "start-producer.sh"]       # Uncomment for node producer
-    #command: ["/bin/bash", "-c", "tail","-f","/dev/null"]   # Used for maintenance purpose
+    command: ["/bin/bash", "-c", "tail","-f","/dev/null"]   # Used for maintenance purpose
     tty: true
     volumes:
       - type: bind
@@ -107,6 +109,7 @@ services:
         target: /cardano/config
         read_only: true
     networks:
+      www:
       cardano:
         aliases:
           - bp
@@ -157,3 +160,6 @@ volumes:
 
 networks:
   cardano:
+  www:
+    external: true
+    name: host
