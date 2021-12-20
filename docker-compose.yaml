@@ -126,9 +126,9 @@ services:
     image: cardano_monitor:latest
     command: ["start-monitoring.sh"]
     depends_on:
-      - cardano_relay1
-      - cardano_relay2
-      - cardano_bp
+      - cardano-relay1
+      - cardano-relay2
+      - cardano-bp
     volumes:
       - type: volume
         source: prometheus-db
