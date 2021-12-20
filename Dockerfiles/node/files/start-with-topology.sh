@@ -19,7 +19,7 @@ trap _term SIGTERM SIGINT
 echo "Starting Topology Updater ..."
 topologyUpdater.sh &
 echo "Starting Cardano Relay Node ..."
-cardano-node run +RTS -N3 -RTS --topology ${TOPOLOGY} --database-path ${DB_PATH} --socket-path ${SOCKET_PATH} --host-addr ${HOSTADDR} --port ${PORT} --config ${CONFIG} &
+cardano-node run +RTS -N4 -RTS --topology ${TOPOLOGY} --database-path ${DB_PATH} --socket-path ${SOCKET_PATH} --host-addr ${HOSTADDR} --port ${PORT} --config ${CONFIG} &
 
 PID=$!
 wait $PID
