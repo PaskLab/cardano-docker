@@ -26,7 +26,6 @@ services:
         read_only: true
     ports:
       - "3001:3000"
-      - "12798"
     networks:
       cardano:
         aliases:
@@ -68,7 +67,6 @@ services:
         read_only: true
     ports:
       - "3002:3000"
-      - "12798"
     networks:
       cardano:
         aliases:
@@ -108,8 +106,6 @@ services:
         source: ./bp/config
         target: /cardano/config
         read_only: true
-    ports:
-      - "12798"
     networks:
       cardano:
         aliases:
