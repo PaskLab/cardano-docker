@@ -11,15 +11,12 @@ scrape_configs:
       - targets: ['cardano-relay1.cardano_cardano:12798']
         labels:
           alias: relay1
-          type: cardano-node
       - targets: ['cardano-relay2.cardano_cardano:12798']
         labels:
           alias: relay2
-          type: cardano-node
       - targets: ['cardano-bp.cardano_cardano:12798']
         labels:
           alias: bp
-          type: cardano-node
   - job_name: 'host' # To scrape data from a node exporter to monitor your linux host metrics.
     scrape_interval: 5s
     static_configs:
