@@ -30,6 +30,7 @@ RUN apt-get install -y g++
 RUN apt-get install -y tmux
 RUN apt-get install -y jq
 RUN apt-get install -y libnuma-dev
+RUN apt-get install -y libsecp256k1-0
 
 # Install aarch64 ghcup-0.1.13
 RUN wget -O ghcup https://downloads.haskell.org/~ghcup/0.1.14/aarch64-linux-ghcup-0.1.14
