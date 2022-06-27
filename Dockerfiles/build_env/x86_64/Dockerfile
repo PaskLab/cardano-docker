@@ -30,7 +30,6 @@ RUN apt-get install -y g++
 RUN apt-get install -y tmux
 RUN apt-get install -y jq
 RUN apt-get install -y libnuma-dev
-RUN apt-get install -y libsecp256k1-0
 
 # Install aarch64 ghcup-0.1.13
 RUN wget -O ghcup https://downloads.haskell.org/~ghcup/0.1.14/x86_64-linux-ghcup-0.1.14
@@ -40,6 +39,25 @@ RUN ./ghcup set ghc 8.10.4
 
 # Install aarch64 cabal 3.4
 RUN ./ghcup -v --downloader wget install cabal
+
+# Install Bitcoin secp256k1 dependency
+RUN git clone https://github.com/bitcoin-core/secp256k1.git
+
+RUN cd secp256k1
+
+RUN git reset --hard $SECP256K1_REF
+
+RUN ./autogen.sh
+
+RUN ./configure  --enable-module-schnorrsig --enable-experimental
+
+RUN make
+
+RUN make install
+
+RUN ldconfig; ldconfig -p | grep secp256k1
+
+WORKDIR /root
 
 # Install Cardano Libsodium dependencies
 RUN apt-get install -y libtool
@@ -58,9 +76,10 @@ ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 WORKDIR /root
-RUN rm -rf libsodium
 
 # Image clean-up
+RUN rm -rf secp256k1
+RUN rm -rf libsodium
 RUN cabal clean
 RUN apt-get autoremove -y
 RUN apt-get clean
