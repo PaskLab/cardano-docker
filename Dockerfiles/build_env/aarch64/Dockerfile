@@ -45,7 +45,7 @@ RUN git clone https://github.com/bitcoin-core/secp256k1.git
 
 RUN cd secp256k1
 
-RUN git reset --hard $SECP256K1_REF
+RUN git reset --hard ac83be33d0956faf6b7f61a60ab524ef7d6a473a
 
 RUN ./autogen.sh
 
