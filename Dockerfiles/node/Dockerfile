@@ -25,9 +25,9 @@ RUN cabal build all
 
 # Create files structure
 RUN mkdir -p /cardano/config /cardano/bin /cardano/db /cardano/socket /cardano/scripts
-
-RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-node-${RELEASE}/x/cardano-node/build/cardano-node/cardano-node /cardano/bin
-RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-cli-${RELEASE}/x/cardano-cli/build/cardano-cli/cardano-cli /cardano/bin
+ARG RELEASE_PATH=$RELEASE
+RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-node-${RELEASE_PATH}/x/cardano-node/build/cardano-node/cardano-node /cardano/bin
+RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-cli-${RELEASE_PATH}/x/cardano-cli/build/cardano-cli/cardano-cli /cardano/bin
 
 # Add startup scripts
 COPY files/start-relay.sh /cardano/scripts/start-relay.sh
