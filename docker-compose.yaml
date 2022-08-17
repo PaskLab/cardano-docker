@@ -36,7 +36,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "10m"
+        max-size: "200k"
         max-file: "10"
     deploy:
       resources:
@@ -77,7 +77,7 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "10m"
+        max-size: "200k"
         max-file: "10"
     deploy:
       resources:
@@ -115,12 +115,12 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "10m"
+        max-size: "200k"
         max-file: "10"
     deploy:
       resources:
         limits:
-          cpus: '4'
+          cpus: '6'
           memory: 16G
 
   cardano-monitor:
