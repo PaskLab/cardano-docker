@@ -37,7 +37,7 @@ First, you need to build all required images:
             ./Dockerfiles/build_env/${ARCHITECTURE}
 
     ** Tip: _Add `--no-cache` to rebuild from scratch_ **
-        
+
 3. Set the version variable (Set the right release VERSION_NUMBER, ie: `1.19.0`)
 
         VERSION_NUMBER=<VERSION_NUMBER>
@@ -48,7 +48,9 @@ First, you need to build all required images:
             --build-arg ARCHITECTURE=${ARCHITECTURE} \
             --build-arg RELEASE=${VERSION_NUMBER} \
             -t cardano_node:${VERSION_NUMBER} Dockerfiles/node
-     
+
+    ** Tips: _Add `--build-arg RELEASE_PATH=1.3x.x` if the node version differ from the git tag._
+
 5. Tag your image with the **latest** tag:
 
         docker tag cardano_node:${VERSION_NUMBER} cardano_node:latest
