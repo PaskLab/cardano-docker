@@ -8,7 +8,7 @@ sleep 3600
 CNODE_CONFIG_DIR="/cardano/config"
 CNODE_LOG_DIR="/cardano"
 
-CNODE_PORT=$(cat ${CNODE_CONFIG_DIR}/port.txt)  # must match your relay node port as set in the startup command
+CNODE_PORT=${PUBLIC_PORT}
 CNODE_HOSTNAME=${CNODE_HOSTNAME:-'CHANGE ME'}
 CNODE_VALENCY=1   # optional for multi-IP hostnames
 

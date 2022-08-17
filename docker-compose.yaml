@@ -3,54 +3,147 @@ version: "3.7"
 
 services:
 
-  cardano_node:
-    container_name: cardano_node
+  cardano-relay1:
+    container_name: cardano-relay1
     environment:
       CNODE_HOSTNAME: 'CHANGE ME'
+      PUBLIC_PORT: 3001
     image: cardano_node:latest
-    command: ["start-relay.sh"]           # Comment for node producer or relay with topology updater
-    #command: ["start-with-topology.sh"]  # Uncomment for relay with topology updater
-    #command: ["start-producer.sh"]       # Uncomment for node producer
-    #command: ["tail","-f","/dev/null"]   # Used for maintenance purpose
+    #command: ["/bin/bash", "-c", "start-relay.sh"]           # Comment for node producer or relay with topology updater
+    #command: ["/bin/bash", "-c", "start-with-topology.sh"]  # Uncomment for relay with topology updater
+    command: ["/bin/bash", "-c", "tail","-f","/dev/null"]   # Used for maintenance purpose
+    tty: true
     volumes:
       - type: bind
-        source: ./socket
+        source: ./relay1/socket
         target: /cardano/socket
       - type: bind
-        source: ./db
+        source: ./relay1/db
         target: /cardano/db
       - type: bind
-        source: ./config
+        source: ./relay1/config
         target: /cardano/config
         read_only: true
-    network_mode: host
-    restart: on-failure
+    ports:
+      - "3001:3000"
+    networks:
+      cardano:
+        aliases:
+          - relay1
+    restart: unless-stopped
     stop_signal: SIGINT
     stop_grace_period: 10s
     logging:
       driver: "json-file"
       options:
-        max-size: "10m"
+        max-size: "200k"
         max-file: "10"
     deploy:
       resources:
         limits:
           cpus: '4'
-          memory: 8G
+          memory: 16G
 
-  cardano_monitor:
-    container_name: cardano_monitor
+  cardano-relay2:
+    container_name: cardano-relay2
+    environment:
+      CNODE_HOSTNAME: 'CHANGE ME'
+      PUBLIC_PORT: 3002
+    image: cardano_node:latest
+    #command: ["/bin/bash", "-c", "start-relay.sh"]           # Comment for node producer or relay with topology updater
+    #command: ["/bin/bash", "-c", "start-with-topology.sh"]  # Uncomment for relay with topology updater
+    command: ["/bin/bash", "-c", "tail","-f","/dev/null"]   # Used for maintenance purpose
+    tty: true
+    volumes:
+      - type: bind
+        source: ./relay2/socket
+        target: /cardano/socket
+      - type: bind
+        source: ./relay2/db
+        target: /cardano/db
+      - type: bind
+        source: ./relay2/config
+        target: /cardano/config
+        read_only: true
+    ports:
+      - "3002:3000"
+    networks:
+      cardano:
+        aliases:
+          - relay2
+    restart: unless-stopped
+    stop_signal: SIGINT
+    stop_grace_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 16G
+
+  cardano-bp:
+    container_name: cardano-bp
+    image: cardano_node:latest
+    #command: ["/bin/bash", "-c", "start-relay.sh"]           # Comment for node producer or relay with topology updater
+    #command: ["/bin/bash", "-c", "start-producer.sh"]       # Uncomment for node producer
+    command: ["/bin/bash", "-c", "tail","-f","/dev/null"]   # Used for maintenance purpose
+    tty: true
+    volumes:
+      - type: bind
+        source: ./bp/socket
+        target: /cardano/socket
+      - type: bind
+        source: ./bp/db
+        target: /cardano/db
+      - type: bind
+        source: ./bp/config
+        target: /cardano/config
+        read_only: true
+    ports:
+      - "5000:3000"
+    networks:
+      cardano:
+        aliases:
+          - bp
+    restart: unless-stopped
+    stop_signal: SIGINT
+    stop_grace_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    deploy:
+      resources:
+        limits:
+          cpus: '6'
+          memory: 16G
+
+  cardano-monitor:
+    container_name: cardano-monitor
     image: cardano_monitor:latest
     command: ["start-monitoring.sh"]
     depends_on:
-      - cardano_node
+      - cardano-relay1
+      - cardano-relay2
+      - cardano-bp
     volumes:
       - type: volume
         source: prometheus-db
         target: /cardano/data
-    network_mode: host
+      - type: bind
+        source: ./monitor/config
+        target: /cardano/config
+    ports:
+      - "3200:3200"
+    networks:
+      cardano:
     restart: on-failure
-    stop_grace_period: 10s
+    stop_grace_period: 5s
     logging:
       driver: "json-file"
       options:
@@ -59,3 +152,6 @@ services:
 
 volumes:
   prometheus-db:
+
+networks:
+  cardano:
