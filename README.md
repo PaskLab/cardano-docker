@@ -9,12 +9,9 @@ Many steps used in this repository are from resources bellow:
 
 [Cardano Official Documentation](https://docs.cardano.org/projects/cardano-node/en/latest/index.html)
 
-Thanks to everyone behind CNODE from **cardano-community repository**.
+Thanks to everyone behind `topology updater` from **cardano-community repository**.
 
 [https://github.com/cardano-community/guild-operators](https://github.com/cardano-community/guild-operators)
-
-For non-dockerized instructions on how to compile cardano-node on RaspberryPi-4B, I'll refer you to
-[Alessandro Konrad Pi-Pool repository](https://github.com/alessandrokonrad/Pi-Pool).
 
 #### !!! Notes !!!
 
@@ -22,13 +19,10 @@ For non-dockerized instructions on how to compile cardano-node on RaspberryPi-4B
 
 * Cabal version: 3.4
 
-* All containers running on host network, providing network isolation where possible will
-be part of future improvement.
-
 ### Building from source 
 
 Since we need our binary to work on Aarch64 architecture, you'll need to build the node from the source files.
-I've wrote a Dockerfile that simplify the process.
+I've written a Dockerfile that simplify the process.
 
 First, you need to build all required images:
   
@@ -67,9 +61,9 @@ They do not have to bare the same name nor the same path.
 
 To make things simple, create the following folders structure:
 
-    ~/Cardano/config
-    ~/Cardano/socket
-    ~/Cardano/db
+    ~/Cardano/{bp|relay1|relayX}/config
+    ~/Cardano/{bp|relay1|relayX}/socket
+    ~/Cardano/{bp|relay1|relayX}/db
                          
 ** `~` is equivalent to your home folder, ie: /home/your_user_name                         
                                   
@@ -90,8 +84,8 @@ If your OS is unix based, you can use the `wget` utility to download all configu
     wget -O topology.json https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/mainnet-topology.json
 
 #### !!! Important !!!!
-We rename them to `byron-genesis.json`, `shelley-genesis.json`, `topology.json` and `config.json` to avoid breaking the script every time they
-change the name..! Don't forget to update the reference to the `*-genesis.json` file in your `config.json`.
+We rename them to `byron-genesis.json`, `shelley-genesis.json`, `topology.json` and `config.json` to make the scripts network agnostic!
+Don't forget to update the reference to the `*-genesis.json` file in your `config.json`.
 
 #### Bind folder permissions
 
@@ -102,31 +96,46 @@ The easy way is to add public read permission to all your files under `/config`:
     chmod 644 config/*
    
 The **correct** way is to give read and/or write access to the `cardano` user group. That group exists only in your 
-container, but might have an equivalent group on your system. Usually the default user group. (They share the same UID)
+container, but might have an equivalent (They share the same UID) group on your system.
+Usually the default/first user group UID: 1000.
 
-You can log in your container using `root` in order to change files owner ship and permission:
+You can log in your container using `root` in order to change files ownership and permission:
 
     docker exec -it --user root cardano_node bash
 
 You can later check on your host what is the equivalent group. All sub-folders and files under `/Cardano` folder should be
-owned by the host equivalent of the container `cardano` group to ensure that the container can write inside them.
+owned (in the container) by the host equivalent of the container `cardano` group to ensure that the container can write inside them.
    
 #### Port configuration
         
-Now, if you wish to use the `start-relay.sh` script provided in my repository, add a `port.txt` file under your `/config` 
-folder. Your file should contain only one line representing the **PORT** used by your node. 
-    
-    echo 3000 > port.txt
+All node are listening to the port 3000 inside the container. You can bind that port to the host port you like.
+
+Now, if you wish to use the `start-with-topology.sh` script provided in my repository, set the `PUBLIC_PORT` environment
+variable to the public port you will expose. If using docker-compose, see the provided [docker-compose.yaml](docker-compose.yaml) file.
     
 ### Relay node configuration
 
 Now you need to configure your `topology.json` file with your Relay and Producer node information.
 
+If using docker-compose, a virtual network named `cardano` will be created. This allow to isolate the block producer node
+from the host network, making it reachable only by the relay nodes. You can reference them in your `topology.json` file by using
+their generated hostname.
+
+Generated hostname will have the following form:
+
+    {service name}.{project name}_{network name}
+
+Whereas the **Project Name** is determined by the folder holding the `docker-compose.yaml` file. In our case, `/Cardano` as seen previously.
+
+** Note that the *generated hostname* is all lowercase.
+
+See [prometheus.yml](./Dockerfiles/monitor/files/prometheus.yml) for hostname examples.
+
 See: [Configure topology files for block-producing and relay nodes](https://docs.cardano.org/projects/cardano-node/en/latest/stake-pool-operations/core_relay.html).
 
 ### Creating the containers with Docker Compose
 
-Docker Compose required `cardano_node`, `cardano_cli` and `cardano_monitor` images.
+Docker Compose required `cardano_node` and `cardano_monitor` images.
 To build the `cardano_monitor` image, read: [Monitoring with Grafana](Docs/monitoring.md).
 
 You can copy the docker-compose.yaml where your `config/` folder reside. Then start your containers with the 

@@ -14,6 +14,9 @@ in the Cardano Node image.
 If you're using docker-compose, change the env `CNODE_HOSTNAME: 'CHANGE ME'` parameters under the
 `cardano_node` service for **your own domain URL**. If you're using IP's, do not touch anything.
 
+You also need to set the `PUBLIC_PORT` environment variable (at the container level) to the public port you will expose.
+This can be done in `docker-compose.yaml` or via the `docker run` command if running standalone.
+
 If you're not using docker-compose, use the following command in `cardano_cli` container to activate
 topologyUpdater cron job:
 
