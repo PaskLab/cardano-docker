@@ -33,14 +33,14 @@ RUN apt-get install -y libnuma-dev
 RUN apt-get install -y libtool
 RUN apt-get install -y autoconf
 
-# Install aarch64 ghcup-0.1.13
-RUN wget -O ghcup https://downloads.haskell.org/~ghcup/0.1.14/aarch64-linux-ghcup-0.1.14
+# Install aarch64 ghcup-0.1.18.0
+RUN wget -O ghcup https://downloads.haskell.org/~ghcup/0.1.18.0/aarch64-linux-ghcup-0.1.18.0
 RUN chmod 500 ghcup
-RUN ./ghcup -v --downloader wget install ghc 8.10.4
-RUN ./ghcup set ghc 8.10.4
+RUN ./ghcup -v --downloader wget install ghc 8.10.7
+RUN ./ghcup set ghc 8.10.7
 
-# Install aarch64 cabal 3.4
-RUN ./ghcup -v --downloader wget install cabal
+# Install aarch64 cabal 3.6.2.0
+RUN ./ghcup -v --downloader wget install cabal 3.6.2.0
 
 # Install Bitcoin secp256k1 dependency
 RUN git clone https://github.com/bitcoin-core/secp256k1.git
