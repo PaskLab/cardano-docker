@@ -51,7 +51,17 @@ First, you need to build all required images:
 
     ** Tips: _Add `--build-arg RELEASE_PATH=1.3x.x` if the node version differ from the git tag._
 
-5. Tag your image with the **latest** tag:
+5. The submit api image:
+
+        RELEASE_PATH=<Submit API version, see cardano-submit-api.cabal file>
+
+        docker build \
+            --build-arg ARCHITECTURE=${ARCHITECTURE} \
+            --build-arg RELEASE=${VERSION_NUMBER} \
+            --build-arg RELEASE_PATH=${RELEASE_PATH} \
+            -t cardano_submit:latest Dockerfiles/submit
+
+6. Tag your image with the **latest** tag:
 
         docker tag cardano_node:${VERSION_NUMBER} cardano_node:latest
 
