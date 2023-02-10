@@ -150,6 +150,29 @@ services:
         max-size: "200k"
         max-file: "10"
 
+  cardano-submit:
+    container_name: cardano-submit
+    image: cardano_submit:latest
+    command: ["/bin/bash", "-c", "start.sh"]
+    tty: true
+    volumes:
+      - type: bind
+        source: ./relay1/socket
+        target: /cardano/socket
+      - type: bind
+        source: ./relay1/config
+        target: /cardano/config
+        read_only: true
+    ports:
+      - "3080:3000"
+    restart: unless-stopped
+    stop_signal: SIGINT
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
 volumes:
   prometheus-db:
 
