@@ -61,7 +61,14 @@ First, you need to build all required images:
             --build-arg RELEASE_PATH=${RELEASE_PATH} \
             -t cardano_submit:latest Dockerfiles/submit
 
-6. Tag your image with the **latest** tag:
+6. The DB-Sync image:
+
+        docker build \
+            --build-arg ARCHITECTURE=${ARCHITECTURE} \
+            --build-arg RELEASE=${VERSION_NUMBER} \
+            -t cardano_db_sync:${VERSION_NUMBER} Dockerfiles/db-sync
+
+7. Tag your image with the **latest** tag:
 
         docker tag cardano_node:${VERSION_NUMBER} cardano_node:latest
 
@@ -163,7 +170,6 @@ following command:
 
 - [How get peers with Topology Updater](Docs/topology.md)
 - [Monitoring with Grafana](Docs/monitoring.md)
-- [Installation of db-sync & graphql](../pool-monitor/Docs/db-sync.md)
 - [Dynamic DNS support](Docs/dynamic_dns.md)
 - [Limit containers memory usage](Docs/memory_limit.md)
 - [Manually creating the containers](Docs/standalone-containers.md)
