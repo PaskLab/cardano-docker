@@ -63,7 +63,7 @@ WORKDIR /root
 RUN git clone https://github.com/input-output-hk/libsodium
 
 WORKDIR /root/libsodium
-RUN git checkout 66f017f1
+RUN git checkout a5baeccc5be38dda54dd85eba58fdd929b2b8387
 RUN ./autogen.sh
 RUN ./configure
 RUN make
