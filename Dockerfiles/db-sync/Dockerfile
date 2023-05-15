@@ -15,7 +15,7 @@ RUN apt-get install -y postgresql postgresql-contrib
 # Download cardano-node repository
 ARG RELEASE
 ARG ARCHITECTURE
-ARG GHC_VERSION=ghc-8.10.7
+ARG GHC_VERSION=ghc-9.2.7
 ARG PGPASSFILE="config/pgpass-mainnet scripts/postgresql-setup.sh --createdb"
 RUN git clone https://github.com/input-output-hk/cardano-db-sync
 WORKDIR /root/cardano-db-sync

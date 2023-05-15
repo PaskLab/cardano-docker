@@ -15,9 +15,9 @@ Thanks to everyone behind `topology updater` from **cardano-community repository
 
 #### !!! Notes !!!
 
-* GHC version: 8.10.4
+* GHC version: 9.2.7
 
-* Cabal version: 3.4
+* Cabal version: 3.10.1
 
 ### Building from source 
 

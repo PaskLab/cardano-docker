@@ -9,7 +9,7 @@ WORKDIR /root
 # Download cardano-node repository
 ARG RELEASE
 ARG ARCHITECTURE
-ARG GHC_VERSION=ghc-8.10.7
+ARG GHC_VERSION=ghc-9.2.7
 RUN git clone https://github.com/input-output-hk/cardano-node
 WORKDIR /root/cardano-node
 RUN git checkout ${RELEASE}
