@@ -9,7 +9,7 @@ WORKDIR /root
 # Download cardano-node repository
 ARG RELEASE
 ARG ARCHITECTURE
-ARG GHC_VERSION=ghc-9.2.7
+ARG GHC_VERSION=ghc-8.10.7
 RUN git clone https://github.com/input-output-hk/cardano-node
 WORKDIR /root/cardano-node
 RUN git checkout ${RELEASE}
@@ -32,10 +32,10 @@ RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-submi
 COPY files/start.sh /cardano/scripts/start.sh
 
 # Creating non root user cardano
-RUN useradd -m cardano
+#RUN useradd -m cardano
 
 # Add permissions
-RUN chown -R cardano:cardano /cardano
+#RUN chown -R cardano:cardano /cardano
 RUN chmod g+s /cardano
 RUN chmod 540 /cardano/scripts/*
 RUN chmod 540 /cardano/bin/*
@@ -68,7 +68,7 @@ RUN apt-get clean
 RUN apt-get autoclean
 
 # Switch user
-USER cardano:cardano
+#USER cardano:cardano
 WORKDIR /cardano
 
 CMD ["/bin/bash", "-c", "start.sh"]
