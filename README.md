@@ -38,20 +38,24 @@ First, you need to build all required images:
 
     ** Tip: _Add `--no-cache` to rebuild from scratch_ **
 
-3. Set the version variable (Set the right release VERSION_NUMBER, ie: `1.19.0`)
+3. Set the version variable (Set the right release TAG, ie: `1.19.0`)
 
-        VERSION_NUMBER=<VERSION_NUMBER>
+        NODE_TAG=<VERSION_TAG>
 
-4. The node image:
+4. Set the output path if different from TAG (_CLI version now differ from node version_)
+
+        NODE_PATH=<PATH>
+        CLI_PATH=<PATH>
+
+5. The node image:
 
         docker build \
             --build-arg ARCHITECTURE=${ARCHITECTURE} \
-            --build-arg RELEASE=${VERSION_NUMBER} \
+            --build-arg NODE_TAG=${NODE_TAG} \
+            --build-arg CLI_PATH=${CLI_PATH} \
             -t cardano_node:${VERSION_NUMBER} Dockerfiles/node
 
-    ** Tips: _Add `--build-arg RELEASE_PATH=1.3x.x` if the node version differ from the git tag._
-
-5. The submit api image:
+6. The submit api image:
 
         RELEASE_PATH=<Submit API version, see cardano-submit-api.cabal file>
 
@@ -61,14 +65,14 @@ First, you need to build all required images:
             --build-arg RELEASE_PATH=${RELEASE_PATH} \
             -t cardano_submit:latest Dockerfiles/submit
 
-6. The DB-Sync image:
+7. The DB-Sync image:
 
         docker build \
             --build-arg ARCHITECTURE=${ARCHITECTURE} \
             --build-arg RELEASE=${VERSION_NUMBER} \
             -t cardano_db_sync:${VERSION_NUMBER} Dockerfiles/db-sync
 
-7. Tag your image with the **latest** tag:
+8. Tag your image with the **latest** tag:
 
         docker tag cardano_node:${VERSION_NUMBER} cardano_node:latest
 
