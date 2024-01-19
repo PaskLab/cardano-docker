@@ -37,13 +37,13 @@ RUN chmod 544 /cardano/scripts/start-monitoring.sh
 COPY files/prometheus.yml /cardano/config/prometheus.yml
 
 # Creating non root user cardano
-RUN useradd -m cardano
+#RUN useradd -m cardano
 
 # Add data store folder
 RUN mkdir /cardano/data
 
 # Add permissions
-RUN chown -R cardano:cardano /cardano
+#RUN chown -R cardano:cardano /cardano
 RUN chmod g+s /cardano
 
 # Export executable path
@@ -58,6 +58,6 @@ RUN apt-get autoremove -y
 RUN apt-get clean
 RUN apt-get autoclean
 
-USER cardano:cardano
+#USER cardano:cardano
 
 CMD ["start-monitoring.sh"]

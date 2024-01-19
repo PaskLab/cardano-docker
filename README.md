@@ -15,9 +15,11 @@ Thanks to everyone behind `topology updater` from **cardano-community repository
 
 #### !!! Notes !!!
 
-* GHC version: 8.10.4
-
-* Cabal version: 3.4
+* **GHC** version: **9.6.4**
+* **Cabal** version: **3.10.1.0**
+* Supported **cardano-node** version: **8.7.3**
+* Supported **cardano-cli** version: **8.17.0.0**
+* Supported **cardano-submit-api** version: **3.2.1**
 
 ### Building from source 
 
@@ -27,43 +29,74 @@ I've written a Dockerfile that simplify the process.
 First, you need to build all required images:
   
 1. Set the architecture variable to your requirement (Only x86/amd64 and aarch64 supported):
-  
-        ARCHITECTURE=<PROCESSOR_ARCHITECTURE(x86_64 or aarch64)>
+
+    ```bash 
+    ARCHITECTURE=<PROCESSOR_ARCHITECTURE(x86_64 or aarch64)>
+    ```    
         
 2. The Cardano sources image:
-        
-        docker build \
-            -t cardano_env:latest \
-            ./Dockerfiles/build_env/${ARCHITECTURE}
 
+   ```bash
+   docker build \
+      -t cardano_env:latest \
+      ./Dockerfiles/build_env/${ARCHITECTURE}
+
+   ``` 
     ** Tip: _Add `--no-cache` to rebuild from scratch_ **
 
-3. Set the version variable (Set the right release VERSION_NUMBER, ie: `1.19.0`)
 
-        VERSION_NUMBER=<VERSION_NUMBER>
+3. Set the version variable (Set the right release TAG, ie: `1.19.0`)
 
-4. The node image:
+   ```bash
+   NODE_TAG=<VERSION_TAG>
+   ```
 
-        docker build \
-            --build-arg ARCHITECTURE=${ARCHITECTURE} \
-            --build-arg RELEASE=${VERSION_NUMBER} \
-            -t cardano_node:${VERSION_NUMBER} Dockerfiles/node
+4. Set the output path if different from TAG (_CLI version now differ from node version_)
 
-    ** Tips: _Add `--build-arg RELEASE_PATH=1.3x.x` if the node version differ from the git tag._
+   ```bash
+   # MANDATORY
+   CLI_PATH=<PATH>
+   
+   # OPTIONAL / IF REQUIRED
+   NODE_PATH=<PATH>
+   ```      
 
-5. The submit api image:
+5. The node image:
 
-        RELEASE_PATH=<Submit API version, see cardano-submit-api.cabal file>
+   ```bash
+   docker build \
+      --build-arg ARCHITECTURE=${ARCHITECTURE} \
+      --build-arg NODE_TAG=${NODE_TAG} \
+      --build-arg CLI_PATH=${CLI_PATH} \
+      -t cardano_node:${NODE_TAG} Dockerfiles/node
+   ```
 
-        docker build \
-            --build-arg ARCHITECTURE=${ARCHITECTURE} \
-            --build-arg RELEASE=${VERSION_NUMBER} \
-            --build-arg RELEASE_PATH=${RELEASE_PATH} \
-            -t cardano_submit:latest Dockerfiles/submit
+6. The submit api image:
 
-6. Tag your image with the **latest** tag:
+   ```bash
+   API_VERSION=<Submit API version, see cardano-submit-api.cabal file>
+   
+   docker build \
+      --build-arg ARCHITECTURE=${ARCHITECTURE} \
+      --build-arg NODE_TAG=${NODE_TAG} \
+      --build-arg API_VERSION=${API_VERSION} \
+      -t cardano_submit:latest Dockerfiles/submit
+   ```
 
-        docker tag cardano_node:${VERSION_NUMBER} cardano_node:latest
+7. The DB-Sync image:
+
+   ```bash
+   docker build \
+      --build-arg ARCHITECTURE=${ARCHITECTURE} \
+      --build-arg RELEASE=${VERSION_NUMBER} \
+      -t cardano_db_sync:${VERSION_NUMBER} Dockerfiles/db-sync
+   ```
+
+8. Tag your image with the **latest** tag:
+
+   ```bash
+   docker tag cardano_node:${VERSION_NUMBER} cardano_node:latest
+   ```
 
 ### Folder structure
 
@@ -163,7 +196,6 @@ following command:
 
 - [How get peers with Topology Updater](Docs/topology.md)
 - [Monitoring with Grafana](Docs/monitoring.md)
-- [Installation of db-sync & graphql](../pool-monitor/Docs/db-sync.md)
 - [Dynamic DNS support](Docs/dynamic_dns.md)
 - [Limit containers memory usage](Docs/memory_limit.md)
 - [Manually creating the containers](Docs/standalone-containers.md)
