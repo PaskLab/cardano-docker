@@ -9,7 +9,7 @@ WORKDIR /root
 # Download cardano-node repository
 ARG NODE_TAG
 ARG ARCHITECTURE
-RUN git clone https://github.com/input-output-hk/cardano-node
+RUN git clone https://github.com/IntersectMBO/cardano-node.git
 WORKDIR /root/cardano-node
 RUN git checkout ${NODE_TAG}
 RUN git submodule update --init --recursive
@@ -24,7 +24,7 @@ RUN cabal build cardano-node cardano-cli
 
 # Create files structure
 RUN mkdir -p /cardano/config /cardano/bin /cardano/db /cardano/socket /cardano/scripts
-ARG GHC_VERSION=ghc-9.6.3
+ARG GHC_VERSION=ghc-9.6.4
 ARG NODE_PATH=$NODE_TAG
 ARG CLI_PATH
 #WORKDIR /root/cardano-node

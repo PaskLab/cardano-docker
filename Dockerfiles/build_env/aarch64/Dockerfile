@@ -1,4 +1,4 @@
-FROM ubuntu:focal
+FROM ubuntu:jammy
 LABEL name="cardano_env"
 LABEL description="AARCH64 Environment for building Cardano node & tools"
 LABEL maintainer="https://github.com/pascallapointe"
@@ -22,7 +22,7 @@ RUN apt-get install -y libsystemd-dev
 RUN apt-get install -y liblmdb-dev
 RUN apt-get install -y libsodium-dev
 RUN apt-get install -y zlib1g-dev
-RUN apt-get install -y llvm-9
+RUN apt-get install -y llvm-14
 RUN apt-get install -y automake
 RUN apt-get install -y make
 RUN apt-get install -y build-essential
@@ -39,8 +39,8 @@ RUN apt-get install -y autoconf
 RUN wget -O ghcup https://downloads.haskell.org/~ghcup/0.1.20.0/aarch64-linux-ghcup-0.1.20.0
 RUN chmod 500 ghcup
 
-RUN ./ghcup -v --downloader wget install ghc 9.6.3
-RUN ./ghcup set ghc 9.6.3
+RUN ./ghcup -v --downloader wget install ghc 9.6.4
+RUN ./ghcup set ghc 9.6.4
 
 # Install aarch64 cabal 3.10.1.0
 RUN ./ghcup -v --downloader wget install cabal 3.10.1.0
