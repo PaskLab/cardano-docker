@@ -57,7 +57,7 @@ RUN apt-get purge -y libssl-dev
 RUN apt-get purge -y libtinfo-dev
 RUN apt-get purge -y libsystemd-dev
 RUN apt-get purge -y zlib1g-dev
-RUN apt-get purge -y llvm
+RUN apt-get purge -y llvm-14
 RUN apt-get purge -y build-essential
 RUN apt-get purge -y libffi-dev
 RUN apt-get purge -y make
