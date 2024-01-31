@@ -1,20 +1,23 @@
 # Dynamic DNS
 
-If you don't have a static IP you still can use your dynamic's one. Providers like google
-allow you to do it without any supplementary charges. Check out
-[Google Dynamic DNS setup](https://support.google.com/domains/answer/6147083).
+If you don't have a static IP you still can use your dynamic's one. Providers like cloudflare
+allow you to do it without any supplementary charges. Thanks to
+[David Schlachter](https://www.davidschlachter.com/) for guidance:
+
+https://www.davidschlachter.com/misc/cloudflare-ddclient.
 
 ### Server side client setup
 
 You'll need a server side client to notify your DynDNS provider for any change.
 Create a `config` folder that can hold your **DDclient** configuration file and add it the 
-provided configuration file
+provided configuration file:
 
 - [Dockerfiles/ddclient/files/ddclient.conf](../Dockerfiles/ddclient/files/ddclient.conf)
 
 Change the configuration file access:
 
-    sudo chmod 600 ddclient.conf
+    sudo chown root:root ddclient.conf
+    sudo chmod 400 ddclient.conf
 
 ### Creating the DDclient image
 
