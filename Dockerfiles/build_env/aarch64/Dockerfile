@@ -14,6 +14,7 @@ RUN apt-get update
 RUN apt-get install -y apt-utils
 RUN apt-get install -y git
 RUN apt-get install -y wget
+RUN apt-get install -y curl
 RUN apt-get install -y pkg-config
 RUN apt-get install -y libgmp-dev
 RUN apt-get install -y libssl-dev
@@ -34,6 +35,11 @@ RUN apt-get install -y jq
 RUN apt-get install -y libnuma-dev
 RUN apt-get install -y libtool
 RUN apt-get install -y autoconf
+
+# Install Rust
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+RUN rustup update
 
 # Install aarch64 ghcup-0.1.18.0
 RUN wget -O ghcup https://downloads.haskell.org/~ghcup/0.1.20.0/aarch64-linux-ghcup-0.1.20.0

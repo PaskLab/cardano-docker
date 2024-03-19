@@ -49,6 +49,7 @@ First, you need to build all required images:
 
    ```bash
    NODE_TAG=<VERSION_TAG>
+   MITHRIL_TAG=<VERSION_TAG>
    ```
 
 4. Set the output path if different from TAG (_CLI version now differ from node version_)
@@ -67,6 +68,7 @@ First, you need to build all required images:
    docker build \
       --build-arg ARCHITECTURE=${ARCHITECTURE} \
       --build-arg NODE_TAG=${NODE_TAG} \
+      --build-arg MITHRIL_TAG=${MITHRIL_TAG} \
       --build-arg CLI_PATH=${CLI_PATH} \
       -t cardano_node:${NODE_TAG} Dockerfiles/node
    ```

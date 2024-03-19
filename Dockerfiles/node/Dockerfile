@@ -27,10 +27,21 @@ RUN mkdir -p /cardano/config /cardano/bin /cardano/db /cardano/socket /cardano/s
 ARG GHC_VERSION=ghc-9.6.4
 ARG NODE_PATH=$NODE_TAG
 ARG CLI_PATH
-#WORKDIR /root/cardano-node
 RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-node-${NODE_PATH}/x/cardano-node/build/cardano-node/cardano-node /cardano/bin
-#WORKDIR /root/cardano-cli
 RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-cli-${CLI_PATH}/x/cardano-cli/build/cardano-cli/cardano-cli /cardano/bin
+
+# Download mithril repository
+WORKDIR /root
+ARG MITHRIL_TAG
+RUN git clone https://github.com/input-output-hk/mithril.git
+WORKDIR /root/mithril
+RUN git checkout ${MITHRIL_TAG}
+WORKDIR /root/mithril/mithril-signer
+
+# Build mithril binary
+RUN make build
+RUN cp -p mithril-signer /cardano/bin
+RUN mkdir -p /cardano/stores
 
 # Add startup scripts
 COPY files/start-relay.sh /cardano/scripts/start-relay.sh
@@ -38,8 +49,8 @@ COPY files/start-producer.sh /cardano/scripts/start-producer.sh
 COPY files/start-with-topology.sh /cardano/scripts/start-with-topology.sh
 
 # Install topologyUpdater script
+# USE CURL, DO NOT UNINSTALL CURL
 RUN apt-get update
-RUN apt-get install -y curl
 COPY files/topologyUpdater.sh /cardano/scripts/topologyUpdater.sh
 
 # Creating non root user cardano
@@ -59,6 +70,7 @@ WORKDIR /root
 
 RUN cabal clean
 RUN rm -rf cardano-node
+RUN rm -rf mithril
 RUN rm -rf .cabal .local
 RUN apt-get purge -y apt-utils
 RUN apt-get purge -y git
