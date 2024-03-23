@@ -1,7 +1,7 @@
 FROM cardano_env
 
-LABEL name="cardano_node"
-LABEL description="Cardano node"
+LABEL name="mithril-signer"
+LABEL description="Cardano Mithril Signer"
 LABEL maintainer="https://github.com/pascallapointe"
 
 WORKDIR /root
@@ -20,25 +20,29 @@ COPY files/cabal.project.local /root/cardano-node/cabal.project.local
 # Build cardano-node binary
 RUN cabal update
 RUN cabal user-config update
-RUN cabal build cardano-node cardano-cli
+RUN cabal build cardano-cli
 
 # Create files structure
 RUN mkdir -p /cardano/config /cardano/bin /cardano/db /cardano/socket /cardano/scripts
 ARG GHC_VERSION=ghc-9.6.4
-ARG NODE_PATH=$NODE_TAG
 ARG CLI_PATH
-RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-node-${NODE_PATH}/x/cardano-node/build/cardano-node/cardano-node /cardano/bin
 RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-cli-${CLI_PATH}/x/cardano-cli/build/cardano-cli/cardano-cli /cardano/bin
 
-# Add startup scripts
-COPY files/start-relay.sh /cardano/scripts/start-relay.sh
-COPY files/start-producer.sh /cardano/scripts/start-producer.sh
-COPY files/start-with-topology.sh /cardano/scripts/start-with-topology.sh
+# Download mithril repository
+WORKDIR /root
+ARG MITHRIL_TAG
+RUN git clone https://github.com/input-output-hk/mithril.git
+WORKDIR /root/mithril
+RUN git checkout ${MITHRIL_TAG}
+WORKDIR /root/mithril/mithril-signer
 
-# Install topologyUpdater script
-# USE CURL, DO NOT UNINSTALL CURL
-RUN apt-get update
-COPY files/topologyUpdater.sh /cardano/scripts/topologyUpdater.sh
+# Build mithril binary
+RUN make build
+RUN cp -p mithril-signer /cardano/bin
+RUN mkdir -p /cardano/stores
+
+# Add startup scripts
+COPY files/start.sh /cardano/scripts/start.sh
 
 # Creating non root user cardano
 # RUN useradd -m cardano
@@ -51,12 +55,16 @@ RUN chmod 540 /cardano/bin/*
 
 ENV PATH=/cardano/scripts:/cardano/bin:$PATH
 ENV CARDANO_NODE_SOCKET_PATH=/cardano/socket/node.sock
+ENV DB_DIRECTORY=/cardano/db
+ENV CARDANO_CLI_PATH=/cardano/bin/cardano-cli
+ENV DATA_STORES_DIRECTORY=/cardano/stores
 
 # Image clean-up
 WORKDIR /root
 
 RUN cabal clean
 RUN rm -rf cardano-node
+RUN rm -rf mithril
 RUN rm -rf .cabal .local
 RUN apt-get purge -y apt-utils
 RUN apt-get purge -y git
@@ -82,4 +90,4 @@ RUN apt-get autoclean
 # USER cardano:cardano
 WORKDIR /cardano
 
-CMD ["/bin/bash", "-c", "start-relay.sh"]
+CMD ["/bin/bash", "-c", "start.sh"]
