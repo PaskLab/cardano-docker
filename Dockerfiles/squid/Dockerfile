@@ -21,4 +21,8 @@ RUN chmod 540 /scripts/*
 
 ENV PATH=/scripts:$PATH
 
+RUN apt-get autoremove -y
+RUN apt-get clean
+RUN apt-get autoclean
+
 CMD ["/bin/bash", "-c", "tail","-f","/dev/null"]
