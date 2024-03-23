@@ -3,6 +3,8 @@ Docker files for setting up Cardano Node environment.
 
 #### You can support this repository by delegating to pool BERRY!
 
+** **_These Dockerfiles are meant to be run along with `Docker-Compose`._**
+
 #### Reference
 
 Many steps used in this repository are from resources bellow:
@@ -49,7 +51,6 @@ First, you need to build all required images:
 
    ```bash
    NODE_TAG=<VERSION_TAG>
-   MITHRIL_TAG=<VERSION_TAG>
    ```
 
 4. Set the output path if different from TAG (_CLI version now differ from node version_)
@@ -68,7 +69,6 @@ First, you need to build all required images:
    docker build \
       --build-arg ARCHITECTURE=${ARCHITECTURE} \
       --build-arg NODE_TAG=${NODE_TAG} \
-      --build-arg MITHRIL_TAG=${MITHRIL_TAG} \
       --build-arg CLI_PATH=${CLI_PATH} \
       -t cardano_node:${NODE_TAG} Dockerfiles/node
    ```
@@ -99,6 +99,33 @@ First, you need to build all required images:
    ```bash
    docker tag cardano_node:${VERSION_NUMBER} cardano_node:latest
    ```
+
+9. The Mithril Signer image:
+
+   ```bash
+   NODE_TAG=<VERSION_TAG>
+   CLI_PATH=<PATH>
+   MITHRIL_TAG=<VERSION_TAG>
+   docker build \
+      --build-arg ARCHITECTURE=${ARCHITECTURE} \
+      --build-arg NODE_TAG=${NODE_TAG} \
+      --build-arg MITHRIL_TAG=${MITHRIL_TAG} \
+      --build-arg CLI_PATH=${CLI_PATH} \
+      -t mithril:${MITHRIL_TAG} Dockerfiles/mithril
+   ```
+
+  ** See:  [mithril.network/doc/](https://mithril.network/doc/)
+
+10. The Mithril Relay (squid) image:
+
+   - Edit `/Dockerfiles/squid/file/squid.conf` to add your producer internal ip address.
+   - Add the configuration file in a `./squid` folder next to your `docker-compose.yml` file.
+
+   ```bash
+   docker build -t squid:latest Dockerfiles/squid
+   ```
+
+** See:  [mithril.network/doc/](https://mithril.network/doc/)
 
 ### Folder structure
 
