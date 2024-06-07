@@ -7,10 +7,9 @@ LABEL maintainer="https://github.com/pascallapointe"
 WORKDIR /root
 
 # Download cardano-node repository
-ARG NODE_TAG
-ARG ARCHITECTURE
 RUN git clone https://github.com/IntersectMBO/cardano-node.git
 WORKDIR /root/cardano-node
+ARG NODE_TAG
 RUN git checkout ${NODE_TAG}
 RUN git submodule update --init --recursive
 
@@ -26,6 +25,7 @@ RUN cabal build cardano-node cardano-cli
 RUN mkdir -p /cardano/config /cardano/bin /cardano/db /cardano/socket /cardano/scripts
 ARG GHC_VERSION=ghc-9.6.4
 ARG NODE_PATH=$NODE_TAG
+ARG ARCHITECTURE
 ARG CLI_PATH
 RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-node-${NODE_PATH}/x/cardano-node/build/cardano-node/cardano-node /cardano/bin
 RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-cli-${CLI_PATH}/x/cardano-cli/build/cardano-cli/cardano-cli /cardano/bin
