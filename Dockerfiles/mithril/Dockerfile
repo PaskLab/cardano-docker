@@ -36,6 +36,9 @@ WORKDIR /root/mithril
 RUN git checkout ${MITHRIL_TAG}
 WORKDIR /root/mithril/mithril-signer
 
+# Support for Asahi Linux 16kb memory page, to be commented if not needed
+ENV JEMALLOC_SYS_WITH_LG_PAGE=16
+
 # Build mithril binary
 RUN make build
 RUN cp -p mithril-signer /cardano/bin
