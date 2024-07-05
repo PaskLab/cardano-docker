@@ -109,7 +109,7 @@ First, you need to build all required images:
       --build-arg NODE_TAG=${NODE_TAG} \
       --build-arg MITHRIL_TAG=${MITHRIL_TAG} \
       --build-arg CLI_TAG=${CLI_TAG} \
-      -t mithril:${MITHRIL_TAG} Dockerfiles/mithril-signer
+      -t mithril_signer:${MITHRIL_TAG} Dockerfiles/mithril-signer
    ```
 
   ** See:  [mithril.network/doc/](https://mithril.network/doc/)
@@ -131,7 +131,7 @@ First, you need to build all required images:
    MITHRIL_TAG=<VERSION_TAG>
    docker build \
       --build-arg MITHRIL_TAG=${MITHRIL_TAG} \
-      -t mithril:${MITHRIL_TAG} Dockerfiles/mithril-client
+      -t mithril_client:${MITHRIL_TAG} Dockerfiles/mithril-client
    ```
 
 ** See:  [mithril.network/doc/](https://mithril.network/doc/)

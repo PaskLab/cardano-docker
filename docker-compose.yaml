@@ -250,7 +250,7 @@ services:
 
   mithril:
     container_name: mithril
-    image: mithril:latest
+    image: mithril_signer:latest
     #command: ["/bin/bash", "-c", "start.sh"]
     command: ["/bin/bash", "-c", "tail","-f","/dev/null"]   # Used for maintenance purpose
     depends_on:
