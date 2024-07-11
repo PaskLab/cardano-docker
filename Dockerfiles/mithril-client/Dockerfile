@@ -1,4 +1,4 @@
-FROM cardano_env
+FROM cardano_env AS base
 
 LABEL name="mithril-client"
 LABEL description="Cardano Mithril Client"
@@ -37,31 +37,29 @@ ENV PATH=/cardano/scripts:/cardano/bin:$PATH
 # Image clean-up
 WORKDIR /root
 
-RUN cabal clean
-RUN rm -rf mithril
-RUN rm -rf .cabal .local
-RUN apt-get purge -y apt-utils
-RUN apt-get purge -y git
-RUN apt-get purge -y wget
-RUN apt-get purge -y pkg-config
-RUN apt-get purge -y libgmp-dev
-RUN apt-get purge -y libssl-dev
-RUN apt-get purge -y libtinfo-dev
-RUN apt-get purge -y libsystemd-dev
-RUN apt-get purge -y liblmdb-dev
-RUN apt-get purge -y zlib1g-dev
-RUN apt-get purge -y llvm-14
-RUN apt-get purge -y build-essential
-RUN apt-get purge -y libffi-dev
-RUN apt-get purge -y make
-RUN apt-get purge -y g++
-
-RUN apt-get autoremove -y
-RUN apt-get clean
-RUN apt-get autoclean
+RUN cabal clean &&\
+    rm -rf mithril &&\
+    ./ghcup nuke &&\
+    rm -rf .cabal .local .ghcup .ghc .cache ghcup &&\
+    rustup self uninstall -y &&\
+    apt-get purge -y apt-utils git wget pkg-config libgmp-dev \
+    libssl-dev libtinfo-dev libsystemd-dev liblmdb-dev libtool \
+    zlib1g-dev llvm-14 build-essential libffi-dev automake \
+    make g++ libncursesw5 jq autoconf &&\
+    apt-get autoremove -y &&\
+    apt-get clean &&\
+    apt-get autoclean
 
 # Switch user
 # USER cardano:cardano
 WORKDIR /cardano
+
+FROM ubuntu:jammy
+COPY --from=base / /
+
+ENV PATH=/cardano/scripts:/cardano/bin:$PATH
+ENV CARDANO_NODE_SOCKET_PATH=/cardano/socket/node.sock
+ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
+ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 CMD ["/bin/bash", "-c", "tail","-f","/dev/null"]

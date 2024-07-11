@@ -257,8 +257,11 @@ services:
       # Depend on block producer service to be healthy before starting.
       - cardano-bp
     environment:
-      KES_SECRET_KEY_PATH: '/cardano/config/kes.skey'
+      DB_DIRECTORY: '/cardano/db'
+      DATA_STORES_DIRECTORY: '/cardano/stores'
+      CARDANO_CLI_PATH: '/cardano/bin/cardano-cli'
       OPERATIONAL_CERTIFICATE_PATH: '/cardano/config/node.cert'
+      KES_SECRET_KEY_PATH: '/cardano/config/kes.skey'
       RUN_INTERVAL: 60000
       STORE_RETENTION_LIMIT: 5
       NETWORK: 'mainnet'
