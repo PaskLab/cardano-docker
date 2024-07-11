@@ -213,7 +213,7 @@ services:
 
   cardano-postgres:
     container_name: cardano-postgres
-    image: postgres:11.18-alpine
+    image: postgres:14.10-alpine
     environment:
       - POSTGRES_LOGGING=true
       - POSTGRES_DB_FILE=/run/secrets/postgres_db
@@ -250,15 +250,18 @@ services:
 
   mithril:
     container_name: mithril
-    image: mithril:latest
+    image: mithril_signer:latest
     #command: ["/bin/bash", "-c", "start.sh"]
     command: ["/bin/bash", "-c", "tail","-f","/dev/null"]   # Used for maintenance purpose
     depends_on:
       # Depend on block producer service to be healthy before starting.
       - cardano-bp
     environment:
-      KES_SECRET_KEY_PATH: '/cardano/config/kes.skey'
+      DB_DIRECTORY: '/cardano/db'
+      DATA_STORES_DIRECTORY: '/cardano/stores'
+      CARDANO_CLI_PATH: '/cardano/bin/cardano-cli'
       OPERATIONAL_CERTIFICATE_PATH: '/cardano/config/node.cert'
+      KES_SECRET_KEY_PATH: '/cardano/config/kes.skey'
       RUN_INTERVAL: 60000
       STORE_RETENTION_LIMIT: 5
       NETWORK: 'mainnet'
@@ -310,6 +313,25 @@ services:
         target: /config
     ports:
       - "3132:3132"
+    restart: unless-stopped
+    stop_signal: SIGINT
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  mithril-client:
+    container_name: mithril-client
+    image: mithril_client:latest
+    environment:
+      GENESIS_VERIFICATION_KEY: '5b3139312c36362c3134302c3138352c3133382c31312c3233372c3230372c3235302c3134342c32372c322c3138382c33302c31322c38312c3135352c3230342c31302c3137392c37352c32332c3133382c3139362c3231372c352c31342c32302c35372c37392c33392c3137365d'
+      AGGREGATOR_ENDPOINT: 'https://aggregator.release-mainnet.api.mithril.network/aggregator'
+    tty: true
+    volumes:
+      - type: bind
+        source: ./mithril-client
+        target: /cardano/db
     restart: unless-stopped
     stop_signal: SIGINT
     logging:

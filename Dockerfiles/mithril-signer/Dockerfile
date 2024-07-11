@@ -1,36 +1,20 @@
 FROM cardano_env AS base
 
-LABEL name="cardano_node"
-LABEL description="Cardano node"
+LABEL name="mithril-signer"
+LABEL description="Cardano Mithril Signer"
 LABEL maintainer="https://github.com/pascallapointe"
 
 WORKDIR /root
 
-# Download cardano-node repository
-RUN git clone https://github.com/IntersectMBO/cardano-node.git
-WORKDIR /root/cardano-node
-ARG NODE_TAG
-RUN git checkout ${NODE_TAG} && git submodule update --init --recursive
-
-# Add cabal config files
-RUN echo 'jobs: 4\npackage cardano-crypto-praos\n  flags: +external-libsodium-vrf\n' > /root/cardano-node/cabal.project.local
-
-# Build cardano-node binary
-RUN cabal update && cabal user-config update && cabal build cardano-node --disable-tests
-
 # Create files structure
-ARG GHC_VERSION=ghc-9.6.4
-ARG NODE_PATH=$NODE_TAG
-ARG ARCHITECTURE
-RUN mkdir -p /cardano/config /cardano/bin /cardano/db /cardano/socket /cardano/scripts &&\
-    cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-node-${NODE_PATH}/x/cardano-node/build/cardano-node/cardano-node /cardano/bin
-
-WORKDIR /root
+RUN mkdir -p /cardano/config /cardano/bin /cardano/db /cardano/socket /cardano/scripts
 
 # Download cardano-cli repository
+ARG ARCHITECTURE
 RUN git clone https://github.com/IntersectMBO/cardano-cli.git
 WORKDIR /root/cardano-cli
 ARG CLI_TAG
+ARG GHC_VERSION=ghc-9.6.4
 RUN git checkout cardano-cli-${CLI_TAG} && git submodule update --init --recursive
 
 # Add cabal config files
@@ -38,30 +22,47 @@ RUN echo 'jobs: 4\npackage cardano-crypto-praos\n  flags: +external-libsodium-vr
 
 # Build cardano-node binary
 RUN cabal update && cabal user-config update && cabal build cardano-cli --disable-tests
-
 RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-cli-${CLI_TAG}/x/cardano-cli/build/cardano-cli/cardano-cli /cardano/bin
 
-# Add startup scripts
-COPY files/start-relay.sh /cardano/scripts/start-relay.sh
-COPY files/start-producer.sh /cardano/scripts/start-producer.sh
-COPY files/start-with-topology.sh /cardano/scripts/start-with-topology.sh
+# Download mithril repository
+WORKDIR /root
+ARG MITHRIL_TAG
+RUN git clone https://github.com/input-output-hk/mithril.git
+WORKDIR /root/mithril
+RUN git checkout ${MITHRIL_TAG}
+WORKDIR /root/mithril/mithril-signer
 
-# Install topologyUpdater script
-# USE CURL, DO NOT UNINSTALL CURL
-COPY files/topologyUpdater.sh /cardano/scripts/topologyUpdater.sh
+# Support for Asahi Linux 16kb memory page, to be commented if not needed
+ENV JEMALLOC_SYS_WITH_LG_PAGE=16
+
+# Build mithril binary
+RUN make build
+RUN cp -p mithril-signer /cardano/bin
+RUN mkdir -p /cardano/stores
+
+# Add startup scripts
+COPY files/start.sh /cardano/scripts/start.sh
 
 # Creating non root user cardano
 # RUN useradd -m cardano
 
 # Add permissions
 # RUN chown -R cardano:cardano /cardano
-RUN chmod g+s /cardano && chmod 540 /cardano/scripts/* && chmod 540 /cardano/bin/*
+RUN chmod g+s /cardano
+RUN chmod 540 /cardano/scripts/*
+RUN chmod 540 /cardano/bin/*
+
+ENV PATH=/cardano/scripts:/cardano/bin:$PATH
+ENV CARDANO_NODE_SOCKET_PATH=/cardano/socket/node.sock
+ENV DB_DIRECTORY=/cardano/db
+ENV CARDANO_CLI_PATH=/cardano/bin/cardano-cli
+ENV DATA_STORES_DIRECTORY=/cardano/stores
 
 # Image clean-up
 WORKDIR /root
 
 RUN cabal clean &&\
-    rm -rf cardano-node &&\
+    rm -rf mithril &&\
     rm -rf cardano-cli &&\
     ./ghcup nuke &&\
     rm -rf .cabal .local .ghcup .ghc .cache ghcup &&\
@@ -86,4 +87,4 @@ ENV CARDANO_NODE_SOCKET_PATH=/cardano/socket/node.sock
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 
-CMD ["/bin/bash", "-c", "start-relay.sh"]
+CMD ["/bin/bash", "-c", "start.sh"]

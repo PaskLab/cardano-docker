@@ -15,7 +15,6 @@ RUN apt-get install -y postgresql postgresql-contrib
 # Download cardano-node repository
 ARG RELEASE
 ARG ARCHITECTURE
-ARG GHC_VERSION=ghc-8.10.7
 ARG PGPASSFILE="config/pgpass-mainnet scripts/postgresql-setup.sh --createdb"
 RUN git clone https://github.com/input-output-hk/cardano-db-sync
 WORKDIR /root/cardano-db-sync
@@ -29,6 +28,7 @@ RUN cabal build all
 # Create files structure
 RUN mkdir -p /cardano/config /cardano/bin /cardano/ledger-state
 ARG RELEASE_PATH=$RELEASE
+ARG GHC_VERSION=ghc-9.6.4
 RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-db-sync-${RELEASE_PATH}/build/cardano-db-sync/cardano-db-sync /cardano/bin
 RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-db-tool-${RELEASE_PATH}/x/cardano-db-tool/build/cardano-db-tool/cardano-db-tool /cardano/bin
 

@@ -51,14 +51,12 @@ First, you need to build all required images:
 
    ```bash
    NODE_TAG=<VERSION_TAG>
+   CLI_TAG=<VERSION_TAG> # only version number, omit the leading 'cardano-cli'
    ```
 
-4. Set the output path if different from TAG (_CLI version now differ from node version_)
+4. Set the output path if different from TAG
 
    ```bash
-   # MANDATORY
-   CLI_PATH=<PATH>
-   
    # OPTIONAL / IF REQUIRED
    NODE_PATH=<PATH>
    ```      
@@ -69,7 +67,7 @@ First, you need to build all required images:
    docker build \
       --build-arg ARCHITECTURE=${ARCHITECTURE} \
       --build-arg NODE_TAG=${NODE_TAG} \
-      --build-arg CLI_PATH=${CLI_PATH} \
+      --build-arg CLI_TAG=${CLI_TAG} \
       -t cardano_node:${NODE_TAG} Dockerfiles/node
    ```
 
@@ -104,14 +102,14 @@ First, you need to build all required images:
 
    ```bash
    NODE_TAG=<VERSION_TAG>
-   CLI_PATH=<PATH>
+   CLI_TAG=<VERSION_TAG>
    MITHRIL_TAG=<VERSION_TAG>
    docker build \
       --build-arg ARCHITECTURE=${ARCHITECTURE} \
       --build-arg NODE_TAG=${NODE_TAG} \
       --build-arg MITHRIL_TAG=${MITHRIL_TAG} \
-      --build-arg CLI_PATH=${CLI_PATH} \
-      -t mithril:${MITHRIL_TAG} Dockerfiles/mithril
+      --build-arg CLI_TAG=${CLI_TAG} \
+      -t mithril_signer:${MITHRIL_TAG} Dockerfiles/mithril-signer
    ```
 
   ** See:  [mithril.network/doc/](https://mithril.network/doc/)
@@ -123,6 +121,17 @@ First, you need to build all required images:
 
    ```bash
    docker build -t squid:latest Dockerfiles/squid
+   ```
+
+** See:  [mithril.network/doc/](https://mithril.network/doc/)
+
+11. The Mithril Client image:
+
+   ```bash
+   MITHRIL_TAG=<VERSION_TAG>
+   docker build \
+      --build-arg MITHRIL_TAG=${MITHRIL_TAG} \
+      -t mithril_client:${MITHRIL_TAG} Dockerfiles/mithril-client
    ```
 
 ** See:  [mithril.network/doc/](https://mithril.network/doc/)
