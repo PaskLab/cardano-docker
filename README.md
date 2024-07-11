@@ -19,9 +19,10 @@ Thanks to everyone behind `topology updater` from **cardano-community repository
 
 * **GHC** version: **9.6.4**
 * **Cabal** version: **3.10.1.0**
-* Supported **cardano-node** version: **8.7.3**
-* Supported **cardano-cli** version: **8.17.0.0**
-* Supported **cardano-submit-api** version: **3.2.1**
+* Supported **cardano-node** version: **9.0.0**
+* Supported **cardano-cli** version: **9.0.0.0**
+* Supported **cardano-submit-api** version: **9.0.0**
+* Supported **mithril** version: **2423.0**
 
 ### Building from source 
 
