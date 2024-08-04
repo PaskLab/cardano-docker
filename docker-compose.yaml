@@ -1,4 +1,3 @@
-version: "3.7"
 # Use --compatibility flag with "docker-compose up" for deploy key translation
 
 services:
@@ -158,7 +157,8 @@ services:
     command: ["/bin/bash", "-c", "start.sh"]
     depends_on:
       # Depend on both services to be healthy before starting.
-      - cardano-relay1
+      cardano-relay1:
+        condition: service_healthy
     tty: true
     volumes:
       - type: bind
@@ -255,7 +255,8 @@ services:
     command: ["/bin/bash", "-c", "tail","-f","/dev/null"]   # Used for maintenance purpose
     depends_on:
       # Depend on block producer service to be healthy before starting.
-      - cardano-bp
+      cardano-bp:
+        condition: service_healthy
     environment:
       DB_DIRECTORY: '/cardano/db'
       DATA_STORES_DIRECTORY: '/cardano/stores'
