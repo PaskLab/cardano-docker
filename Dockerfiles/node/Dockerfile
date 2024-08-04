@@ -7,9 +7,9 @@ LABEL maintainer="https://github.com/pascallapointe"
 WORKDIR /root
 
 # Download cardano-node repository
+ARG NODE_TAG
 RUN git clone https://github.com/IntersectMBO/cardano-node.git
 WORKDIR /root/cardano-node
-ARG NODE_TAG
 RUN git checkout ${NODE_TAG} && git submodule update --init --recursive
 
 # Add cabal config files
@@ -28,9 +28,9 @@ RUN mkdir -p /cardano/config /cardano/bin /cardano/db /cardano/socket /cardano/s
 WORKDIR /root
 
 # Download cardano-cli repository
+ARG CLI_TAG
 RUN git clone https://github.com/IntersectMBO/cardano-cli.git
 WORKDIR /root/cardano-cli
-ARG CLI_TAG
 RUN git checkout cardano-cli-${CLI_TAG} && git submodule update --init --recursive
 
 # Add cabal config files

@@ -5,24 +5,15 @@ Docker files for setting up Cardano Node environment.
 
 ** **_These Dockerfiles are meant to be run along with `Docker-Compose`._**
 
-#### Reference
-
-Many steps used in this repository are from resources bellow:
-
-[Cardano Official Documentation](https://docs.cardano.org/projects/cardano-node/en/latest/index.html)
-
-Thanks to everyone behind `topology updater` from **cardano-community repository**.
-
-[https://github.com/cardano-community/guild-operators](https://github.com/cardano-community/guild-operators)
-
-#### !!! Notes !!!
+#### !!! Support Notes !!!
 
 * **GHC** version: **9.6.4**
 * **Cabal** version: **3.10.1.0**
-* Supported **cardano-node** version: **9.0.0**
-* Supported **cardano-cli** version: **9.0.0.0**
+* Supported **cardano-node** version: **9.1.0**
+* Supported **cardano-cli** version: **9.2.1.0**
 * Supported **cardano-submit-api** version: **9.0.0**
-* Supported **mithril** version: **2423.0**
+* Supported **mithril** version: **2430.0**
+* Supported **DBSYNC** version: **13.3.0.0**
 
 ### Building from source 
 

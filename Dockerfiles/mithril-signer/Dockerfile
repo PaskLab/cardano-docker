@@ -11,9 +11,9 @@ RUN mkdir -p /cardano/config /cardano/bin /cardano/db /cardano/socket /cardano/s
 
 # Download cardano-cli repository
 ARG ARCHITECTURE
+ARG CLI_TAG
 RUN git clone https://github.com/IntersectMBO/cardano-cli.git
 WORKDIR /root/cardano-cli
-ARG CLI_TAG
 ARG GHC_VERSION=ghc-9.6.4
 RUN git checkout cardano-cli-${CLI_TAG} && git submodule update --init --recursive
 
