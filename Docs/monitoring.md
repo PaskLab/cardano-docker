@@ -19,6 +19,7 @@ To help you understand how all pieces are bound together, here's a small diagram
 2. Build the cardano_monitor image:
 
         docker build \
+            --build-arg ARCHITECTURE=${ARCHITECTURE} \
             -t cardano_monitor:latest \
             ./Dockerfiles/monitor
             
