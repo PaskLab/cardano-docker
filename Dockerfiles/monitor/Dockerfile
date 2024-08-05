@@ -9,13 +9,15 @@ WORKDIR /cardano
 RUN apt-get update
 RUN apt-get install -y wget
 
+ARG ARCHITECTURE
+
 # Define arguments/variables
 ARG PROM_DIR="prometheus"
-ARG PROM_FILE="prometheus-2.19.2.linux-arm64.tar.gz"
+ARG PROM_FILE="prometheus-2.19.2.linux-${ARCHITECTURE}.tar.gz"
 ARG PROM_URL="https://github.com/prometheus/prometheus/releases/download/v2.19.2/${PROM_FILE}"
 
 ARG NEXP_DIR="node_exporter"
-ARG NEXP_FILE="node_exporter-1.0.1.linux-arm64.tar.gz"
+ARG NEXP_FILE="node_exporter-1.0.1.linux-${ARCHITECTURE}.tar.gz"
 ARG NEXP_URL="https://github.com/prometheus/node_exporter/releases/download/v1.0.1/${NEXP_FILE}"
 
 # Download all libraries
