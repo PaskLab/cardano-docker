@@ -10,13 +10,19 @@ To help you understand how all pieces are bound together, here's a small diagram
 
 ### Creating images
 
-1. Build the cardano_monitor image:
+1. Set the architecture variable to your requirement (Only amd64 and arm64 supported):
+
+    ```bash 
+    ARCHITECTURE=<PROCESSOR_ARCHITECTURE(amd64 or arm64)>
+    ```    
+
+2. Build the cardano_monitor image:
 
         docker build \
             -t cardano_monitor:latest \
             ./Dockerfiles/monitor
             
-2. Build the grafana image:
+3. Build the grafana image:
 
         docker build \
             -t grafana:latest \
