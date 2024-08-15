@@ -50,10 +50,6 @@ RUN cabal clean &&\
     apt-get clean &&\
     apt-get autoclean
 
-# Switch user
-# USER cardano:cardano
-WORKDIR /cardano
-
 FROM ubuntu:jammy
 COPY --from=base / /
 
@@ -61,5 +57,9 @@ ENV PATH=/cardano/scripts:/cardano/bin:$PATH
 ENV CARDANO_NODE_SOCKET_PATH=/cardano/socket/node.sock
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
+
+# Switch user
+# USER cardano:cardano
+WORKDIR /cardano
 
 CMD ["/bin/bash", "-c", "tail","-f","/dev/null"]
