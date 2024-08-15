@@ -150,37 +150,24 @@ Your container will bind to this folder, so you can access your configuration fr
     mkdir config
     cd config
         
-If your OS is unix based, you can use the `wget` utility to download all configuration files from the
-[official source](https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/index.html).
+You can find required configuration files here: 
+[https://book.play.dev.cardano.org/env-mainnet.html](https://book.play.dev.cardano.org/env-mainnet.html).
 
-    wget -O config.json https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/mainnet-config.json
-    wget -O byron-genesis.json https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/mainnet-byron-genesis.json
-    wget -O shelley-genesis.json https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/mainnet-shelley-genesis.json
-    wget -O topology.json https://hydra.iohk.io/job/Cardano/cardano-node/cardano-deployment/latest-finished/download/1/mainnet-topology.json
+Here's the files you'll need:
 
-#### !!! Important !!!!
-We rename them to `byron-genesis.json`, `shelley-genesis.json`, `topology.json` and `config.json` to make the scripts network agnostic!
-Don't forget to update the reference to the `*-genesis.json` file in your `config.json`.
+- `config.json`
+- `topology.json`
+- `byron-genesis.json` (referenced to in **config.json**)
+- `shelley-genesis.json` (referenced to in **config.json**)
+- `alonzo-genesis.json` (referenced to in **config.json**)
+- `conway-genesis.json` (referenced to in **config.json**)
 
-#### Bind folder permissions
+Note that a producer node will need 3 more file to run:
 
-Your user living inside your container need to have access to your configuration files and need to be able
-to write in `db` and socket `folder`.
-The easy way is to add public read permission to all your files under `/config`:
+- `node.cert` (node operational certificat)
+- `vrf.skey`
+- `kes.skey`
 
-    chmod 644 config/*
-   
-The **correct** way is to give read and/or write access to the `cardano` user group. That group exists only in your 
-container, but might have an equivalent (They share the same UID) group on your system.
-Usually the default/first user group UID: 1000.
-
-You can log in your container using `root` in order to change files ownership and permission:
-
-    docker exec -it --user root cardano_node bash
-
-You can later check on your host what is the equivalent group. All sub-folders and files under `/Cardano` folder should be
-owned (in the container) by the host equivalent of the container `cardano` group to ensure that the container can write inside them.
-   
 #### Port configuration
         
 All node are listening to the port 3000 inside the container. You can bind that port to the host port you like.
