@@ -5,6 +5,7 @@ services:
   cardano-relay1:
     container_name: cardano-relay1
     environment:
+      NODE_RTS: '-maxN4'
       CNODE_HOSTNAME: 'CHANGE ME'
       PUBLIC_PORT: 3001
     image: cardano_node:latest
@@ -48,6 +49,7 @@ services:
   cardano-relay2:
     container_name: cardano-relay2
     environment:
+      NODE_RTS: '-maxN4'
       CNODE_HOSTNAME: 'CHANGE ME'
       PUBLIC_PORT: 3002
     image: cardano_node:latest
@@ -90,6 +92,8 @@ services:
 
   cardano-bp:
     container_name: cardano-bp
+    environment:
+      NODE_RTS: '-N6'
     image: cardano_node:latest
     #command: ["/bin/bash", "-c", "start-relay.sh"]           # Comment for node producer or relay with topology updater
     #command: ["/bin/bash", "-c", "start-producer.sh"]       # Uncomment for node producer
