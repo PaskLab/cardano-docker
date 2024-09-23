@@ -80,10 +80,12 @@ First, you need to build all required images:
 7. The DB-Sync image:
 
    ```bash
+   DBSYNC_TAG=<db-sync release tag>
+   
    docker build \
       --build-arg ARCHITECTURE=${ARCHITECTURE} \
-      --build-arg RELEASE=${VERSION_NUMBER} \
-      -t cardano_db_sync:${VERSION_NUMBER} Dockerfiles/db-sync
+      --build-arg RELEASE=${DBSYNC_TAG} \
+      -t cardano_db_sync:${DBSYNC_TAG} Dockerfiles/db-sync
    ```
 
 8. Tag your image with the **latest** tag:
