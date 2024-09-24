@@ -19,7 +19,7 @@ WORKDIR /root/cardano-db-sync
 RUN git checkout ${RELEASE}
 
 # Build cardano-node binary
-RUN cabal update && cabal build cardano-db-sync && cabal build cardano-db-sync cardano-db-tool --disable-tests
+RUN cabal update && cabal build cardano-db-sync cardano-db-tool
 
 # Create files structure
 RUN mkdir -p /cardano/config /cardano/bin /cardano/ledger-state
