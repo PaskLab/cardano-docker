@@ -13,7 +13,7 @@ WORKDIR /root
 RUN apt-get update && \
     apt-get install -y apt-utils git wget curl pkg-config \
     libgmp-dev libssl-dev libtinfo-dev libsystemd-dev liblmdb-dev \
-    libsodium-dev zlib1g-dev llvm-14 automake make build-essential \
+    zlib1g-dev llvm-dev automake make build-essential \
     libffi-dev libncursesw5 g++ jq libnuma-dev libtool autoconf
 
 # Install Rust

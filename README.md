@@ -17,7 +17,7 @@ Docker files for setting up Cardano Node environment.
 
 ### Building from source 
 
-Since we need our binary to work on Aarch64 architecture, you'll need to build the node from the source files.
+Since we need our binary to work on aarch64 architecture, you'll need to build the node from the source files.
 I've written a Dockerfile that simplify the process.
 
 First, you need to build all required images:

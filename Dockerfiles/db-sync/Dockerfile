@@ -8,21 +8,24 @@ WORKDIR /root
 
 # Install base utilities and dependencies
 RUN apt-get update && \
-    apt-get install -y libghc-postgresql-libpq-dev libpq5 postgresql postgresql-contrib
+    apt-get install -y libpq-dev postgresql-client
 
-# Download cardano-node repository
+# Download Db-Sync repository
 ARG RELEASE
-ARG ARCHITECTURE
 ARG PGPASSFILE="config/pgpass-mainnet scripts/postgresql-setup.sh --createdb"
 RUN git clone https://github.com/input-output-hk/cardano-db-sync
 WORKDIR /root/cardano-db-sync
-RUN git checkout ${RELEASE}
+RUN git checkout ${RELEASE} && git submodule update --init --recursive
 
-# Build cardano-node binary
-RUN cabal update && cabal build cardano-db-sync cardano-db-tool
+# Build db-sync binary
+RUN cabal update && \
+    cabal user-config update && \
+    cabal build cardano-db-sync --disable-tests && \
+    cabal build cardano-db-tool --disable-tests
 
 # Create files structure
 RUN mkdir -p /cardano/config /cardano/bin /cardano/ledger-state
+ARG ARCHITECTURE
 ARG RELEASE_PATH=$RELEASE
 ARG GHC_VERSION=ghc-9.6.4
 RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-db-sync-${RELEASE_PATH}/build/cardano-db-sync/cardano-db-sync /cardano/bin && \
@@ -46,22 +49,11 @@ WORKDIR /root
 #RUN cabal clean
 RUN rm -rf cardano-db-sync && \
     rm -rf .cabal .local && \
-    apt-get purge -y apt-utils && \
-    apt-get purge -y git && \
-    apt-get purge -y wget && \
-    apt-get purge -y pkg-config && \
-    apt-get purge -y libgmp-dev && \
-    apt-get purge -y libssl-dev && \
-    apt-get purge -y libtinfo-dev && \
-    apt-get purge -y libsystemd-dev && \
-    apt-get purge -y zlib1g-dev && \
-    apt-get purge -y llvm && \
-    apt-get purge -y build-essential && \
-    apt-get purge -y libffi-dev && \
-    apt-get purge -y make && \
-    apt-get purge -y g++
-
-RUN apt-get autoremove -y && \
+    apt-get purge -y apt-utils git wget pkg-config libgmp-dev \
+        libssl-dev libtinfo-dev libsystemd-dev liblmdb-dev libtool \
+        zlib1g-dev llvm-dev build-essential libffi-dev automake \
+        make g++ libncursesw5 jq autoconf libpq-dev &&\
+    apt-get autoremove -y && \
     apt-get clean && \
     apt-get autoclean
 
@@ -73,8 +65,6 @@ ENV CARDANO_NODE_SOCKET_PATH=/cardano/socket/node.sock
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 
-# Switch user
-# USER cardano:cardano
 WORKDIR /cardano
 
 CMD ["/bin/bash", "-c", "start.sh"]
