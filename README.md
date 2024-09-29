@@ -63,8 +63,6 @@ First, you need to build all required images:
       -t cardano_node:${NODE_TAG} Dockerfiles/node
    ```
 
-  ** Tip: Prepend `docker buildx build --platform=linux/amd64` to build for **amd64**.
-
 6. The submit api image:
 
    ```bash
