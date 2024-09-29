@@ -34,7 +34,7 @@ RUN git clone https://github.com/bitcoin-core/secp256k1.git
 
 WORKDIR /root/secp256k1
 
-RUN git reset --hard ac83be33d0956faf6b7f61a60ab524ef7d6a473a &&\
+RUN git checkout v0.3.2 &&\
     ./autogen.sh &&\
     ./configure --enable-module-schnorrsig --enable-experimental &&\
     make &&\
@@ -46,7 +46,7 @@ WORKDIR /root
 RUN git clone https://github.com/input-output-hk/libsodium
 
 WORKDIR /root/libsodium
-RUN git checkout dbb48cc &&\
+RUN git checkout dbb48cce5429cb6585c9034f002568964f1ce567 &&\
     ./autogen.sh &&\
     ./configure &&\
     make &&\
@@ -60,7 +60,7 @@ WORKDIR /root
 # Install BLST dependencies
 RUN git clone https://github.com/supranational/blst
 WORKDIR /root/blst
-RUN git checkout v0.3.10 &&\
+RUN git checkout v0.3.11 &&\
     ./build.sh
 COPY files/libblst.pc /usr/local/lib/pkgconfig/libblst.pc
 RUN cp bindings/blst_aux.h bindings/blst.h bindings/blst.hpp /usr/local/include/ &&\

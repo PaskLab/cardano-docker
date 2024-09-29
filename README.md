@@ -9,11 +9,11 @@ Docker files for setting up Cardano Node environment.
 
 * **GHC** version: **9.6.4**
 * **Cabal** version: **3.10.1.0**
-* Supported **cardano-node** version: **9.1.0**
-* Supported **cardano-cli** version: **9.2.1.0**
+* Supported **cardano-node** version: **9.2.1**
+* Supported **cardano-cli** version: **9.4.1.0**
 * Supported **cardano-submit-api** version: **9.0.0**
-* Supported **mithril** version: **2430.0**
-* Supported **DBSYNC** version: **13.3.0.0**
+* Supported **mithril** version: **2437.1**
+* Supported **DBSYNC** version: **13.5.0.2**
 
 ### Building from source 
 
