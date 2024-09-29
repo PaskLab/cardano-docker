@@ -17,20 +17,12 @@ WORKDIR /root/mithril
 RUN git checkout ${MITHRIL_TAG}
 WORKDIR /root/mithril/mithril-client-cli
 
-# Support for Asahi Linux 16kb memory page, to be commented if not needed
-#ENV JEMALLOC_SYS_WITH_LG_PAGE=16
-
 # Build mithril binary
 RUN make build
 RUN cp mithril-client /cardano/bin
 
-# Creating non root user cardano
-# RUN useradd -m cardano
-
 # Add permissions
-# RUN chown -R cardano:cardano /cardano
-RUN chmod g+s /cardano
-RUN chmod 540 /cardano/bin/*
+RUN chmod g+s /cardano && chmod 540 /cardano/bin/*
 
 ENV PATH=/cardano/scripts:/cardano/bin:$PATH
 
@@ -58,8 +50,6 @@ ENV CARDANO_NODE_SOCKET_PATH=/cardano/socket/node.sock
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 
-# Switch user
-# USER cardano:cardano
 WORKDIR /cardano
 
 CMD ["/bin/bash", "-c", "tail","-f","/dev/null"]

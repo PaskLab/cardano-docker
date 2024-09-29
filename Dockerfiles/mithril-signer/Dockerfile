@@ -17,10 +17,7 @@ WORKDIR /root/cardano-cli
 ARG GHC_VERSION=ghc-9.6.4
 RUN git checkout cardano-cli-${CLI_TAG} && git submodule update --init --recursive
 
-# Add cabal config files
-RUN echo 'jobs: 4\npackage cardano-crypto-praos\n  flags: +external-libsodium-vrf\n' > /root/cardano-cli/cabal.project.local
-
-# Build cardano-node binary
+# Build cardano-cli binary
 RUN cabal update && cabal user-config update && cabal build cardano-cli --disable-tests
 RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-cli-${CLI_TAG}/x/cardano-cli/build/cardano-cli/cardano-cli /cardano/bin
 
@@ -43,14 +40,8 @@ RUN mkdir -p /cardano/stores
 # Add startup scripts
 COPY files/start.sh /cardano/scripts/start.sh
 
-# Creating non root user cardano
-# RUN useradd -m cardano
-
 # Add permissions
-# RUN chown -R cardano:cardano /cardano
-RUN chmod g+s /cardano
-RUN chmod 540 /cardano/scripts/*
-RUN chmod 540 /cardano/bin/*
+RUN chmod g+s /cardano && chmod 540 /cardano/scripts/* && chmod 540 /cardano/bin/*
 
 ENV PATH=/cardano/scripts:/cardano/bin:$PATH
 ENV CARDANO_NODE_SOCKET_PATH=/cardano/socket/node.sock
@@ -83,8 +74,6 @@ ENV CARDANO_NODE_SOCKET_PATH=/cardano/socket/node.sock
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 ENV PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 
-# Switch user
-# USER cardano:cardano
 WORKDIR /cardano
 
 CMD ["/bin/bash", "-c", "start.sh"]
