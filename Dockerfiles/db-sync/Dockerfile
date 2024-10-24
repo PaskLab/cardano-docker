@@ -7,8 +7,9 @@ LABEL maintainer="https://github.com/pascallapointe"
 WORKDIR /root
 
 # Install base utilities and dependencies
+# (libicu70 & tree required by db-sync-tool)
 RUN apt-get update && \
-    apt-get install -y libpq-dev postgresql-client
+    apt-get install -y libpq-dev postgresql-client libicu70 tree
 
 # Download Db-Sync repository
 ARG RELEASE
@@ -37,6 +38,7 @@ RUN mv cardano-db-sync/schema /cardano/.
 # Add startup scripts
 COPY files/start.sh /cardano/scripts/start.sh
 COPY files/sleep.sh /cardano/scripts/sleep.sh
+COPY files/postgresql-setup.sh /cardano/scripts/postgresql-setup.sh
 
 # Add permissions
 RUN chmod g+s /cardano && \

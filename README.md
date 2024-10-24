@@ -1,7 +1,7 @@
 # cardano-docker
-Docker files for setting up Cardano Node environment.
+Docker files for setting up Cardano Node environment and more.
 
-#### You can support this repository by delegating to pool BERRY!
+#### You can support this repository by delegating to [Berry pool [BERRY]](https://berrypool.io/) 🙏
 
 ** **_These Dockerfiles are meant to be run along with `Docker-Compose`._**
 
@@ -12,25 +12,27 @@ Docker files for setting up Cardano Node environment.
 * Supported **cardano-node** version: **9.2.1**
 * Supported **cardano-cli** version: **9.4.1.0**
 * Supported **cardano-submit-api** version: **9.0.0**
-* Supported **mithril** version: **2437.1**
-* Supported **DBSYNC** version: **13.5.0.2**
+* Supported **mithril** version: **2442.0**
+* Supported **DB-SYNC** version: **13.5.0.2**
 
-### Building from source 
+### Building all docker images from source 
 
-Since we need our binary to work on aarch64 architecture, you'll need to build the node from the source files.
-I've written a Dockerfile that simplify the process.
+Most images are built on top of the `cardano_env:latest` images, make sure to build it first.
+This image install dependencies and compilation tooling required by other images.
 
-First, you need to build all required images:
-  
-1. Set the architecture variable to your requirement (Only x86/amd64 and aarch64 supported):
+- [Build Environment image](#build-environment-image)
+- [Cardano Node image](#cardano-node-image)
+- [Submit API image](#submit-api-image)
+- [DB-Sync image](#db-sync-image)
+- [Mithril Signer image](#mithril-signer-image)
+- [Mithril Client image](#mithril-client-image)
+- [Mithril Relay (squid) image](#mithril-relay-squid-image)
 
-    ```bash 
-    ARCHITECTURE=<PROCESSOR_ARCHITECTURE(x86_64 or aarch64)>
-    ```    
-        
-2. The Cardano sources image:
+#### Build Environment image
 
    ```bash
+   ARCHITECTURE=<PROCESSOR_ARCHITECTURE(x86_64 or aarch64)>
+   
    docker build \
       -t cardano_env:latest \
       ./Dockerfiles/build_env/${ARCHITECTURE}
@@ -38,24 +40,13 @@ First, you need to build all required images:
    ``` 
     ** Tip: _Add `--no-cache` to rebuild from scratch_ **
 
-
-3. Set the version variable (Set the right release TAG, ie: `1.19.0`)
+#### Cardano Node image
 
    ```bash
+   ARCHITECTURE=<PROCESSOR_ARCHITECTURE(x86_64 or aarch64)>
    NODE_TAG=<VERSION_TAG>
    CLI_TAG=<VERSION_TAG> # only version number, omit the leading 'cardano-cli'
-   ```
-
-4. Set the output path if different from TAG
-
-   ```bash
-   # OPTIONAL / IF REQUIRED
-   NODE_PATH=<PATH>
-   ```      
-
-5. The node image:
-
-   ```bash
+   
    docker build \
       --build-arg ARCHITECTURE=${ARCHITECTURE} \
       --build-arg NODE_TAG=${NODE_TAG} \
@@ -63,9 +54,11 @@ First, you need to build all required images:
       -t cardano_node:${NODE_TAG} Dockerfiles/node
    ```
 
-6. The submit api image:
+#### Submit API image
 
    ```bash
+   ARCHITECTURE=<PROCESSOR_ARCHITECTURE(x86_64 or aarch64)>
+   NODE_TAG=<VERSION_TAG>
    API_VERSION=<Submit API version, see cardano-submit-api.cabal file>
    
    docker build \
@@ -75,9 +68,10 @@ First, you need to build all required images:
       -t cardano_submit:latest Dockerfiles/submit
    ```
 
-7. The DB-Sync image:
+#### DB-Sync image
 
    ```bash
+   ARCHITECTURE=<PROCESSOR_ARCHITECTURE(x86_64 or aarch64)>
    DBSYNC_TAG=<db-sync release tag>
    
    docker build \
@@ -86,18 +80,14 @@ First, you need to build all required images:
       -t cardano_db_sync:${DBSYNC_TAG} Dockerfiles/db-sync
    ```
 
-8. Tag your image with the **latest** tag:
+#### Mithril Signer image
 
    ```bash
-   docker tag cardano_node:${VERSION_NUMBER} cardano_node:latest
-   ```
-
-9. The Mithril Signer image:
-
-   ```bash
+   ARCHITECTURE=<PROCESSOR_ARCHITECTURE(x86_64 or aarch64)>
    NODE_TAG=<VERSION_TAG>
    CLI_TAG=<VERSION_TAG>
    MITHRIL_TAG=<VERSION_TAG>
+   
    docker build \
       --build-arg ARCHITECTURE=${ARCHITECTURE} \
       --build-arg NODE_TAG=${NODE_TAG} \
@@ -108,24 +98,25 @@ First, you need to build all required images:
 
   ** See:  [mithril.network/doc/](https://mithril.network/doc/)
 
-10. The Mithril Relay (squid) image:
-
-   - Edit `/Dockerfiles/squid/file/squid.conf` to add your producer internal ip address.
-   - Add the configuration file in a `./squid` folder next to your `docker-compose.yml` file.
+#### Mithril Client image
 
    ```bash
-   docker build -t squid:latest Dockerfiles/squid
+   MITHRIL_TAG=<VERSION_TAG>
+   
+   docker build \
+      --build-arg MITHRIL_TAG=${MITHRIL_TAG} \
+      -t mithril_client:${MITHRIL_TAG} Dockerfiles/mithril-client
    ```
 
 ** See:  [mithril.network/doc/](https://mithril.network/doc/)
 
-11. The Mithril Client image:
+#### Mithril Relay (squid) image
+
+- Edit `/Dockerfiles/squid/file/squid.conf` to add your producer internal ip address.
+- Add the configuration file in a `./squid` folder next to your `docker-compose.yml` file.
 
    ```bash
-   MITHRIL_TAG=<VERSION_TAG>
-   docker build \
-      --build-arg MITHRIL_TAG=${MITHRIL_TAG} \
-      -t mithril_client:${MITHRIL_TAG} Dockerfiles/mithril-client
+   docker build -t squid:latest Dockerfiles/squid
    ```
 
 ** See:  [mithril.network/doc/](https://mithril.network/doc/)
@@ -205,11 +196,9 @@ To build the `cardano_monitor` image, read: [Monitoring with Grafana](Docs/monit
 You can copy the docker-compose.yaml where your `config/` folder reside. Then start your containers with the 
 following command:
 
-    docker-compose --compatibility up -d
+    docker-compose up -d
 
 ** Tips: To start a node as producer instead of relay, swap the comment on `CMD` line in the `docker-compose.yaml` file.
-** Tips: --compatibility flag used to support deploy key.
-** TIPS: Adjust limit values under deploy to your fit your system available memory to avoid OOM KILL signal.
 
 ### Read further on these topics:
 
@@ -218,3 +207,4 @@ following command:
 - [Dynamic DNS support](Docs/dynamic_dns.md)
 - [Limit containers memory usage](Docs/memory_limit.md)
 - [Manually creating the containers](Docs/standalone-containers.md)
+- [Creating a db-sync snapshot](Docs/db-sync-snapshot.md)
