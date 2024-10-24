@@ -10,15 +10,15 @@ WORKDIR /root
 RUN mkdir -p /cardano/config /cardano/bin /cardano/db /cardano/socket /cardano/scripts
 
 # Download cardano-cli repository
-ARG ARCHITECTURE
 ARG CLI_TAG
 RUN git clone https://github.com/IntersectMBO/cardano-cli.git
 WORKDIR /root/cardano-cli
-ARG GHC_VERSION=ghc-9.6.4
 RUN git checkout cardano-cli-${CLI_TAG} && git submodule update --init --recursive
 
 # Build cardano-cli binary
 RUN cabal update && cabal user-config update && cabal build cardano-cli --disable-tests
+ARG ARCHITECTURE
+ARG GHC_VERSION=ghc-9.6.4
 RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-cli-${CLI_TAG}/x/cardano-cli/build/cardano-cli/cardano-cli /cardano/bin
 
 # Download mithril repository

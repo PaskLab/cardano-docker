@@ -201,6 +201,9 @@ services:
         target: /cardano/config
         read_only: true
       - type: bind
+        source: ./db-sync/snapshot
+        target: /cardano/snapshot
+      - type: bind
         source: ./relay1/socket
         target: /cardano/socket
       - type: volume
@@ -209,6 +212,7 @@ services:
     networks:
       db-sync:
     restart: unless-stopped
+    stop_grace_period: 20s
     logging:
       driver: "json-file"
       options:

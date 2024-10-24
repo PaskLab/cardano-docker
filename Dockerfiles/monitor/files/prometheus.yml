@@ -17,6 +17,14 @@ scrape_configs:
       - targets: ['cardano-bp.cardano_cardano:12798']
         labels:
           alias: bp
+  - job_name: 'db-sync'
+    metrics_path: '/'
+    honor_labels: false
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['db-sync:12798']
+        labels:
+          alias: db-sync
   - job_name: 'host' # To scrape data from a node exporter to monitor your linux host metrics.
     scrape_interval: 5s
     static_configs:
