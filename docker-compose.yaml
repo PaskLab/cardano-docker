@@ -231,7 +231,7 @@ services:
       - postgres_password
       - postgres_user
       - postgres_db
-    command: ${POSTGRES_ARGS:--c maintenance_work_mem=1GB -c max_parallel_maintenance_workers=4}
+    command: ${POSTGRES_ARGS:--c maintenance_work_mem=1GB -c max_parallel_maintenance_workers=4 -c max_wal_size=4GB -c checkpoint_timeout=15min -c checkpoint_completion_target=0.9}
     ports:
       - "5433:5432"
     networks:
@@ -343,6 +343,37 @@ services:
         target: /cardano/db
     restart: unless-stopped
     stop_signal: SIGINT
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  blockfrost:
+    container_name: blockfrost
+    image: blockfrost-platform:0.0.2
+    entrypoint:
+      - /app/blockfrost-platform
+      - --network
+      - mainnet
+      - --secret
+      - !!!SECRET!!!
+      - --reward-address
+      - !!!ADDRESS!!!
+      - --server-port
+      - "3000"
+      - --node-socket-path
+      - /ipc/node.sock
+    depends_on:
+      - relay2
+    volumes:
+      - type: bind
+        source: ./relay2/socket
+        target: /ipc
+    profiles: [ "" ]
+    ports:
+      - "3000:3000"
+    restart: on-failure
     logging:
       driver: "json-file"
       options:
