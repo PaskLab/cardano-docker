@@ -23,7 +23,6 @@ services:
       - type: bind
         source: ./relay1/config
         target: /cardano/config
-        read_only: true
     ports:
       - "3001:3000"
     networks:
@@ -67,7 +66,6 @@ services:
       - type: bind
         source: ./relay2/config
         target: /cardano/config
-        read_only: true
     ports:
       - "3002:3000"
     networks:
@@ -109,7 +107,6 @@ services:
       - type: bind
         source: ./bp/config
         target: /cardano/config
-        read_only: true
     ports:
       - "5000:3000"
     networks:
