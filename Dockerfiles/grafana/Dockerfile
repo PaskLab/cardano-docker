@@ -14,8 +14,8 @@ RUN apt-get install -y libfontconfig1
 
 # Define arguments/variables
 ARG GRAF_DIR="grafana"
-ARG GRAF_FILE="grafana-7.0.6.linux-arm64.tar.gz"
-ARG GRAF_URL="https://dl.grafana.com/oss/release/${GRAF_FILE}"
+ARG GRAF_FILE="grafana-enterprise-11.6.0.linux-arm64.tar.gz"
+ARG GRAF_URL="https://dl.grafana.com/enterprise/release/${GRAF_FILE}"
 
 # Download all libraries
 RUN wget ${GRAF_URL}
