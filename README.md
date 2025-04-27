@@ -164,9 +164,6 @@ Note that a producer node will need 3 more file to run:
 #### Port configuration
         
 All node are listening to the port 3000 inside the container. You can bind that port to the host port you like.
-
-Now, if you wish to use the `start-with-topology.sh` script provided in my repository, set the `PUBLIC_PORT` environment
-variable to the public port you will expose. If using docker-compose, see the provided [docker-compose.yaml](docker-compose.yaml) file.
     
 ### Relay node configuration
 
@@ -174,7 +171,7 @@ Now you need to configure your `topology.json` file with your Relay and Producer
 
 If using docker-compose, a virtual network named `cardano` will be created. This allow to isolate the block producer node
 from the host network, making it reachable only by the relay nodes. You can reference them in your `topology.json` file by using
-their generated hostname.
+their generated hostname or the given `alias`.
 
 Generated hostname will have the following form:
 
@@ -185,8 +182,6 @@ Whereas the **Project Name** is determined by the folder holding the `docker-com
 ** Note that the *generated hostname* is all lowercase.
 
 See [prometheus.yml](./Dockerfiles/monitor/files/prometheus.yml) for hostname examples.
-
-See: [Configure topology files for block-producing and relay nodes](https://docs.cardano.org/projects/cardano-node/en/latest/stake-pool-operations/core_relay.html).
 
 ### Creating the containers with Docker Compose
 
@@ -202,7 +197,6 @@ following command:
 
 ### Read further on these topics:
 
-- [How get peers with Topology Updater](Docs/topology.md)
 - [Monitoring with Grafana](Docs/monitoring.md)
 - [Dynamic DNS support](Docs/dynamic_dns.md)
 - [Limit containers memory usage](Docs/memory_limit.md)

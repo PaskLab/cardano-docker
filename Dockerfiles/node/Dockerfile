@@ -38,11 +38,6 @@ RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-cli-$
 # Add startup scripts
 COPY files/start-relay.sh /cardano/scripts/start-relay.sh
 COPY files/start-producer.sh /cardano/scripts/start-producer.sh
-COPY files/start-with-topology.sh /cardano/scripts/start-with-topology.sh
-
-# Install topologyUpdater script
-# USE CURL, DO NOT UNINSTALL CURL
-COPY files/topologyUpdater.sh /cardano/scripts/topologyUpdater.sh
 
 # Add permissions
 RUN chmod g+s /cardano && chmod 540 /cardano/scripts/* && chmod 540 /cardano/bin/*
