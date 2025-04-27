@@ -38,11 +38,6 @@ RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-cli-$
 # Add startup scripts
 COPY files/start-relay.sh /cardano/scripts/start-relay.sh
 COPY files/start-producer.sh /cardano/scripts/start-producer.sh
-COPY files/start-with-topology.sh /cardano/scripts/start-with-topology.sh
-
-# Install topologyUpdater script
-# USE CURL, DO NOT UNINSTALL CURL
-COPY files/topologyUpdater.sh /cardano/scripts/topologyUpdater.sh
 
 # Add permissions
 RUN chmod g+s /cardano && chmod 540 /cardano/scripts/* && chmod 540 /cardano/bin/*
@@ -57,7 +52,7 @@ RUN cabal clean &&\
     rm -rf .cabal .local .ghcup .ghc .cache ghcup &&\
     rustup self uninstall -y &&\
     apt-get purge -y apt-utils git wget pkg-config libgmp-dev \
-        libssl-dev libtinfo-dev libsystemd-dev liblmdb-dev libtool \
+        libssl-dev libtinfo-dev libsystemd-dev libtool \
         zlib1g-dev llvm-dev build-essential libffi-dev automake \
         make g++ libncursesw5 jq autoconf &&\
     apt-get autoremove -y &&\

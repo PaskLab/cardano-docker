@@ -52,7 +52,7 @@ WORKDIR /root
 RUN rm -rf cardano-db-sync && \
     rm -rf .cabal .local && \
     apt-get purge -y apt-utils git wget pkg-config libgmp-dev \
-        libssl-dev libtinfo-dev libsystemd-dev liblmdb-dev libtool \
+        libssl-dev libtinfo-dev libsystemd-dev libtool \
         zlib1g-dev llvm-dev build-essential libffi-dev automake \
         make g++ libncursesw5 jq autoconf libpq-dev &&\
     apt-get autoremove -y && \

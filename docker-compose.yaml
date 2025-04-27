@@ -6,11 +6,8 @@ services:
     container_name: cardano-relay1
     environment:
       NODE_RTS: '-maxN4'
-      CNODE_HOSTNAME: 'CHANGE ME'
-      PUBLIC_PORT: 3001
     image: cardano_node:latest
     #command: ["/bin/bash", "-c", "start-relay.sh"]           # Comment for node producer or relay with topology updater
-    #command: ["/bin/bash", "-c", "start-with-topology.sh"]  # Uncomment for relay with topology updater
     command: ["/bin/bash", "-c", "tail","-f","/dev/null"]   # Used for maintenance purpose
     tty: true
     volumes:
@@ -23,7 +20,6 @@ services:
       - type: bind
         source: ./relay1/config
         target: /cardano/config
-        read_only: true
     ports:
       - "3001:3000"
     networks:
@@ -50,11 +46,8 @@ services:
     container_name: cardano-relay2
     environment:
       NODE_RTS: '-maxN4'
-      CNODE_HOSTNAME: 'CHANGE ME'
-      PUBLIC_PORT: 3002
     image: cardano_node:latest
     #command: ["/bin/bash", "-c", "start-relay.sh"]           # Comment for node producer or relay with topology updater
-    #command: ["/bin/bash", "-c", "start-with-topology.sh"]  # Uncomment for relay with topology updater
     command: ["/bin/bash", "-c", "tail","-f","/dev/null"]   # Used for maintenance purpose
     tty: true
     volumes:
@@ -67,7 +60,6 @@ services:
       - type: bind
         source: ./relay2/config
         target: /cardano/config
-        read_only: true
     ports:
       - "3002:3000"
     networks:
@@ -109,7 +101,6 @@ services:
       - type: bind
         source: ./bp/config
         target: /cardano/config
-        read_only: true
     ports:
       - "5000:3000"
     networks:
