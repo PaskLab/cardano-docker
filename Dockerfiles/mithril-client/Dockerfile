@@ -35,7 +35,7 @@ RUN cabal clean &&\
     rm -rf .cabal .local .ghcup .ghc .cache ghcup &&\
     rustup self uninstall -y &&\
     apt-get purge -y apt-utils git wget pkg-config libgmp-dev \
-    libssl-dev libtinfo-dev libsystemd-dev liblmdb-dev libtool \
+    libssl-dev libtinfo-dev libsystemd-dev libtool \
     zlib1g-dev llvm-14 build-essential libffi-dev automake \
     make g++ libncursesw5 jq autoconf &&\
     apt-get autoremove -y &&\
