@@ -195,6 +195,16 @@ following command:
 
 ** Tips: To start a node as producer instead of relay, swap the comment on `CMD` line in the `docker-compose.yaml` file.
 
+### Genesis peer snapshot
+
+Genesis peer snapshot file can be updated periodically via system CRON.
+
+```bash
+# Once per week at 00:00 on Sunday
+0 0 * * 0 docker exec cardano-relay cardano-cli query ledger-peer-snapshot --mainnet --out-file /cardano/config/peer-snapshot.json
+```
+
+
 ### Read further on these topics:
 
 - [Monitoring with Grafana](Docs/monitoring.md)
