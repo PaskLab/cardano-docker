@@ -65,7 +65,7 @@ This image install dependencies and compilation tooling required by other images
       --build-arg ARCHITECTURE=${ARCHITECTURE} \
       --build-arg NODE_TAG=${NODE_TAG} \
       --build-arg API_VERSION=${API_VERSION} \
-      -t cardano_submit:latest Dockerfiles/submit
+      -t cardano_submit:${API_VERSION} Dockerfiles/submit
    ```
 
 #### DB-Sync image
