@@ -30,12 +30,14 @@ services:
     stop_signal: SIGINT
     stop_grace_period: 10s
     healthcheck:
-      # Ping the EKG port to see if it responds.
-      # Assuming if EKG isn't up then the rest of cardano-node isn't either.
-      test: [ "CMD-SHELL", "curl -H \"Accept: application/json\" -f 127.0.0.1:12788 || exit 1" ]
+      # Ping the node port to see if it responds.
+      test: [ "CMD-SHELL", "cardano-cli ping -h localhost -p 3000 -c 1 || exit 1" ]
       interval: 60s
       timeout: 10s
       retries: 5
+      start_period: 600s
+    labels:
+      autoheal: true
     logging:
       driver: "json-file"
       options:
@@ -70,12 +72,14 @@ services:
     stop_signal: SIGINT
     stop_grace_period: 10s
     healthcheck:
-      # Ping the EKG port to see if it responds.
-      # Assuming if EKG isn't up then the rest of cardano-node isn't either.
-      test: [ "CMD-SHELL", "curl -H \"Accept: application/json\" -f 127.0.0.1:12788 || exit 1" ]
+      # Ping the node port to see if it responds.
+      test: [ "CMD-SHELL", "cardano-cli ping -h localhost -p 3000 -c 1 || exit 1" ]
       interval: 60s
       timeout: 10s
       retries: 5
+      start_period: 600s
+    labels:
+      autoheal: true
     logging:
       driver: "json-file"
       options:
@@ -111,12 +115,14 @@ services:
     stop_signal: SIGINT
     stop_grace_period: 10s
     healthcheck:
-      # Ping the EKG port to see if it responds.
-      # Assuming if EKG isn't up then the rest of cardano-node isn't either.
-      test: [ "CMD-SHELL", "curl -H \"Accept: application/json\" -f 127.0.0.1:12788 || exit 1" ]
+      # Ping the node port to see if it responds.
+      test: [ "CMD-SHELL", "cardano-cli ping -h localhost -p 3000 -c 1 || exit 1" ]
       interval: 60s
       timeout: 10s
       retries: 5
+      start_period: 600s
+    labels:
+      autoheal: true
     logging:
       driver: "json-file"
       options:
@@ -241,6 +247,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    labels:
+      autoheal: true
     logging:
       driver: "json-file"
       options:
@@ -365,11 +373,33 @@ services:
     ports:
       - "3000:3000"
     restart: on-failure
+    healthcheck:
+      # Ping the EKG port to see if it responds.
+      # Assuming if EKG isn't up then the rest of cardano-node isn't either.
+      # test: [ "CMD-SHELL", "curl -H \"Accept: application/json\" -f 127.0.0.1:3000 || exit 1" ]
+      test: [ "CMD-SHELL", "curl -H \"Accept: application/json\" -f -s 127.0.0.1:3000 | jq -e \".healthy == true\" || exit 1" ]
+      interval: 60s
+      timeout: 10s
+      retries: 5
+    labels:
+      autoheal: true
     logging:
       driver: "json-file"
       options:
         max-size: "200k"
         max-file: "10"
+
+  autoheal:
+    container_name: autoheal
+    environment:
+      AUTOHEAL_CONTAINER_LABEL: autoheal
+      AUTOHEAL_ONLY_MONITOR_RUNNING: true
+    image: willfarrell/autoheal:latest
+    network_mode: none
+    restart: always
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
 
 volumes:
   prometheus-db:

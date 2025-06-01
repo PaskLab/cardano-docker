@@ -12,7 +12,7 @@ Docker files for setting up Cardano Node environment and more.
 * Supported **cardano-node** version: **10.3.1**
 * Supported **cardano-cli** version: **10.8.0.0**
 * Supported **cardano-submit-api** version: **10.1.1**
-* Supported **mithril** version: **2513.0**
+* Supported **mithril** version: **2517.1**
 * Supported **DB-SYNC** version: **13.6.0.4**
 
 ### Building all docker images from source 
@@ -65,7 +65,7 @@ This image install dependencies and compilation tooling required by other images
       --build-arg ARCHITECTURE=${ARCHITECTURE} \
       --build-arg NODE_TAG=${NODE_TAG} \
       --build-arg API_VERSION=${API_VERSION} \
-      -t cardano_submit:latest Dockerfiles/submit
+      -t cardano_submit:${API_VERSION} Dockerfiles/submit
    ```
 
 #### DB-Sync image
