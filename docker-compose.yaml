@@ -390,6 +390,7 @@ services:
         max-file: "10"
 
   autoheal:
+    container_name: autoheal
     environment:
       AUTOHEAL_CONTAINER_LABEL: autoheal
       AUTOHEAL_ONLY_MONITOR_RUNNING: true
