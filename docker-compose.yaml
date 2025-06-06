@@ -31,11 +31,11 @@ services:
     stop_grace_period: 10s
     healthcheck:
       # Ping the node port to see if it responds.
-      test: [ "CMD-SHELL", "cardano-cli ping -h localhost -p 3000 -c 1 || exit 1" ]
-      interval: 60s
+      test: [ "CMD-SHELL", "cardano-cli ping -h localhost -p 3000 -t || exit 1" ]
+      interval: 2m
       timeout: 10s
       retries: 5
-      start_period: 600s
+      start_period: 10m
     labels:
       autoheal: true
     logging:
@@ -73,11 +73,11 @@ services:
     stop_grace_period: 10s
     healthcheck:
       # Ping the node port to see if it responds.
-      test: [ "CMD-SHELL", "cardano-cli ping -h localhost -p 3000 -c 1 || exit 1" ]
-      interval: 60s
+      test: [ "CMD-SHELL", "cardano-cli ping -h localhost -p 3000 -t || exit 1" ]
+      interval: 2m
       timeout: 10s
       retries: 5
-      start_period: 600s
+      start_period: 10m
     labels:
       autoheal: true
     logging:
@@ -116,11 +116,11 @@ services:
     stop_grace_period: 10s
     healthcheck:
       # Ping the node port to see if it responds.
-      test: [ "CMD-SHELL", "cardano-cli ping -h localhost -p 3000 -c 1 || exit 1" ]
-      interval: 60s
+      test: [ "CMD-SHELL", "cardano-cli ping -h localhost -p 3000 -t || exit 1" ]
+      interval: 2m
       timeout: 10s
       retries: 5
-      start_period: 600s
+      start_period: 10m
     labels:
       autoheal: true
     logging:
@@ -394,6 +394,7 @@ services:
     environment:
       AUTOHEAL_CONTAINER_LABEL: autoheal
       AUTOHEAL_ONLY_MONITOR_RUNNING: true
+      AUTOHEAL_INTERVAL: 180
     image: willfarrell/autoheal:latest
     network_mode: none
     restart: always
