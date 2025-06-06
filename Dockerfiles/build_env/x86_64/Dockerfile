@@ -25,9 +25,9 @@ RUN rustup update
 # Install aarch64 cabal 3.10.1.0
 RUN wget -O ghcup https://downloads.haskell.org/~ghcup/0.1.20.0/x86_64-linux-ghcup-0.1.20.0 &&\
     chmod 500 ghcup &&\
-    ./ghcup -v --downloader wget install ghc 9.6.4 &&\
-    ./ghcup set ghc 9.6.4 &&\
-    ./ghcup -v --downloader wget install cabal 3.10.1.0
+    ./ghcup -v --downloader wget install ghc 9.10.2 &&\
+    ./ghcup set ghc 9.10.2 &&\
+    ./ghcup -v --downloader wget install cabal 3.12.1.0
 
 # Install Bitcoin secp256k1 dependency
 RUN git clone https://github.com/bitcoin-core/secp256k1.git

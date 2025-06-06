@@ -13,10 +13,11 @@ WORKDIR /root/cardano-node
 RUN git checkout ${NODE_TAG} && git submodule update --init --recursive
 
 # Build cardano-node binary
-RUN cabal update && cabal build cardano-node --disable-tests
+#RUN cabal update && cabal build cardano-node --disable-tests
+RUN cabal update && cabal build all --disable-tests
 
 # Create files structure
-ARG GHC_VERSION=ghc-9.6.4
+ARG GHC_VERSION=ghc-9.10.2
 ARG NODE_PATH=$NODE_TAG
 ARG ARCHITECTURE
 RUN mkdir -p /cardano/config /cardano/bin /cardano/db /cardano/socket /cardano/scripts &&\
