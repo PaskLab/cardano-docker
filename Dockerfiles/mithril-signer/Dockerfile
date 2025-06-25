@@ -18,7 +18,7 @@ RUN git checkout cardano-cli-${CLI_TAG} && git submodule update --init --recursi
 # Build cardano-cli binary
 RUN cabal update && cabal user-config update && cabal build cardano-cli --disable-tests
 ARG ARCHITECTURE
-ARG GHC_VERSION=ghc-9.6.4
+ARG GHC_VERSION=ghc-9.10.2
 RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-cli-${CLI_TAG}/x/cardano-cli/build/cardano-cli/cardano-cli /cardano/bin
 
 # Download mithril repository
