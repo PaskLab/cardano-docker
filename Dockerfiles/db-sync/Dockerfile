@@ -28,7 +28,7 @@ RUN cabal update && \
 RUN mkdir -p /cardano/config /cardano/bin /cardano/ledger-state
 ARG ARCHITECTURE
 ARG RELEASE_PATH=$RELEASE
-ARG GHC_VERSION=ghc-9.6.4
+ARG GHC_VERSION=ghc-9.10.2
 RUN cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-db-sync-${RELEASE_PATH}/build/cardano-db-sync/cardano-db-sync /cardano/bin && \
     cp -p dist-newstyle/build/${ARCHITECTURE}-linux/${GHC_VERSION}/cardano-db-tool-${RELEASE_PATH}/x/cardano-db-tool/build/cardano-db-tool/cardano-db-tool /cardano/bin
 
