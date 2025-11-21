@@ -6,6 +6,8 @@ LABEL maintainer="https://github.com/pascallapointe"
 
 WORKDIR /root
 
+COPY files/libblst.pc /usr/local/lib/pkgconfig/libblst.pc
+
 # Download cardano-node repository
 ARG NODE_TAG
 RUN git clone https://github.com/IntersectMBO/cardano-node.git
