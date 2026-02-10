@@ -62,6 +62,7 @@ RUN git clone https://github.com/supranational/blst
 WORKDIR /root/blst
 RUN git checkout v0.3.14 &&\
     ./build.sh
+# !!! DO NOT FORGET TO UPDATE BLST VERSION IN THE FOLLOWING FILE !!!
 COPY files/libblst.pc /usr/local/lib/pkgconfig/libblst.pc
 RUN cp bindings/blst_aux.h bindings/blst.h bindings/blst.hpp /usr/local/include/ &&\
     cp libblst.a /usr/local/lib &&\
