@@ -14,7 +14,8 @@ RUN apt-get update && \
     apt-get install -y apt-utils git wget curl pkg-config \
     libgmp-dev libssl-dev libtinfo-dev libsystemd-dev liblmdb-dev \
     zlib1g-dev llvm-dev automake make build-essential \
-    libffi-dev libncursesw5 g++ jq libnuma-dev libtool autoconf
+    libffi-dev libncursesw5 g++ jq libnuma-dev libtool autoconf \
+    liburing-dev protobuf-compiler libsnappy-dev
 
 # Install Rust
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
