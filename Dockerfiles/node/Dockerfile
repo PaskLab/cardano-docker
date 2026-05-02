@@ -54,7 +54,7 @@ RUN cabal clean &&\
     apt-get purge -y apt-utils git wget pkg-config libgmp-dev \
         libssl-dev libtinfo-dev libsystemd-dev libtool \
         zlib1g-dev llvm-dev build-essential libffi-dev automake \
-        make g++ libncursesw5 jq autoconf &&\
+        make g++ libncursesw5 jq autoconf protobuf-compiler &&\
     apt-get autoremove -y &&\
     apt-get clean &&\
     apt-get autoclean
